@@ -9,8 +9,8 @@
   "scripts": {
     "postinstall": "cd frontend && npm install --include=dev && cd ../backend && npm install",
     "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
-    "build:frontend": "cd frontend && npm install --include=dev && npm run build",
-    "build": "cd frontend && npm install --include=dev && npm run build",
+    "build:frontend": "cd frontend && npm install --include=dev && npm run build && cd .. && node scripts/sync-build.js",
+    "build": "cd frontend && npm install --include=dev && npm run build && cd .. && node scripts/sync-build.js",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm start",
     "start": "cd backend && npm start"
