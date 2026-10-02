@@ -1,0 +1,93 @@
+/* Clinical Trust & Deployment System Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #003461;
+  --primary-container: #004b87;
+  --secondary: #006a68;
+  --tertiary: #f2a900;
+  --deep-navy: #0B3C5D;
+  --clinical-green: #5FCF80;
+  --bg-canvas: #F5F7FA;
+  --surface-white: #FFFFFF;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #1E293B;
+  background-color: #F5F7FA;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Material Symbols alignment */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+  line-height: 1;
+  display: inline-block;
+}
+
+.material-symbols-fill {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #eff4ff;
+}
+::-webkit-scrollbar-thumb {
+  background: #a3c9ff;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #004b87;
+}
+
+/* Smooth Transitions & Card hover */
+.transition-lift {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.transition-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -5px rgba(11, 60, 93, 0.12), 0 8px 10px -6px rgba(11, 60, 93, 0.05);
+}
+
+/* Glow & Accent Rings */
+.glow-gold {
+  box-shadow: 0 0 15px rgba(242, 169, 0, 0.35);
+}
+
+.glow-teal {
+  box-shadow: 0 0 15px rgba(0, 106, 104, 0.3);
+}
+
+/* Modal Backdrop Animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px) scale(0.97); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

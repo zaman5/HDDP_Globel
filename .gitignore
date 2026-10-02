@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+*/node_modules/
+package-lock.json
+
+# Production Builds
+dist/
+*/dist/
+.angular/
+*/.angular/
+
+# Environment and Database Local Files
+.env
+*/.env
+*.sqlite*
+*.sqlite
+*.sqlite3
+*.db
+backend/database.sqlite*
+
+# Uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Logs and OS
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
