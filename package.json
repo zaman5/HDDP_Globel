@@ -6,6 +6,7 @@
     "node": ">=20.0.0 <21.0.0",
     "npm": ">=9.0.0"
   },
+  "main": "server.js",
   "scripts": {
     "postinstall": "cd frontend && npm install --include=dev && cd ../backend && npm install",
     "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
@@ -13,6 +14,13 @@
     "build": "cd frontend && npm install --include=dev && npm run build && cd .. && node scripts/sync-build.js",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm start",
-    "start": "cd backend && npm start"
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.12.0"
   }
 }

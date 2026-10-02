@@ -1,3 +1,9 @@
+<IfModule mod_authz_core.c>
+  Require all granted
+</IfModule>
+
+DirectoryIndex index.html
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
@@ -11,5 +17,3 @@
   RewriteRule ^ index.html [L]
 </IfModule>
 
-DirectoryIndex index.html
-Options -Indexes
