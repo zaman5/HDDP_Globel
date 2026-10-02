@@ -1,15 +1,24 @@
 const mysql = require('mysql2/promise');
-const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 
 let dbType = 'none';
 let mysqlPool = null;
-let sqliteDb = null;
+
+// Pure JS Embedded File Database (zero native compilation required)
+const jsonDbPath = path.join(__dirname, '..', '..', 'hddp_local_data.json');
+let inMemoryData = {
+  job_positions: [],
+  candidates: [],
+  talent_requests: [],
+  partner_applications: [],
+  contact_inquiries: []
+};
 
 const initialJobs = [
   {
+    id: 1,
     title: 'ICU / Critical Care Registered Nurse',
     department: 'Intensive Care Unit',
     specialty: 'Nursing - ICU / CCU',
@@ -24,9 +33,11 @@ const initialJobs = [
     description: 'Provide high-acuity critical care management, ventilator monitoring, and rapid emergency intervention in a state-of-the-art Level 1 trauma facility.',
     requirements: 'Active RN license, BLS, ACLS, NIHSS required. Compact license accepted. CCRN preferred.',
     is_featured: 1,
-    status: 'Open'
+    status: 'Open',
+    created_at: new Date().toISOString()
   },
   {
+    id: 2,
     title: 'Emergency Department Staff Nurse',
     department: 'Emergency Medicine',
     specialty: 'Nursing - Emergency Room',
@@ -41,9 +52,11 @@ const initialJobs = [
     description: 'Manage triage, acute medical crisis assessments, pediatric and adult trauma resuscitation, and coordinate bedside care.',
     requirements: 'Active TX/Compact RN license, BLS, ACLS, PALS, TNCC preferred.',
     is_featured: 1,
-    status: 'Open'
+    status: 'Open',
+    created_at: new Date().toISOString()
   },
   {
+    id: 3,
     title: 'Operating Room (OR / Surgical) Nurse',
     department: 'Surgical Services',
     specialty: 'Nursing - Perioperative / OR',
@@ -58,9 +71,11 @@ const initialJobs = [
     description: 'Circulate and scrub for orthopedic, general, vascular, and robotic minimally invasive surgical cases.',
     requirements: 'RN License, BLS, ACLS, CNOR preferred. Experience with DaVinci Xi robotic systems a plus.',
     is_featured: 1,
-    status: 'Open'
+    status: 'Open',
+    created_at: new Date().toISOString()
   },
   {
+    id: 4,
     title: 'EHR Specialist & Clinical Informatics Consultant',
     department: 'Clinical Technology & Operations',
     specialty: 'Healthcare IT & Informatics',
@@ -75,9 +90,11 @@ const initialJobs = [
     description: 'Lead clinical workflow integration, optimize Epic / Cerner EHR workflows for nursing staff, and oversee deployment training.',
     requirements: 'Epic or Cerner Certified, Clinical background (RN/BSN/Informatics) highly preferred.',
     is_featured: 1,
-    status: 'Open'
+    status: 'Open',
+    created_at: new Date().toISOString()
   },
   {
+    id: 5,
     title: 'Cardiovascular Interventional Radiographer',
     department: 'Cath Lab / Interventional',
     specialty: 'Allied Health - Imaging / Cath Lab',
@@ -92,9 +109,11 @@ const initialJobs = [
     description: 'Assist interventional cardiologists in diagnostic and therapeutic cardiac catheterizations, stenting, and pacemaker insertions.',
     requirements: 'ARRT (R) or RCIS certification, BLS, ACLS.',
     is_featured: 1,
-    status: 'Open'
+    status: 'Open',
+    created_at: new Date().toISOString()
   },
   {
+    id: 6,
     title: 'Medical-Surgical / Telemetry Float Nurse',
     department: 'Inpatient Medicine',
     specialty: 'Nursing - Med-Surg / Telemetry',
@@ -109,9 +128,32 @@ const initialJobs = [
     description: 'Provide inpatient nursing coverage across acute med-surg and telemetry units with cardiac rhythm strip interpretation.',
     requirements: 'Active NC/Compact RN license, BLS, ACLS.',
     is_featured: 0,
-    status: 'Open'
+    status: 'Open',
+    created_at: new Date().toISOString()
   }
 ];
+
+function loadJsonDb() {
+  try {
+    if (fs.existsSync(jsonDbPath)) {
+      const content = fs.readFileSync(jsonDbPath, 'utf8');
+      inMemoryData = JSON.parse(content);
+    } else {
+      inMemoryData.job_positions = [...initialJobs];
+      saveJsonDb();
+    }
+  } catch (e) {
+    inMemoryData.job_positions = [...initialJobs];
+  }
+}
+
+function saveJsonDb() {
+  try {
+    fs.writeFileSync(jsonDbPath, JSON.stringify(inMemoryData, null, 2), 'utf8');
+  } catch (e) {
+    console.error('Failed to write JSON DB:', e.message);
+  }
+}
 
 async function initDatabase() {
   const host = process.env.DB_HOST || '127.0.0.1';
@@ -120,10 +162,10 @@ async function initDatabase() {
   const password = process.env.DB_PASSWORD || '';
   const database = process.env.DB_NAME || 'hddp_recruitment';
 
-  console.log(`[DB] Attempting MySQL connection on ${host}:${port} (database: ${database})...`);
+  console.log(`[DB] Connecting to MySQL on ${host}:${port}...`);
 
   try {
-    // 1. Try to connect to MySQL server
+    // 1. Connect to MySQL server
     const serverConnection = await mysql.createConnection({
       host,
       port,
@@ -135,7 +177,7 @@ async function initDatabase() {
     await serverConnection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`);
     await serverConnection.end();
 
-    // 2. Create Pool
+    // 2. Create Connection Pool
     mysqlPool = mysql.createPool({
       host,
       port,
@@ -147,9 +189,8 @@ async function initDatabase() {
       queueLimit: 0
     });
 
-    // Test connection
     const conn = await mysqlPool.getConnection();
-    console.log(`[DB] Successfully connected to MySQL database: ${database}`);
+    console.log(`[DB] Connected to MySQL database: ${database}`);
     conn.release();
 
     dbType = 'mysql';
@@ -157,17 +198,10 @@ async function initDatabase() {
     await seedMysqlData();
     return;
   } catch (err) {
-    console.warn(`[DB WARNING] MySQL is not available or connection failed: ${err.message}`);
-    console.log(`[DB] Switching to resilient SQLite database engine for full instant offline operation.`);
-    
-    // Fallback to SQLite
-    const sqlitePath = path.join(__dirname, '..', '..', 'database.sqlite');
-    sqliteDb = new Database(sqlitePath);
-    sqliteDb.pragma('journal_mode = WAL');
-    dbType = 'sqlite';
-    createSqliteTables();
-    seedSqliteData();
-    console.log(`[DB] SQLite database initialized at ${sqlitePath}`);
+    console.warn(`[DB NOTICE] MySQL connection offline (${err.message}). Using resilient pure-JS database.`);
+    loadJsonDb();
+    dbType = 'json_store';
+    console.log(`[DB] Pure-JS data store active at ${jsonDbPath}`);
   }
 }
 
@@ -292,143 +326,146 @@ async function seedMysqlData() {
   }
 }
 
-function createSqliteTables() {
-  sqliteDb.exec(`
-    CREATE TABLE IF NOT EXISTS job_positions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT NOT NULL,
-      department TEXT NOT NULL,
-      specialty TEXT NOT NULL,
-      location TEXT NOT NULL,
-      state TEXT NOT NULL,
-      compact_eligible INTEGER DEFAULT 1,
-      job_type TEXT DEFAULT 'Travel Contract',
-      shift TEXT DEFAULT '12h Days',
-      pay_range TEXT DEFAULT '$2,800 - $3,500 / wk',
-      experience_required TEXT DEFAULT '2+ Years',
-      urgency_level TEXT DEFAULT 'Urgent Need',
-      description TEXT,
-      requirements TEXT,
-      is_featured INTEGER DEFAULT 1,
-      status TEXT DEFAULT 'Open',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS candidates (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      first_name TEXT NOT NULL,
-      last_name TEXT NOT NULL,
-      email TEXT NOT NULL,
-      phone TEXT NOT NULL,
-      specialty TEXT NOT NULL,
-      license_type TEXT NOT NULL,
-      compact_license INTEGER DEFAULT 0,
-      years_experience TEXT NOT NULL,
-      preferred_shift TEXT DEFAULT 'Flexible',
-      desired_pay TEXT NULL,
-      current_city TEXT NULL,
-      current_state TEXT NULL,
-      willing_to_relocate INTEGER DEFAULT 1,
-      resume_filename TEXT NULL,
-      resume_path TEXT NULL,
-      notes TEXT NULL,
-      status TEXT DEFAULT 'New / Under Review',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS talent_requests (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      organization_name TEXT NOT NULL,
-      contact_name TEXT NOT NULL,
-      work_email TEXT NOT NULL,
-      phone_number TEXT NOT NULL,
-      facility_type TEXT NOT NULL,
-      facility_city TEXT NOT NULL,
-      facility_state TEXT NOT NULL,
-      roles_needed TEXT NOT NULL,
-      num_positions INTEGER DEFAULT 1,
-      urgency_level TEXT DEFAULT 'Immediate (Within 48h)',
-      shift_requirements TEXT DEFAULT '12h Rotating / Days & Nights',
-      target_start_date TEXT NULL,
-      additional_notes TEXT NULL,
-      status TEXT DEFAULT 'Pending Review',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS partner_applications (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      company_name TEXT NOT NULL,
-      contact_name TEXT NOT NULL,
-      job_title TEXT NOT NULL,
-      work_email TEXT NOT NULL,
-      phone_number TEXT NOT NULL,
-      organization_type TEXT NOT NULL,
-      staffing_volume TEXT NOT NULL,
-      specialized_units TEXT NOT NULL,
-      geographic_reach TEXT NOT NULL,
-      message TEXT NULL,
-      status TEXT DEFAULT 'Pending Intake',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS contact_inquiries (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      full_name TEXT NOT NULL,
-      email TEXT NOT NULL,
-      phone TEXT NULL,
-      inquiry_type TEXT DEFAULT 'General Inquiry',
-      subject TEXT NOT NULL,
-      message TEXT NOT NULL,
-      status TEXT DEFAULT 'Unread',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-  `);
-}
-
-function seedSqliteData() {
-  const row = sqliteDb.prepare('SELECT COUNT(*) as cnt FROM job_positions').get();
-  if (row.cnt === 0) {
-    console.log('[DB] Seeding initial job positions to SQLite...');
-    const insert = sqliteDb.prepare(`
-      INSERT INTO job_positions (title, department, specialty, location, state, compact_eligible, job_type, shift, pay_range, experience_required, urgency_level, description, requirements, is_featured, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
-    for (const job of initialJobs) {
-      insert.run(
-        job.title, job.department, job.specialty, job.location, job.state,
-        job.compact_eligible, job.job_type, job.shift, job.pay_range,
-        job.experience_required, job.urgency_level, job.description,
-        job.requirements, job.is_featured, job.status
-      );
-    }
-  }
-}
-
 /**
- * Universal query runner
+ * Universal Query Engine
  */
 async function query(sql, params = []) {
   if (dbType === 'mysql') {
-    const [rows, fields] = await mysqlPool.query(sql, params);
+    const [rows] = await mysqlPool.query(sql, params);
     return rows;
-  } else if (dbType === 'sqlite') {
-    const trimmed = sql.trim();
-    if (trimmed.toUpperCase().startsWith('SELECT') || trimmed.toUpperCase().startsWith('PRAGMA')) {
-      const stmt = sqliteDb.prepare(sql);
-      return stmt.all(...params);
-    } else {
-      const stmt = sqliteDb.prepare(sql);
-      const info = stmt.run(...params);
-      return { insertId: info.lastInsertRowid, affectedRows: info.changes };
-    }
   } else {
-    throw new Error('Database not initialized');
+    // Pure JS Query Processor
+    const trimmed = sql.trim();
+    const upper = trimmed.toUpperCase();
+
+    if (upper.startsWith('SELECT COUNT(*)')) {
+      const match = trimmed.match(/FROM\s+([a-zA-Z_0-9]+)/i);
+      const tableName = match ? match[1] : '';
+      const list = inMemoryData[tableName] || [];
+      return [{ count: list.length, cnt: list.length }];
+    }
+
+    if (upper.startsWith('SELECT')) {
+      const match = trimmed.match(/FROM\s+([a-zA-Z_0-9]+)/i);
+      const tableName = match ? match[1] : '';
+      let list = [...(inMemoryData[tableName] || [])];
+
+      if (trimmed.includes('WHERE id = ?')) {
+        const id = Number(params[0]);
+        list = list.filter(item => item.id === id);
+      } else if (trimmed.includes('WHERE status = ?')) {
+        list = list.filter(item => item.status === params[0]);
+      }
+
+      list.sort((a, b) => (b.id || 0) - (a.id || 0));
+      return list;
+    }
+
+    if (upper.startsWith('INSERT INTO')) {
+      const match = trimmed.match(/INSERT INTO\s+([a-zA-Z_0-9]+)/i);
+      const tableName = match ? match[1] : '';
+      if (!inMemoryData[tableName]) {
+        inMemoryData[tableName] = [];
+      }
+
+      const newId = (inMemoryData[tableName].length > 0)
+        ? Math.max(...inMemoryData[tableName].map(i => i.id || 0)) + 1
+        : 1;
+
+      let record = { id: newId, created_at: new Date().toISOString() };
+
+      if (tableName === 'job_positions') {
+        record = {
+          ...record,
+          title: params[0],
+          department: params[1],
+          specialty: params[2],
+          location: params[3],
+          state: params[4],
+          compact_eligible: params[5],
+          job_type: params[6],
+          shift: params[7],
+          pay_range: params[8],
+          experience_required: params[9],
+          urgency_level: params[10],
+          description: params[11],
+          requirements: params[12],
+          is_featured: params[13],
+          status: 'Open'
+        };
+      } else if (tableName === 'candidates') {
+        record = {
+          ...record,
+          first_name: params[0],
+          last_name: params[1],
+          email: params[2],
+          phone: params[3],
+          specialty: params[4],
+          license_type: params[5],
+          compact_license: params[6],
+          years_experience: params[7],
+          preferred_shift: params[8],
+          desired_pay: params[9],
+          current_city: params[10],
+          current_state: params[11],
+          willing_to_relocate: params[12],
+          resume_filename: params[13],
+          resume_path: params[14],
+          notes: params[15],
+          status: 'New / Under Review'
+        };
+      } else if (tableName === 'talent_requests') {
+        record = {
+          ...record,
+          organization_name: params[0],
+          contact_name: params[1],
+          work_email: params[2],
+          phone_number: params[3],
+          facility_type: params[4],
+          facility_city: params[5],
+          facility_state: params[6],
+          roles_needed: params[7],
+          num_positions: params[8],
+          urgency_level: params[9],
+          shift_requirements: params[10],
+          target_start_date: params[11],
+          additional_notes: params[12],
+          status: 'Pending Review'
+        };
+      } else if (tableName === 'partner_applications') {
+        record = {
+          ...record,
+          company_name: params[0],
+          contact_name: params[1],
+          job_title: params[2],
+          work_email: params[3],
+          phone_number: params[4],
+          organization_type: params[5],
+          staffing_volume: params[6],
+          specialized_units: params[7],
+          geographic_reach: params[8],
+          message: params[9],
+          status: 'Pending Intake'
+        };
+      } else if (tableName === 'contact_inquiries') {
+        record = {
+          ...record,
+          full_name: params[0],
+          email: params[1],
+          phone: params[2],
+          inquiry_type: params[3],
+          subject: params[4],
+          message: params[5],
+          status: 'Unread'
+        };
+      }
+
+      inMemoryData[tableName].push(record);
+      saveJsonDb();
+      return { insertId: newId, affectedRows: 1 };
+    }
+
+    return [];
   }
 }
 
