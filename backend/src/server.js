@@ -19,8 +19,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve uploaded files statically
-app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+// Uploaded CVs are personal data: they are NOT served publicly; use GET /api/candidates/:id/resume
 
 // Mount API routes
 app.use('/api', apiRoutes);

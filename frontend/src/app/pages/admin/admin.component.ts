@@ -109,7 +109,7 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
         <div *ngIf="activeTab === 'candidates'" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
           <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
             <h3 class="font-heading font-bold text-sm text-[#003461]">Submitted Candidate Applications</h3>
-            <span class="text-xs text-slate-500">Stored in MySQL DB</span>
+            <span class="text-xs text-slate-500">Click a row to see full details</span>
           </div>
 
           <div class="overflow-x-auto">
@@ -119,40 +119,68 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
                   <th class="p-3.5">ID</th>
                   <th class="p-3.5">Name</th>
                   <th class="p-3.5">Contact</th>
-                  <th class="p-3.5">Specialty</th>
-                  <th class="p-3.5">License</th>
+                  <th class="p-3.5">Applied For</th>
                   <th class="p-3.5">Experience</th>
-                  <th class="p-3.5">Desired Pay</th>
+                  <th class="p-3.5">Applied On</th>
                   <th class="p-3.5">Status</th>
-                  <th class="p-3.5">Resume</th>
+                  <th class="p-3.5">CV / Resume</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100">
-                <tr *ngFor="let c of candidates()" class="hover:bg-slate-50">
-                  <td class="p-3.5 font-bold text-slate-900">#{{ c.id }}</td>
+                <ng-container *ngFor="let c of candidates()">
+                <tr (click)="toggleCandidate(c.id)" class="hover:bg-slate-50 cursor-pointer" [ngClass]="expandedCandidateId === c.id ? 'bg-slate-50' : ''">
+                  <td class="p-3.5 font-bold text-slate-900">
+                    <span class="material-symbols-outlined text-[16px] align-middle text-slate-400">{{ expandedCandidateId === c.id ? 'expand_less' : 'expand_more' }}</span>#{{ c.id }}
+                  </td>
                   <td class="p-3.5 font-bold text-[#004b87]">{{ c.first_name }} {{ c.last_name }}</td>
                   <td class="p-3.5">
                     <div>{{ c.email }}</div>
                     <div class="text-slate-400 text-[11px]">{{ c.phone }}</div>
                   </td>
-                  <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-blue-50 text-blue-800 font-semibold">{{ c.specialty }}</span></td>
                   <td class="p-3.5">
-                    <div>{{ c.license_type }}</div>
-                    <span *ngIf="c.compact_license" class="text-[10px] text-emerald-700 font-bold">Compact (eNLC)</span>
+                    <span *ngIf="c.job_title" class="px-2 py-0.5 rounded bg-blue-50 text-blue-800 font-semibold">{{ c.job_title }}</span>
+                    <span *ngIf="!c.job_title" class="text-slate-400">General application</span>
                   </td>
                   <td class="p-3.5">{{ c.years_experience }}</td>
-                  <td class="p-3.5 font-semibold">{{ c.desired_pay || 'Negotiable' }}</td>
+                  <td class="p-3.5">{{ c.created_at | date:'mediumDate' }}</td>
                   <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 font-bold">{{ c.status }}</span></td>
                   <td class="p-3.5">
-                    <span *ngIf="c.resume_filename" class="text-emerald-700 font-bold flex items-center gap-1">
-                      <span class="material-symbols-outlined text-xs">attach_file</span>
-                      {{ c.resume_filename }}
-                    </span>
-                    <span *ngIf="!c.resume_filename" class="text-slate-400">Direct Form</span>
+                    <a *ngIf="c.resume_path && c.id" [href]="apiService.getResumeDownloadUrl(c.id)" (click)="$event.stopPropagation()"
+                      class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#004b87] hover:bg-[#0B3C5D] text-white font-bold">
+                      <span class="material-symbols-outlined text-[16px]">download</span>
+                      Download
+                    </a>
+                    <span *ngIf="!c.resume_path" class="text-slate-400">No file</span>
                   </td>
                 </tr>
+                <tr *ngIf="expandedCandidateId === c.id" class="bg-slate-50">
+                  <td colspan="8" class="px-6 pb-6 pt-2">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-white p-5 rounded-xl border border-slate-200">
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Full Name</span>{{ c.first_name }} {{ c.last_name }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Email</span><a [href]="'mailto:' + c.email" class="text-[#004b87] font-semibold">{{ c.email }}</a></div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Phone</span><a [href]="'tel:' + c.phone" class="text-[#004b87] font-semibold">{{ c.phone }}</a></div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Location</span>{{ locationOf(c) }}<span *ngIf="c.country"> — {{ c.country }}</span></div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Work Authorization</span>{{ c.work_authorization || '—' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Privacy Consent Given</span>{{ c.privacy_consent_at ? (c.privacy_consent_at | date:'medium') : 'Not recorded' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Applied For</span>{{ c.job_title || 'General application' }}<span *ngIf="c.job_id" class="text-slate-400"> (Job #{{ c.job_id }})</span></div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Specialty</span>{{ c.specialty || '—' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">License / Certifications</span>{{ c.license_type || '—' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Experience</span>{{ c.years_experience || '—' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Expected Pay</span>{{ c.desired_pay || '—' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Applied On</span>{{ c.created_at | date:'medium' }}</div>
+                      <div class="col-span-2"><span class="block text-[10px] uppercase font-bold text-slate-400">CV / Resume File</span>
+                        <a *ngIf="c.resume_path && c.id" [href]="apiService.getResumeDownloadUrl(c.id)" class="inline-flex items-center gap-1 text-[#004b87] font-bold">
+                          <span class="material-symbols-outlined text-[16px]">download</span>{{ c.resume_filename }}
+                        </a>
+                        <span *ngIf="!c.resume_path">No file uploaded</span>
+                      </div>
+                      <div class="col-span-2 md:col-span-4"><span class="block text-[10px] uppercase font-bold text-slate-400">Cover Note</span><p class="whitespace-pre-line">{{ c.notes || '—' }}</p></div>
+                    </div>
+                  </td>
+                </tr>
+                </ng-container>
                 <tr *ngIf="candidates().length === 0">
-                  <td colspan="9" class="p-8 text-center text-slate-400">No candidate submissions recorded yet. Submit one from Candidates page!</td>
+                  <td colspan="8" class="p-8 text-center text-slate-400">No candidate submissions recorded yet. Submit one from Candidates page!</td>
                 </tr>
               </tbody>
             </table>
@@ -289,7 +317,7 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
         <!-- TAB 5: PUBLISH NEW JOB FORM -->
         <div *ngIf="activeTab === 'new-job'" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto">
           <h3 class="font-heading text-xl font-bold text-[#003461] mb-1">Publish New Clinical Position to Database</h3>
-          <p class="text-xs text-slate-500 mb-6">New openings appear immediately on the live candidate job board.</p>
+          <p class="text-xs text-slate-500 mb-6">New openings appear immediately on the Candidates page. Avoid age-, gender- or nationality-based requirements ("young", "native English speaker") — they breach US, UK and Canadian equality laws.</p>
 
           <form (ngSubmit)="publishJob()" class="space-y-4 text-xs">
             
@@ -315,6 +343,18 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
               </div>
             </div>
 
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Country *</label>
+              <select 
+                [(ngModel)]="newJob.country" 
+                name="country" 
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-[#004b87] bg-white text-slate-900">
+                <option value="United States">United States</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="Canada">Canada</option>
+              </select>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label class="block font-bold text-slate-700 mb-1">Specialty *</label>
@@ -337,7 +377,7 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
                   class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-[#004b87] text-slate-900" />
               </div>
               <div>
-                <label class="block font-bold text-slate-700 mb-1">State</label>
+                <label class="block font-bold text-slate-700 mb-1">State / Province / County</label>
                 <input 
                   type="text" 
                   [(ngModel)]="newJob.state" 
@@ -358,6 +398,8 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
                   <option value="Direct Hire / Full Time">Direct Hire / Full Time</option>
                   <option value="Per Diem / PRN">Per Diem / PRN</option>
                   <option value="Contract-to-Hire">Contract-to-Hire</option>
+                  <option value="Permanent / Full Time">Permanent / Full Time</option>
+                  <option value="Part Time">Part Time</option>
                 </select>
               </div>
 
@@ -372,13 +414,14 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
               </div>
 
               <div>
-                <label class="block font-bold text-slate-700 mb-1">Pay Range</label>
+                <label class="block font-bold text-slate-700 mb-1">Pay Range (with currency)</label>
                 <input 
                   type="text" 
                   [(ngModel)]="newJob.pay_range" 
                   name="pay_range" 
-                  placeholder="$3,400 - $3,950 / wk" 
+                  placeholder="USD 40-48/hr, GBP 30,000-34,000/yr, CAD 38-45/hr" 
                   class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-[#004b87] text-slate-900" />
+                <p class="mt-1 text-[10px] text-slate-500">Pay ranges are legally required in job ads in several US states (e.g. CA, NY, CO, WA, IL) and parts of Canada (e.g. BC, ON).</p>
               </div>
             </div>
 
@@ -448,8 +491,18 @@ export class AdminComponent implements OnInit {
   contactInquiries = signal<ContactInquiry[]>([]);
   jobs = signal<JobPosition[]>([]);
   stats = signal<PlatformStats | null>(null);
+  expandedCandidateId: number | undefined;
+
+  locationOf(c: CandidateApplication) {
+    return [c.current_city, c.current_state].filter(Boolean).join(', ') || '—';
+  }
+
+  toggleCandidate(id: number | undefined) {
+    this.expandedCandidateId = this.expandedCandidateId === id ? undefined : id;
+  }
 
   newJob: Partial<JobPosition> = {
+    country: 'United States',
     title: '',
     department: 'Intensive Care',
     specialty: 'Nursing - ICU',
@@ -504,6 +557,7 @@ export class AdminComponent implements OnInit {
       next: (res) => {
         this.toastService.success('Position Published!', 'New job position stored in MySQL database.');
         this.newJob = {
+          country: 'United States',
           title: '',
           department: '',
           specialty: '',

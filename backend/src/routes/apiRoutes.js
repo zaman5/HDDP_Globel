@@ -65,6 +65,7 @@ router.post('/jobs', jobController.createJob);
 // Candidates & Resumes
 router.post('/candidates/apply', upload.single('resume'), candidateController.submitCandidateApplication);
 router.get('/candidates', candidateController.getAllCandidates);
+router.get('/candidates/:id/resume', candidateController.downloadResume);
 
 // Talent Requisitions (Hospitals & Staffing Partners)
 router.post('/talent-requests', talentRequestController.submitTalentRequest);

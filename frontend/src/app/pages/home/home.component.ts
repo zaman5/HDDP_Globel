@@ -1,353 +1,211 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ApiService } from '../../services/api.service';
 import { ModalService } from '../../services/modal.service';
-import { PlatformStats, JobPosition } from '../../models/models';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <div class="flex flex-col w-full">
-      
-      <!-- HERO SECTION -->
-      <section class="relative w-full overflow-hidden bg-[#f8f9ff] pt-6 pb-12 lg:pt-10 lg:pb-16">
-        <!-- Ambient Blurred Backdrops -->
-        <div class="pointer-events-none absolute -top-40 right-[-10%] h-[580px] w-[580px] rounded-full bg-gradient-to-br from-[#006a68]/15 via-[#d3e4ff]/30 to-transparent blur-3xl"></div>
-        <div class="pointer-events-none absolute -bottom-32 -left-20 h-[480px] w-[480px] rounded-full bg-gradient-to-tr from-[#5FCF80]/15 via-[#e5eeff]/40 to-transparent blur-3xl"></div>
-
-        <div class="relative mx-auto max-w-7xl px-6 lg:px-12">
-          <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
-            
-            <!-- Left Column: Copy & CTAs -->
-            <div class="flex flex-col lg:col-span-7">
-              <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#003461] tracking-tight leading-[1.15]">
-                Connecting Healthcare Talent to Where It Matters Most
-              </h1>
-
-              <p class="mt-6 text-lg sm:text-xl text-[#1E293B] font-medium leading-relaxed">
-                HDDP Consultants partners with healthcare staffing agencies and hospital providers to deliver pre-screened, job-ready nurses and clinicians—quickly, efficiently, and at scale.
-              </p>
-
-              <p class="mt-3 text-base text-slate-600 max-w-2xl leading-relaxed">
-                From critical emergency shortages to high-volume travel contracts, we act as your dedicated recruitment infrastructure—helping you fill clinical roles faster while drastically lowering staffing overhead.
-              </p>
-
-              <!-- CTAs -->
-              <div class="mt-8 flex flex-col sm:flex-row sm:items-center gap-4">
-                <button 
-                  (click)="modalService.openRequestTalent()" 
-                  class="inline-flex items-center justify-center gap-2.5 rounded-xl bg-[#004b87] hover:bg-[#0B3C5D] px-8 py-4 text-base font-bold text-white shadow-lg hover:shadow-xl transition-all">
-                  <span>Request Talent</span>
-                  <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
-                </button>
-                <a 
-                  routerLink="/partner-with-us" 
-                  class="inline-flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 px-8 py-4 text-base font-bold text-[#003461] shadow-sm transition-all">
-                  <span class="material-symbols-outlined text-[20px] text-[#006a68]">handshake</span>
-                  <span>Partner With Us</span>
-                </a>
-              </div>
-
-              <!-- Micro Credentialing Highlights -->
-              <div class="mt-10 flex flex-wrap items-center gap-6 text-slate-700 text-sm font-semibold">
-                <div class="flex items-center gap-2">
-                  <span class="material-symbols-outlined text-[#5FCF80] text-[22px]">verified</span>
-                  <span>Primary-Source Verified</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="material-symbols-outlined text-[#5FCF80] text-[22px]">verified</span>
-                  <span>Joint Commission Aligned</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="material-symbols-outlined text-[#5FCF80] text-[22px]">speed</span>
-                  <span>48–96h Turnaround SLA</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Column: Visual Composite Card -->
-            <div class="relative lg:col-span-5">
-              <div class="relative overflow-hidden rounded-3xl bg-white shadow-2xl border border-slate-200">
-                <img 
-                  class="h-[440px] w-full object-cover object-top" 
-                  alt="Clinical registered nurse on duty" 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHDrmUJM8S8umdBMVSw7Lar0K0cv0lJK5Clb5gz08lz43fPA3cH5e5i0uochZzEnjQxPzZuIcpEkArN7Z8aniergr4X5G5yuhVceuBDpiTN_SYw5Ioio16cR-K3cw5qCk_hrYE-U_yvmD5ps6GSEVSrbcbkIz8zWwdGpUKH61mZ5ygjFV4u_A5x1bSqjvrSOMnh17rvjxHW6O5IGqviH_1qvGrBGhiYO1GYBEd93SbZytJ1L8pRqhBZw" />
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0B3C5D]/80 via-transparent to-transparent"></div>
-                
-                <!-- Bottom Live Badge -->
-                <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-xl bg-white/95 px-4 py-3 backdrop-blur-md shadow-lg border border-slate-100">
-                  <div class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#006a68]/15 text-[#006a68]">
-                      <span class="material-symbols-outlined text-[24px]">verified_user</span>
-                    </div>
-                    <div>
-                      <div class="font-bold text-sm text-[#003461]">Credential Verified</div>
-                      <div class="text-xs text-slate-500">RN • ICU / Med-Surg • Compact License</div>
-                    </div>
-                  </div>
-                  <span class="inline-flex items-center rounded-md bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 text-xs">
-                    Ready to Deploy
-                  </span>
-                </div>
-              </div>
-
-              <!-- Floating SLA Metric Badge -->
-              <div class="absolute -top-5 -left-5 z-20 hidden sm:flex items-center gap-3 rounded-2xl bg-white p-4 shadow-xl border border-slate-100">
-                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#004b87] text-white">
-                  <span class="material-symbols-outlined text-[26px]">timer</span>
-                </div>
-                <div>
-                  <div class="font-heading text-2xl font-extrabold text-[#003461] leading-tight">48–96h</div>
-                  <div class="text-xs text-slate-500 font-medium">Placement Turnaround SLA</div>
-                </div>
-              </div>
-
-              <!-- Floating Retention Badge -->
-              <div class="absolute -bottom-5 -right-4 z-20 hidden sm:flex items-center gap-3 rounded-2xl bg-[#0B3C5D] p-4 text-white shadow-xl">
-                <span class="material-symbols-outlined text-[#86f4f1] text-[28px]">groups</span>
-                <div>
-                  <div class="font-heading text-xl font-bold">98.4%</div>
-                  <div class="text-xs text-slate-300">Client Retention Rate</div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- TRUST & CREDIBILITY METRICS BAR -->
-      <section class="w-full bg-white border-y border-[#E2E8F0] py-8">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div class="flex flex-col items-center">
-              <span class="font-heading text-3xl sm:text-4xl font-extrabold text-[#004b87]">500+</span>
-              <span class="text-xs sm:text-sm font-semibold text-slate-600 mt-1">Partner Healthcare Facilities</span>
-            </div>
-            <div class="flex flex-col items-center">
-              <span class="font-heading text-3xl sm:text-4xl font-extrabold text-[#004b87]">14,500+</span>
-              <span class="text-xs sm:text-sm font-semibold text-slate-600 mt-1">Pre-Screened Clinicians</span>
-            </div>
-            <div class="flex flex-col items-center">
-              <span class="font-heading text-3xl sm:text-4xl font-extrabold text-[#004b87]">50 States</span>
-              <span class="text-xs sm:text-sm font-semibold text-slate-600 mt-1">National Licensure Network</span>
-            </div>
-            <div class="flex flex-col items-center">
-              <span class="font-heading text-3xl sm:text-4xl font-extrabold text-[#004b87]">48–96h</span>
-              <span class="text-xs sm:text-sm font-semibold text-slate-600 mt-1">Average Sourcing Velocity</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 2: 4 CORE SERVICE PILLARS -->
-      <section class="w-full py-16 lg:py-24 bg-[#F5F7FA]">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-          
-          <div class="text-center max-w-3xl mx-auto mb-16">
-            <span class="text-xs font-bold uppercase tracking-wider text-[#006a68] bg-[#eff4ff] px-4 py-1.5 rounded-full">Comprehensive Clinical Coverage</span>
-            <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-[#003461] mt-3">
-              Tailored Healthcare Solutions Built for Scalability
-            </h2>
-            <p class="text-slate-600 mt-3 text-base">
-              Whether you need rapid surge relief, specialized travel nursing contracts, or enterprise Allied Health coverage, HDDP delivers compliant workforce solutions.
-            </p>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            <!-- Card 1 -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
-              <div>
-                <div class="w-12 h-12 rounded-xl bg-[#e5eeff] text-[#004b87] flex items-center justify-center mb-4">
-                  <span class="material-symbols-outlined text-[28px]">flight_takeoff</span>
-                </div>
-                <h3 class="font-heading text-lg font-bold text-[#003461]">Travel Nursing</h3>
-                <p class="text-slate-600 text-sm mt-2 leading-relaxed">
-                  13 to 26-week assignments for ICU, ER, OR, Telemetry, and Med-Surg RNs ready for immediate deployment.
-                </p>
-                <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500 space-y-1.5">
-                  <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-[#5FCF80]">check_circle</span>Compact Multi-State</div>
-                  <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-[#5FCF80]">check_circle</span>Full Health Clearances</div>
-                </div>
-              </div>
-              <a routerLink="/healthcare-solutions" class="mt-6 text-xs font-bold text-[#004b87] hover:text-[#0B3C5D] flex items-center gap-1">
-                <span>Learn More</span>
-                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-              </a>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
-              <div>
-                <div class="w-12 h-12 rounded-xl bg-[#86f4f1]/20 text-[#006a68] flex items-center justify-center mb-4">
-                  <span class="material-symbols-outlined text-[28px]">schedule</span>
-                </div>
-                <h3 class="font-heading text-lg font-bold text-[#003461]">Per Diem & PRN Staffing</h3>
-                <p class="text-slate-600 text-sm mt-2 leading-relaxed">
-                  Flexible local shift coverage to manage census spikes, seasonal surges, and unexpected nurse call-outs.
-                </p>
-                <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500 space-y-1.5">
-                  <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-[#5FCF80]">check_circle</span>24/7 Dispatch Availability</div>
-                  <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-[#5FCF80]">check_circle</span>Local Clinician Pools</div>
-                </div>
-              </div>
-              <a routerLink="/healthcare-solutions" class="mt-6 text-xs font-bold text-[#004b87] hover:text-[#0B3C5D] flex items-center gap-1">
-                <span>Learn More</span>
-                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-              </a>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
-              <div>
-                <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center mb-4">
-                  <span class="material-symbols-outlined text-[28px]">biotech</span>
-                </div>
-                <h3 class="font-heading text-lg font-bold text-[#003461]">Allied Health & Imaging</h3>
-                <p class="text-slate-600 text-sm mt-2 leading-relaxed">
-                  Radiologic Technologists, Cath Lab Specialists, Respiratory Therapists, and Certified Lab Technicians.
-                </p>
-                <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500 space-y-1.5">
-                  <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-[#5FCF80]">check_circle</span>ARRT / NBRC Certified</div>
-                  <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-[#5FCF80]">check_circle</span>Specialty Verified</div>
-                </div>
-              </div>
-              <a routerLink="/healthcare-solutions" class="mt-6 text-xs font-bold text-[#004b87] hover:text-[#0B3C5D] flex items-center gap-1">
-                <span>Learn More</span>
-                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-              </a>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
-              <div>
-                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-4">
-                  <span class="material-symbols-outlined text-[28px]">terminal</span>
-                </div>
-                <h3 class="font-heading text-lg font-bold text-[#003461]">EHR & Clinical Tech</h3>
-                <p class="text-slate-600 text-sm mt-2 leading-relaxed">
-                  Epic and Cerner credentialed clinical informatics trainers and Go-Live support teams for hospital system upgrades.
-                </p>
-                <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500 space-y-1.5">
-                  <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-[#5FCF80]">check_circle</span>Epic / Cerner Certified</div>
-                  <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-[#5FCF80]">check_circle</span>Workflow Optimization</div>
-                </div>
-              </div>
-              <a routerLink="/healthcare-solutions" class="mt-6 text-xs font-bold text-[#004b87] hover:text-[#0B3C5D] flex items-center gap-1">
-                <span>Learn More</span>
-                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-              </a>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      <!-- SECTION 3: FEATURED OPEN POSITIONS -->
-      <section class="w-full py-16 bg-white border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-          
-          <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div>
-              <span class="text-xs font-bold uppercase tracking-wider text-[#006a68]">Live Requisitions</span>
-              <h2 class="font-heading text-3xl font-extrabold text-[#003461] mt-1">Featured High-Priority Openings</h2>
-              <p class="text-slate-600 text-sm mt-1">Direct from our partner hospital network across the United States.</p>
-            </div>
-            <a routerLink="/candidates" class="inline-flex items-center gap-2 text-sm font-bold text-[#004b87] hover:text-[#0B3C5D]">
-              <span>View All {{ totalJobs() }} Open Positions</span>
-              <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </a>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div *ngFor="let job of featuredJobs()" class="bg-[#F8F9FF] p-6 rounded-2xl border border-slate-200 hover:border-[#004b87] shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-              <div>
-                <div class="flex items-center justify-between gap-2 mb-3">
-                  <span class="px-2.5 py-1 rounded bg-[#004b87]/10 text-[#004b87] text-xs font-bold">{{ job.job_type }}</span>
-                  <span class="inline-flex items-center gap-1 text-xs font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                    {{ job.urgency_level }}
-                  </span>
-                </div>
-                <h3 class="font-heading text-lg font-bold text-[#003461] leading-snug">{{ job.title }}</h3>
-                <div class="mt-2 flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-                  <span class="material-symbols-outlined text-[16px] text-[#006a68]">location_on</span>
-                  <span>{{ job.location }}</span>
-                </div>
-                <p class="mt-3 text-xs text-slate-600 leading-relaxed line-clamp-2">{{ job.description }}</p>
-              </div>
-
-              <div class="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between">
-                <div>
-                  <span class="text-xs text-slate-400 block font-medium">Est. Compensation</span>
-                  <span class="text-sm font-extrabold text-[#003461]">{{ job.pay_range }}</span>
-                </div>
-                <button 
-                  (click)="modalService.openResumeModal(job.title)" 
-                  class="px-4 py-2 rounded-lg bg-[#004b87] hover:bg-[#0B3C5D] text-white text-xs font-bold transition-colors">
-                  Quick Apply
-                </button>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- SECTION 4: CALL TO ACTION BANNER -->
-      <section class="w-full bg-[#0B3C5D] text-white py-16 px-6 lg:px-12 relative overflow-hidden">
-        <div class="max-w-5xl mx-auto text-center relative z-10">
-          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold uppercase tracking-wider text-[#86f4f1] mb-4">
-            <span class="w-2 h-2 rounded-full bg-[#5FCF80]"></span>
-            Accelerate Your Healthcare Workforce
-          </span>
-          <h2 class="font-heading text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-            Ready to Solve Your Clinical Staffing Challenges?
-          </h2>
-          <p class="mt-4 text-base sm:text-lg text-slate-300 max-w-2xl mx-auto">
-            Connect with our enterprise talent directors today to discuss rapid deployment contracts, per diem pooling, or custom agency partnerships.
+    <!-- HERO -->
+    <section class="band !pt-16 lg:!pt-20">
+      <div class="wrap grid gap-14 lg:grid-cols-12 lg:items-center">
+        <div class="lg:col-span-7">
+          <p class="t-kicker">Nurse staffing and healthcare recruitment partner for the USA, UK and Canada</p>
+          <h1 class="t-display max-w-[19ch]">Connecting healthcare talent to where it matters most</h1>
+          <p class="t-lede mt-6">
+            HDDP Consultants partners with healthcare staffing agencies and providers to deliver pre-screened, job-ready nurses and healthcare professionals—quickly, efficiently, and at scale.
           </p>
-
-          <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button 
-              (click)="modalService.openRequestTalent()" 
-              class="w-full sm:w-auto bg-[#f2a900] hover:bg-amber-400 text-slate-900 font-extrabold px-8 py-4 rounded-xl shadow-lg transition-all text-base flex items-center justify-center gap-2">
-              <span>Submit Staffing Requisition</span>
-              <span class="material-symbols-outlined text-[20px]">send</span>
-            </button>
-            <a 
-              routerLink="/contact-us" 
-              class="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-xl border border-white/20 transition-all text-base flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined text-[20px]">phone</span>
-              <span>Speak to an Advisor</span>
-            </a>
+          <p class="t-body mt-4">
+            From critical staffing shortages to urgent placements, we act as your extended recruitment engine—helping you fill roles faster while reducing hiring costs and operational strain.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-primary">Request talent</button>
+            <a routerLink="/partner-with-us" class="btn btn-outline">Partner with us</a>
           </div>
         </div>
-      </section>
 
-    </div>
+        <!-- What partners receive: a candidate summary -->
+        <figure class="lg:col-span-5 m-0">
+          <div class="bg-white border border-line rounded-lg shadow-[0_18px_40px_-18px_rgba(11,60,93,0.35)]">
+            <div class="px-6 pt-5 pb-4 border-b border-line flex items-start justify-between gap-4">
+              <div>
+                <p class="text-sm text-muted">Candidate summary</p>
+                <p class="font-heading font-semibold text-navy text-lg leading-snug">Registered Nurse, Med-Surg</p>
+              </div>
+              <span class="text-xs font-semibold text-teal-ink bg-mist border border-line rounded px-2 py-1 whitespace-nowrap">Ready to submit</span>
+            </div>
+
+            <div class="px-6 py-5 border-b border-line">
+              <div class="flex justify-between text-sm">
+                <span class="text-muted">Requirement received</span>
+                <span class="font-semibold">0 h</span>
+              </div>
+              <div class="relative mt-3 h-2 rounded-full bg-mist" aria-hidden="true">
+                <div class="absolute inset-y-0 left-1/2 right-0 rounded-r-full bg-teal/25"></div>
+                <div class="absolute inset-y-0 left-0 w-[54%] rounded-l-full bg-teal"></div>
+                <div class="absolute -top-1 left-[54%] -ml-2 h-4 w-4 rounded-full border-[3px] border-white bg-navy shadow"></div>
+              </div>
+              <div class="mt-2 flex justify-between text-xs text-muted">
+                <span>0 h</span><span>48 h</span><span>96 h</span>
+              </div>
+              <p class="mt-3 text-sm"><span class="font-semibold text-navy">Submitted at 52 hours</span>, inside the 48–96 hour window.</p>
+            </div>
+
+            <ul class="px-6 py-4 m-0 list-none text-sm">
+              <li *ngFor="let c of checks" class="flex items-center justify-between gap-4 py-2 border-b border-line last:border-0">
+                <span>{{ c.label }}</span>
+                <span class="flex items-center gap-1.5 font-semibold" [ngClass]="c.done ? 'text-teal-ink' : 'text-muted'">
+                  <span class="inline-block h-2.5 w-2.5 rounded-full" [ngClass]="c.done ? 'bg-[#5FCF80]' : 'border-2 border-teal'"></span>
+                  {{ c.state }}
+                </span>
+              </li>
+            </ul>
+          </div>
+          <figcaption class="mt-3 text-sm text-muted">Example of the summary sent with each candidate.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- TRUST BAR -->
+    <section class="border-y border-line">
+      <div class="wrap grid grid-cols-2 lg:grid-cols-4">
+        <div *ngFor="let t of trust; let i = index" class="py-7 pr-4 border-line" [ngClass]="i > 0 ? 'lg:border-l lg:pl-8' : ''">
+          <p class="font-heading font-semibold text-navy text-lg">{{ t.title }}</p>
+          <p class="text-sm text-muted mt-1">{{ t.text }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROBLEM → SOLUTION -->
+    <section class="band">
+      <div class="wrap split">
+        <div>
+          <h2 class="t-h2">Healthcare staffing challenges, and how HDDP solves them</h2>
+        </div>
+        <div>
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="text-sm text-muted">
+                <th scope="col" class="font-semibold pb-3 w-1/2">The challenge</th>
+                <th scope="col" class="font-semibold pb-3">How HDDP helps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let r of challenges" class="border-t border-line align-top">
+                <td class="py-5 pr-6 text-ink">{{ r.problem }}</td>
+                <td class="py-5 font-semibold text-navy">{{ r.answer }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORE SERVICES -->
+    <section class="band band-mist">
+      <div class="wrap split">
+        <div>
+          <h2 class="t-h2">Core services</h2>
+          <p class="t-body mt-4">Recruitment support for nurse and healthcare staffing agencies. We add capacity to your team; your agency keeps its clients and its operations.</p>
+          <a routerLink="/healthcare-solutions" class="link inline-block mt-6">See roles and delivery models</a>
+        </div>
+        <ul class="ruled">
+          <li *ngFor="let s of services" class="def-row">
+            <h3 class="t-h3">{{ s.title }}</h3>
+            <p class="t-body m-0">{{ s.text }}</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="band">
+      <div class="wrap">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+          <h2 class="t-h2">How it works</h2>
+          <p class="font-heading font-semibold text-teal-ink text-lg m-0">Qualified candidates delivered within 48–96 hours</p>
+        </div>
+        <ol class="steps steps-row">
+          <li *ngFor="let step of steps"><span class="font-semibold text-navy">{{ step }}</span></li>
+        </ol>
+        <a routerLink="/process" class="link inline-block mt-8">Read about our process</a>
+      </div>
+    </section>
+
+    <!-- WHY HDDP -->
+    <section class="band band-mist">
+      <div class="wrap split">
+        <h2 class="t-h2">Why agencies work with HDDP</h2>
+        <ul class="ruled">
+          <li *ngFor="let w of whyHddp" class="def-row">
+            <h3 class="t-h3">{{ w.title }}</h3>
+            <p class="t-body m-0">{{ w.text }}</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="band band-navy">
+      <div class="wrap flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        <div>
+          <h2 class="t-h1">Struggling to fill healthcare roles?</h2>
+          <p class="mt-3 text-lg text-white/80">Let HDDP deliver pre-screened candidates—fast, reliable, and ready.</p>
+        </div>
+        <div class="flex flex-wrap gap-3 shrink-0">
+          <a routerLink="/contact-us" class="btn btn-light">Schedule a consultation</a>
+          <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-ghost-light">Request talent</button>
+        </div>
+      </div>
+    </section>
   `
 })
-export class HomeComponent implements OnInit {
-  apiService = inject(ApiService);
+export class HomeComponent {
   modalService = inject(ModalService);
 
-  featuredJobs = signal<JobPosition[]>([]);
-  totalJobs = signal<number>(6);
+  checks = [
+    { label: 'Resume and experience screening', state: 'Done', done: true },
+    { label: 'Communication evaluation', state: 'Done', done: true },
+    { label: 'Role fit assessment', state: 'Done', done: true },
+    { label: 'Credential verification', state: 'Coordinating', done: false }
+  ];
 
-  ngOnInit() {
-    this.apiService.getJobs().subscribe({
-      next: (res) => {
-        if (res.data) {
-          this.featuredJobs.set(res.data.slice(0, 3));
-          this.totalJobs.set(res.count);
-        }
-      }
-    });
-  }
+  trust = [
+    { title: 'Trusted recruitment partner', text: 'We support agencies; we don’t compete with them.' },
+    { title: '25+ years combined expertise', text: 'In healthcare recruitment and staffing.' },
+    { title: 'Global talent network', text: 'Sourcing for roles in the USA, UK and Canada.' },
+    { title: 'Fast delivery', text: 'Candidates within 48–96 hours.' }
+  ];
+
+  challenges = [
+    { problem: 'Ongoing nurse shortages', answer: 'Rapid candidate delivery' },
+    { problem: 'Slow hiring cycles', answer: 'Pre-screened, qualified professionals' },
+    { problem: 'Burnout due to understaffing', answer: 'Scalable offshore recruitment teams' },
+    { problem: 'High cost of recruitment', answer: 'Cost-efficient hiring support' }
+  ];
+
+  services = [
+    { title: 'Healthcare talent sourcing', text: 'We identify and deliver qualified healthcare professionals aligned with your specific requirements.' },
+    { title: 'Recruitment process outsourcing (RPO)', text: 'Dedicated offshore recruiters acting as an extension of your internal hiring team.' },
+    { title: 'Credentialing and compliance support', text: 'We assist with documentation, verification coordination, and candidate readiness.' },
+    { title: 'Back-office recruitment support', text: 'Interview scheduling, pipeline management, and administrative coordination.' }
+  ];
+
+  steps = [
+    'Requirement understanding',
+    'Targeted talent sourcing',
+    'Screening and evaluation',
+    'Credentialing coordination',
+    'Candidate submission'
+  ];
+
+  whyHddp = [
+    { title: 'Speed-driven recruitment', text: 'Qualified candidates within 48–96 hours of receiving your requirement.' },
+    { title: 'Global talent reach', text: 'Sourcing from a global talent network for roles in the USA, UK and Canada.' },
+    { title: 'Cost efficiency', text: 'Offshore recruitment capacity for less than the cost of growing an in-house team.' },
+    { title: 'Deep industry understanding', text: 'Recruiters who know nursing, allied health and healthcare IT roles.' },
+    { title: 'Scalable delivery model', text: 'Add recruiters as your requisitions grow, and scale back when they slow.' }
+  ];
 }

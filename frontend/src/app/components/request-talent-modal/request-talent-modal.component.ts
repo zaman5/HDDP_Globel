@@ -15,14 +15,14 @@ import { TalentRequest } from '../../models/models';
       <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh] animate-slide-up">
         
         <!-- Modal Header -->
-        <div class="bg-[#003461] text-white px-6 py-5 flex items-center justify-between">
+        <div class="bg-navy text-white px-6 py-5 flex items-center justify-between">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-              <span class="material-symbols-outlined text-[#86f4f1] text-[24px]">assignment_add</span>
+              <span class="material-symbols-outlined text-white text-[24px]" aria-hidden="true">assignment_add</span>
             </div>
             <div>
-              <h3 class="font-heading text-lg font-bold">Request Clinical Talent</h3>
-              <p class="text-xs text-[#8abcff]">Enterprise Staffing Requisition • 48-96h Deployment SLA</p>
+              <h3 class="font-heading text-lg font-bold">Request Talent</h3>
+              <p class="text-sm text-white/75">Pre-screened candidates within 48–96 hours</p>
             </div>
           </div>
           <button (click)="modalService.closeRequestTalent()" class="text-slate-300 hover:text-white p-1 rounded-lg">
@@ -31,22 +31,22 @@ import { TalentRequest } from '../../models/models';
         </div>
 
         <!-- Modal Body / Form -->
-        <form (ngSubmit)="submitRequest()" class="p-6 overflow-y-auto space-y-4 text-sm flex-1">
+        <form (ngSubmit)="submitRequest()" class="hd-form p-6 overflow-y-auto space-y-4 text-sm flex-1" novalidate>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">Organization / Facility Name *</label>
-              <input 
+              <label for="rt-organization-name" class="block font-semibold text-slate-700 mb-1">Organization / Facility Name *</label>
+              <input id="rt-organization-name" 
                 type="text" 
                 [(ngModel)]="formData.organization_name" 
                 name="organization_name" 
                 required 
-                placeholder="e.g. Northwestern Memorial Hospital" 
+                placeholder="e.g. Apex Health Staffing" 
                 class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#004b87] focus:border-transparent text-slate-900" />
             </div>
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">Contact Name *</label>
-              <input 
+              <label for="rt-contact-name" class="block font-semibold text-slate-700 mb-1">Contact Name *</label>
+              <input id="rt-contact-name" 
                 type="text" 
                 [(ngModel)]="formData.contact_name" 
                 name="contact_name" 
@@ -58,8 +58,8 @@ import { TalentRequest } from '../../models/models';
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">Work Email *</label>
-              <input 
+              <label for="rt-work-email" class="block font-semibold text-slate-700 mb-1">Work Email *</label>
+              <input id="rt-work-email" 
                 type="email" 
                 [(ngModel)]="formData.work_email" 
                 name="work_email" 
@@ -68,8 +68,8 @@ import { TalentRequest } from '../../models/models';
                 class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#004b87] focus:border-transparent text-slate-900" />
             </div>
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">Direct Phone Number *</label>
-              <input 
+              <label for="rt-phone-number" class="block font-semibold text-slate-700 mb-1">Direct Phone Number *</label>
+              <input id="rt-phone-number" 
                 type="tel" 
                 [(ngModel)]="formData.phone_number" 
                 name="phone_number" 
@@ -81,21 +81,18 @@ import { TalentRequest } from '../../models/models';
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">Facility Type</label>
-              <select 
+              <label for="rt-facility-type" class="block font-semibold text-slate-700 mb-1">Facility Type</label>
+              <select id="rt-facility-type" 
                 [(ngModel)]="formData.facility_type" 
                 name="facility_type" 
                 class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#004b87] bg-white text-slate-900">
-                <option value="Acute Care Hospital">Acute Care Hospital</option>
-                <option value="Level 1/2 Trauma Center">Level 1/2 Trauma Center</option>
-                <option value="Ambulatory / Surgery Center">Ambulatory / Surgery Center</option>
-                <option value="Long-Term Acute Care (LTACH)">LTACH Facility</option>
-                <option value="Healthcare Staffing Agency">Staffing Agency Partner</option>
+                <option value="Healthcare Staffing Agency">Healthcare Staffing Agency</option>
+                <option value="Healthcare Provider">Healthcare Provider</option>
               </select>
             </div>
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">Facility City</label>
-              <input 
+              <label for="rt-facility-city" class="block font-semibold text-slate-700 mb-1">Facility City</label>
+              <input id="rt-facility-city" 
                 type="text" 
                 [(ngModel)]="formData.facility_city" 
                 name="facility_city" 
@@ -103,8 +100,8 @@ import { TalentRequest } from '../../models/models';
                 class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#004b87] text-slate-900" />
             </div>
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">State</label>
-              <input 
+              <label for="rt-facility-state" class="block font-semibold text-slate-700 mb-1">State</label>
+              <input id="rt-facility-state" 
                 type="text" 
                 [(ngModel)]="formData.facility_state" 
                 name="facility_state" 
@@ -115,18 +112,18 @@ import { TalentRequest } from '../../models/models';
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="sm:col-span-2">
-              <label class="block font-semibold text-slate-700 mb-1">Roles / Specialties Needed *</label>
-              <input 
+              <label for="rt-roles-needed" class="block font-semibold text-slate-700 mb-1">Roles / Specialties Needed *</label>
+              <input id="rt-roles-needed" 
                 type="text" 
                 [(ngModel)]="formData.roles_needed" 
                 name="roles_needed" 
                 required 
-                placeholder="e.g. 5x ICU RNs, 2x OR Scrub Nurses" 
+                placeholder="e.g. 5x RNs, 3x CNAs, 1x Radiology Tech" 
                 class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#004b87] text-slate-900" />
             </div>
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">Number of Openings</label>
-              <input 
+              <label for="rt-num-positions" class="block font-semibold text-slate-700 mb-1">Number of Openings</label>
+              <input id="rt-num-positions" 
                 type="number" 
                 min="1" 
                 [(ngModel)]="formData.num_positions" 
@@ -137,20 +134,20 @@ import { TalentRequest } from '../../models/models';
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">Urgency Level</label>
-              <select 
+              <label for="rt-urgency-level" class="block font-semibold text-slate-700 mb-1">Urgency Level</label>
+              <select id="rt-urgency-level" 
                 [(ngModel)]="formData.urgency_level" 
                 name="urgency_level" 
                 class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#004b87] bg-white text-slate-900">
-                <option value="Critical / Rapid Deployment (24-48h)">Critical / Rapid Deployment (24-48h)</option>
+                <option value="Urgent (Candidates in 48-96h)">Urgent (Candidates in 48–96h)</option>
                 <option value="Immediate Need (Within 1-2 Weeks)">Immediate Need (Within 1-2 Weeks)</option>
                 <option value="Planned Sourcing (30 Days+)">Planned Sourcing (30 Days+)</option>
-                <option value="Per Diem / Ongoing Pool">Per Diem / Ongoing Pool</option>
+                <option value="Ongoing Talent Pipeline">Ongoing Talent Pipeline</option>
               </select>
             </div>
             <div>
-              <label class="block font-semibold text-slate-700 mb-1">Target Start Date</label>
-              <input 
+              <label for="rt-target-start-date" class="block font-semibold text-slate-700 mb-1">Target Start Date</label>
+              <input id="rt-target-start-date" 
                 type="text" 
                 [(ngModel)]="formData.target_start_date" 
                 name="target_start_date" 
@@ -160,12 +157,12 @@ import { TalentRequest } from '../../models/models';
           </div>
 
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Clinical Requirements & Specifications</label>
-            <textarea 
+            <label for="rt-additional-notes" class="block font-semibold text-slate-700 mb-1">Clinical Requirements & Specifications</label>
+            <textarea id="rt-additional-notes" 
               rows="3" 
               [(ngModel)]="formData.additional_notes" 
               name="additional_notes" 
-              placeholder="Specify required certifications (BLS, ACLS, NIHSS, Epic/Cerner EHR proficiency, compact licensure requirements)..." 
+              placeholder="Required licenses/certifications, experience, and preferred engagement model (Per Placement, Monthly Retainer, Dedicated Recruiter, Project-Based)..." 
               class="w-full px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#004b87] text-slate-900 resize-none"></textarea>
           </div>
 
@@ -180,8 +177,8 @@ import { TalentRequest } from '../../models/models';
             <button 
               type="submit" 
               [disabled]="isSubmitting()" 
-              class="px-7 py-2.5 rounded-lg bg-[#004b87] hover:bg-[#0B3C5D] text-white font-bold shadow-md transition-all flex items-center gap-2 disabled:opacity-50">
-              <span *ngIf="!isSubmitting()">Deploy Requisition</span>
+              class="btn btn-primary">
+              <span *ngIf="!isSubmitting()">Send talent request</span>
               <span *ngIf="isSubmitting()">Submitting Requisition...</span>
               <span class="material-symbols-outlined text-[18px]">send</span>
             </button>
@@ -205,7 +202,7 @@ export class RequestTalentModalComponent {
     contact_name: '',
     work_email: '',
     phone_number: '',
-    facility_type: 'Acute Care Hospital',
+    facility_type: 'Healthcare Staffing Agency',
     facility_city: '',
     facility_state: '',
     roles_needed: '',
@@ -226,7 +223,7 @@ export class RequestTalentModalComponent {
     this.apiService.submitTalentRequest(this.formData).subscribe({
       next: (res) => {
         this.isSubmitting.set(false);
-        this.toastService.success('Requisition Received!', 'Your talent request has been logged into MySQL database. Our clinical staffing coordinator will follow up immediately.');
+        this.toastService.success('Request Received!', 'Thank you. Our recruitment team will follow up shortly.');
         this.modalService.closeRequestTalent();
         this.resetForm();
       },
@@ -243,7 +240,7 @@ export class RequestTalentModalComponent {
       contact_name: '',
       work_email: '',
       phone_number: '',
-      facility_type: 'Acute Care Hospital',
+      facility_type: 'Healthcare Staffing Agency',
       facility_city: '',
       facility_state: '',
       roles_needed: '',

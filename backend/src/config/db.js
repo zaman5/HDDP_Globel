@@ -223,6 +223,7 @@ async function createMysqlTables() {
       description TEXT,
       requirements TEXT,
       is_featured BOOLEAN DEFAULT TRUE,
+      country VARCHAR(50) DEFAULT 'United States',
       status VARCHAR(50) DEFAULT 'Open',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -246,6 +247,11 @@ async function createMysqlTables() {
       resume_filename VARCHAR(255) NULL,
       resume_path VARCHAR(255) NULL,
       notes TEXT NULL,
+      job_id INT NULL,
+      job_title VARCHAR(255) NULL,
+      country VARCHAR(50) NULL,
+      work_authorization VARCHAR(100) NULL,
+      privacy_consent_at VARCHAR(40) NULL,
       status VARCHAR(50) DEFAULT 'New / Under Review',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -304,6 +310,23 @@ async function createMysqlTables() {
 
   for (const q of queries) {
     await mysqlPool.query(q);
+  }
+
+  // Add columns introduced after the first release to tables that already exist
+  const addedColumns = [
+    ['candidates', 'job_id INT NULL'],
+    ['candidates', 'job_title VARCHAR(255) NULL'],
+    ['candidates', 'country VARCHAR(50) NULL'],
+    ['candidates', 'work_authorization VARCHAR(100) NULL'],
+    ['candidates', 'privacy_consent_at VARCHAR(40) NULL'],
+    ['job_positions', "country VARCHAR(50) DEFAULT 'United States'"]
+  ];
+  for (const [table, col] of addedColumns) {
+    try {
+      await mysqlPool.query(`ALTER TABLE ${table} ADD COLUMN ${col}`);
+    } catch (e) {
+      if (e.code !== 'ER_DUP_FIELDNAME') throw e;
+    }
   }
 }
 
@@ -391,6 +414,7 @@ async function query(sql, params = []) {
           description: params[11],
           requirements: params[12],
           is_featured: params[13],
+          country: params[14] || 'United States',
           status: 'Open'
         };
       } else if (tableName === 'candidates') {
@@ -412,6 +436,11 @@ async function query(sql, params = []) {
           resume_filename: params[13],
           resume_path: params[14],
           notes: params[15],
+          job_id: params[16],
+          job_title: params[17],
+          country: params[18],
+          work_authorization: params[19],
+          privacy_consent_at: params[20],
           status: 'New / Under Review'
         };
       } else if (tableName === 'talent_requests') {

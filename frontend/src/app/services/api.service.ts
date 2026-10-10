@@ -90,6 +90,11 @@ export class ApiService {
     });
   }
 
+  // Direct link that downloads a candidate's uploaded CV with its original filename
+  getResumeDownloadUrl(candidateId: number): string {
+    return `${this.baseUrl}/candidates/${candidateId}/resume`;
+  }
+
   getCandidates(specialty?: string, status?: string): Observable<{ success: boolean; count: number; data: CandidateApplication[] }> {
     const params = new URLSearchParams();
     if (specialty) params.append('specialty', specialty);

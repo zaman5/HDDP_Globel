@@ -14,6 +14,7 @@ export interface JobPosition {
   description: string;
   requirements: string;
   is_featured: number | boolean;
+  country?: string;
   status: string;
   created_at?: string;
 }
@@ -36,6 +37,11 @@ export interface CandidateApplication {
   resume_filename?: string;
   resume_path?: string;
   notes?: string;
+  job_id?: number | null;
+  job_title?: string | null;
+  country?: string | null;
+  work_authorization?: string | null;
+  privacy_consent_at?: string | null;
   status?: string;
   created_at?: string;
 }
