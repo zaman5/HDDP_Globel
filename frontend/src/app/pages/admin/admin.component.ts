@@ -10,7 +10,23 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="flex flex-col w-full bg-[#F5F7FA] min-h-screen pb-20">
+    <!-- SIGN IN -->
+    <section *ngIf="!apiService.adminToken()" class="band band-mist min-h-[70vh]">
+      <div class="wrap max-w-md">
+        <h1 class="t-h2">Admin sign-in</h1>
+        <p class="t-body mt-3">Enter the admin key to view applications, enquiries and CVs.</p>
+        <form (ngSubmit)="signIn()" class="hd-form mt-6 bg-white border border-line rounded-lg p-6 space-y-4" novalidate>
+          <div>
+            <label for="admin-key">Admin key</label>
+            <input id="admin-key" type="password" name="adminKey" [(ngModel)]="adminKey" autocomplete="current-password" required />
+          </div>
+          <p *ngIf="signInError()" class="text-sm font-semibold text-red-700 m-0" role="alert">{{ signInError() }}</p>
+          <button type="submit" class="btn btn-primary btn-block" [disabled]="signingIn() || !adminKey">{{ signingIn() ? 'Checking…' : 'Sign in' }}</button>
+        </form>
+      </div>
+    </section>
+
+    <div *ngIf="apiService.adminToken()" class="flex flex-col w-full bg-[#F5F7FA] min-h-screen pb-20">
       
       <!-- ADMIN HEADER -->
       <section class="bg-[#0B3C5D] text-white py-10 px-6 lg:px-12 border-b border-[#213145]">
@@ -25,6 +41,7 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
           </div>
 
           <div class="flex items-center gap-3">
+            <button (click)="signOut()" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold transition-all border border-white/20">Sign out</button>
             <button (click)="refreshData()" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border border-white/20">
               <span class="material-symbols-outlined text-[16px]">refresh</span>
               <span>Refresh Records</span>
@@ -145,11 +162,11 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
                   <td class="p-3.5">{{ c.created_at | date:'mediumDate' }}</td>
                   <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 font-bold">{{ c.status }}</span></td>
                   <td class="p-3.5">
-                    <a *ngIf="c.resume_path && c.id" [href]="apiService.getResumeDownloadUrl(c.id)" (click)="$event.stopPropagation()"
+                    <button *ngIf="c.resume_path && c.id" type="button" (click)="$event.stopPropagation(); downloadCv(c)"
                       class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#004b87] hover:bg-[#0B3C5D] text-white font-bold">
                       <span class="material-symbols-outlined text-[16px]">download</span>
                       Download
-                    </a>
+                    </button>
                     <span *ngIf="!c.resume_path" class="text-slate-400">No file</span>
                   </td>
                 </tr>
@@ -171,9 +188,9 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Expected Pay</span>{{ c.desired_pay || '—' }}</div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Applied On</span>{{ c.created_at | date:'medium' }}</div>
                       <div class="col-span-2"><span class="block text-[10px] uppercase font-bold text-slate-400">CV / Resume File</span>
-                        <a *ngIf="c.resume_path && c.id" [href]="apiService.getResumeDownloadUrl(c.id)" class="inline-flex items-center gap-1 text-[#004b87] font-bold">
+                        <button *ngIf="c.resume_path && c.id" type="button" (click)="downloadCv(c)" class="inline-flex items-center gap-1 text-[#004b87] font-bold bg-transparent border-0 p-0 cursor-pointer">
                           <span class="material-symbols-outlined text-[16px]">download</span>{{ c.resume_filename }}
-                        </a>
+                        </button>
                         <span *ngIf="!c.resume_path">No file uploaded</span>
                       </div>
                       <div class="col-span-2 md:col-span-4"><span class="block text-[10px] uppercase font-bold text-slate-400">Cover Note</span><p class="whitespace-pre-line">{{ c.notes || '—' }}</p></div>
@@ -519,34 +536,66 @@ export class AdminComponent implements OnInit {
     requirements: 'Active RN License, BLS, ACLS'
   };
 
+  adminKey = '';
+  signingIn = signal(false);
+  signInError = signal('');
+
   ngOnInit() {
-    this.refreshData();
+    if (this.apiService.adminToken()) this.refreshData();
+  }
+
+  signIn() {
+    const key = this.adminKey.trim();
+    if (!key) return;
+    this.signingIn.set(true);
+    this.signInError.set('');
+    this.apiService.verifyAdminToken(key).subscribe({
+      next: () => {
+        this.signingIn.set(false);
+        this.adminKey = '';
+        this.refreshData();
+      },
+      error: (err: Error) => {
+        this.signingIn.set(false);
+        this.signInError.set(err.message);
+      }
+    });
+  }
+
+  signOut() {
+    this.apiService.signOutAdmin();
+    this.candidates.set([]);
+    this.talentRequests.set([]);
+    this.partnerApps.set([]);
+    this.contactInquiries.set([]);
+  }
+
+  async downloadCv(c: CandidateApplication) {
+    try {
+      await this.apiService.downloadResume(c.id!, c.resume_filename || 'cv');
+    } catch (err) {
+      this.toastService.error('Download failed', (err as Error).message);
+    }
   }
 
   refreshData() {
+    // One message for the whole refresh, not one per list
+    let reported = false;
+    const onError = (err: Error & { status?: number }) => {
+      if (reported) return;
+      reported = true;
+      if (err.status === 401) this.toastService.error('Signed out', 'Your admin session has ended. Please sign in again.');
+      else this.toastService.error('Could not load records', err.message);
+    };
+
     this.apiService.getStats().subscribe(res => {
       if (res.data) this.stats.set(res.data);
     });
-
-    this.apiService.getCandidates().subscribe(res => {
-      if (res.data) this.candidates.set(res.data);
-    });
-
-    this.apiService.getTalentRequests().subscribe(res => {
-      if (res.data) this.talentRequests.set(res.data);
-    });
-
-    this.apiService.getPartners().subscribe(res => {
-      if (res.data) this.partnerApps.set(res.data);
-    });
-
-    this.apiService.getContactInquiries().subscribe(res => {
-      if (res.data) this.contactInquiries.set(res.data);
-    });
-
-    this.apiService.getJobs().subscribe(res => {
-      if (res.data) this.jobs.set(res.data);
-    });
+    this.apiService.getCandidates().subscribe({ next: res => this.candidates.set(res.data || []), error: onError });
+    this.apiService.getTalentRequests().subscribe({ next: res => this.talentRequests.set(res.data || []), error: onError });
+    this.apiService.getPartners().subscribe({ next: res => this.partnerApps.set(res.data || []), error: onError });
+    this.apiService.getContactInquiries().subscribe({ next: res => this.contactInquiries.set(res.data || []), error: onError });
+    this.apiService.getJobs().subscribe({ next: res => this.jobs.set(res.data || []), error: onError });
   }
 
   publishJob() {
@@ -557,7 +606,7 @@ export class AdminComponent implements OnInit {
 
     this.apiService.createJob(this.newJob).subscribe({
       next: (res) => {
-        this.toastService.success('Position Published!', 'New job position stored in MySQL database.');
+        this.toastService.success('Position published', 'The job is now live on the jobs page.');
         this.newJob = {
           country: 'United States',
           title: '',
@@ -577,7 +626,7 @@ export class AdminComponent implements OnInit {
         this.activeTab = 'candidates';
       },
       error: (err) => {
-        this.toastService.error('Error Publishing Job', err.error?.message || 'Failed to save job');
+        this.toastService.error('Error publishing job', err.message || 'Failed to save job');
       }
     });
   }

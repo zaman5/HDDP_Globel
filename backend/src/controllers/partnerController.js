@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { isEmail, fieldTooLong } = require('../utils/validation');
 
 exports.submitPartnerApplication = async (req, res) => {
   try {
@@ -20,6 +21,13 @@ exports.submitPartnerApplication = async (req, res) => {
         success: false,
         message: 'Company Name, Contact Name, Work Email, and Phone Number are required.'
       });
+    }
+
+    if (!isEmail(work_email)) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
+    }
+    if (fieldTooLong(req.body)) {
+      return res.status(400).json({ success: false, message: 'One of the fields is too long. Please shorten it and try again.' });
     }
 
     const result = await db.query(
@@ -49,8 +57,7 @@ exports.submitPartnerApplication = async (req, res) => {
     console.error('Error submitting partner application:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error submitting partnership application',
-      error: error.message
+      message: 'Server error submitting partnership application'
     });
   }
 };
@@ -61,6 +68,6 @@ exports.getAllPartners = async (req, res) => {
     res.json({ success: true, count: partners.length, data: partners });
   } catch (error) {
     console.error('Error fetching partner applications:', error);
-    res.status(500).json({ success: false, message: 'Server error retrieving partners', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error retrieving partners' });
   }
 };

@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { isEmail, fieldTooLong } = require('../utils/validation');
 
 exports.submitTalentRequest = async (req, res) => {
   try {
@@ -23,6 +24,13 @@ exports.submitTalentRequest = async (req, res) => {
         success: false,
         message: 'Organization Name, Contact Name, Work Email, Phone, and Roles Needed are required.'
       });
+    }
+
+    if (!isEmail(work_email)) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
+    }
+    if (fieldTooLong(req.body)) {
+      return res.status(400).json({ success: false, message: 'One of the fields is too long. Please shorten it and try again.' });
     }
 
     const result = await db.query(
@@ -55,8 +63,7 @@ exports.submitTalentRequest = async (req, res) => {
     console.error('Error submitting talent request:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error processing talent request',
-      error: error.message
+      message: 'Server error processing talent request'
     });
   }
 };
@@ -67,6 +74,6 @@ exports.getAllTalentRequests = async (req, res) => {
     res.json({ success: true, count: requests.length, data: requests });
   } catch (error) {
     console.error('Error fetching talent requests:', error);
-    res.status(500).json({ success: false, message: 'Server error retrieving talent requests', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error retrieving talent requests' });
   }
 };

@@ -59,13 +59,14 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .rule-top { border-top: 1px solid var(--line); }
 
 /* Heading on the left, content on the right */
+/* minmax(0, …) lets columns shrink below their content, so wide tables scroll inside their box instead of widening the page */
 .split {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 32px;
 }
 @media (min-width: 900px) {
-  .split { grid-template-columns: 4fr 8fr; gap: 64px; }
+  .split { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 64px; }
 }
 
 /* ---------- Type scale (1.25 ratio) ---------- */

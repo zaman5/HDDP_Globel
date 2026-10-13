@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { ModalService } from '../../services/modal.service';
 import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
+import { DialogDirective } from '../dialog.directive';
 
 const ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx', '.rtf', '.txt'];
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
@@ -12,10 +13,10 @@ const MAX_FILE_BYTES = 10 * 1024 * 1024;
 @Component({
   selector: 'app-resume-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, DialogDirective],
   template: `
     <div *ngIf="modalService.isResumeModalOpen()" class="fixed inset-0 z-[9990] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-fade-in">
-      <div role="dialog" aria-modal="true" aria-labelledby="rm-title" class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh] animate-slide-up">
+      <div appDialog (dialogClose)="modalService.closeResumeModal()" role="dialog" aria-modal="true" aria-labelledby="rm-title" tabindex="-1" class="outline-none bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh] animate-slide-up">
 
         <!-- Header -->
         <div class="bg-navy text-white px-6 py-5 flex items-center justify-between">
@@ -24,7 +25,7 @@ const MAX_FILE_BYTES = 10 * 1024 * 1024;
               <span class="material-symbols-outlined text-white text-[24px]" aria-hidden="true">clinical_notes</span>
             </div>
             <div>
-              <h3 id="rm-title" class="font-heading text-lg font-bold">Submit Your Resume</h3>
+              <h2 id="rm-title" class="font-heading text-lg font-bold text-white m-0">Submit your resume</h2>
               <p class="text-sm text-white/75">Join our talent network for nursing and healthcare roles in the USA, UK and Canada</p>
             </div>
           </div>
@@ -233,7 +234,7 @@ export class ResumeModalComponent {
     this.apiService.submitCandidateApplication(postData).subscribe({
       next: () => {
         this.isSubmitting.set(false);
-        this.toastService.success('Application Received!', 'Thank you. A recruiter will contact you shortly.');
+        this.toastService.success('Application received', 'Thank you. A recruiter will contact you shortly.');
         this.modalService.closeResumeModal();
         this.formData = this.emptyForm();
         this.selectedFile = null;

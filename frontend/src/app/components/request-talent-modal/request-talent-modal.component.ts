@@ -5,14 +5,15 @@ import { ModalService } from '../../services/modal.service';
 import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
 import { TalentRequest } from '../../models/models';
+import { DialogDirective } from '../dialog.directive';
 
 @Component({
   selector: 'app-request-talent-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DialogDirective],
   template: `
     <div *ngIf="modalService.isRequestTalentOpen()" class="fixed inset-0 z-[9990] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-fade-in">
-      <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh] animate-slide-up">
+      <div appDialog (dialogClose)="modalService.closeRequestTalent()" role="dialog" aria-modal="true" aria-labelledby="rt-title" tabindex="-1" class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh] animate-slide-up outline-none">
         
         <!-- Modal Header -->
         <div class="bg-navy text-white px-6 py-5 flex items-center justify-between">
@@ -21,12 +22,12 @@ import { TalentRequest } from '../../models/models';
               <span class="material-symbols-outlined text-white text-[24px]" aria-hidden="true">assignment_add</span>
             </div>
             <div>
-              <h3 class="font-heading text-lg font-bold">Request Talent</h3>
+              <h2 id="rt-title" class="font-heading text-lg font-bold text-white m-0">Request talent</h2>
               <p class="text-sm text-white/75">Pre-screened candidates within 48–96 hours</p>
             </div>
           </div>
-          <button (click)="modalService.closeRequestTalent()" class="text-slate-300 hover:text-white p-1 rounded-lg">
-            <span class="material-symbols-outlined text-[24px]">close</span>
+          <button type="button" (click)="modalService.closeRequestTalent()" aria-label="Close" class="text-slate-300 hover:text-white p-1 rounded-lg">
+            <span class="material-symbols-outlined text-[24px]" aria-hidden="true">close</span>
           </button>
         </div>
 
@@ -226,7 +227,7 @@ export class RequestTalentModalComponent {
     this.apiService.submitTalentRequest(this.formData).subscribe({
       next: (res) => {
         this.isSubmitting.set(false);
-        this.toastService.success('Request Received!', 'Thank you. Our recruitment team will follow up shortly.');
+        this.toastService.success('Request received', 'Thank you. Our recruitment team will follow up within one business day.');
         this.modalService.closeRequestTalent();
         this.resetForm();
       },

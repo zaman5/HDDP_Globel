@@ -13,14 +13,15 @@ const PORT = process.env.PORT || 3000;
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Disposition']
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve uploaded documents
-app.use('/uploads', express.static(path.join(__dirname, 'backend', 'uploads')));
+// Uploaded CVs are NOT served publicly; admins download them through the
+// authenticated /api/candidates/:id/resume endpoint.
 
 // Mount API routes
 app.use('/api', apiRoutes);
@@ -158,6 +159,19 @@ app.get('*', async (req, res, next) => {
     return res.send(renderNoIndex(shell));
   }
   res.status(404).send(renderNoIndex(shell));
+});
+
+// JSON errors for the API (never leak stack traces or file paths)
+app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+  let status = err.status || err.statusCode || 500;
+  let message = 'Something went wrong. Please try again.';
+  if (err.code === 'LIMIT_FILE_SIZE') { status = 413; message = 'The file is too large. The maximum size is 10 MB.'; }
+  else if (err.name === 'MulterError') { status = 400; message = 'The file upload could not be processed.'; }
+  else if (err.type === 'entity.parse.failed') { status = 400; message = 'The request data was not valid.'; }
+  else if (/Only document files/.test(err.message || '')) { status = 400; message = err.message; }
+  if (status >= 500) console.error('[SERVER ERROR]', err);
+  res.status(status).json({ success: false, message });
 });
 
 // Start Server

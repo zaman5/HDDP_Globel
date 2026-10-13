@@ -48,7 +48,7 @@ import { JobPosition } from '../../models/models';
         </div>
 
         <p class="t-small mt-4" aria-live="polite">
-          <ng-container *ngIf="!loading()">{{ filteredJobs().length }} open {{ filteredJobs().length === 1 ? 'job' : 'jobs' }}</ng-container>
+          <ng-container *ngIf="!loading() && !loadError()">{{ filteredJobs().length }} open {{ filteredJobs().length === 1 ? 'job' : 'jobs' }}</ng-container>
           <ng-container *ngIf="loading()">Loading jobs…</ng-container>
         </p>
 
@@ -68,7 +68,12 @@ import { JobPosition } from '../../models/models';
           </li>
         </ul>
 
-        <div *ngIf="!loading() && !filteredJobs().length" class="mt-6 p-8 bg-mist rounded">
+        <div *ngIf="loadError()" class="mt-6 p-8 bg-mist rounded" role="alert">
+          <p class="font-semibold text-navy m-0">We couldn’t load jobs right now.</p>
+          <p class="t-body mt-2 mb-4">Please try again, or send us your resume and a recruiter will match you to open roles.</p>
+          <button type="button" (click)="loadJobs()" class="btn btn-outline">Try again</button>
+        </div>
+        <div *ngIf="!loading() && !loadError() && !filteredJobs().length" class="mt-6 p-8 bg-mist rounded">
           <p class="font-semibold text-navy">No open jobs match your search.</p>
           <p class="t-body mt-1">Clear the filters, or submit your resume and we’ll contact you when a matching role opens.</p>
           <button type="button" (click)="modalService.openResumeModal()" class="btn btn-primary mt-4">Submit your resume</button>
@@ -105,6 +110,7 @@ export class CandidatesComponent implements OnInit {
 
   jobs = signal<JobPosition[]>([]);
   loading = signal<boolean>(true);
+  loadError = signal<boolean>(false);
   searchTerm = signal<string>('');
   countryFilter = signal<string>('');
 
@@ -125,9 +131,21 @@ export class CandidatesComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.apiService.getJobs({}).subscribe(res => {
-      this.jobs.set(res.data || []);
-      this.loading.set(false);
+    this.loadJobs();
+  }
+
+  loadJobs() {
+    this.loading.set(true);
+    this.loadError.set(false);
+    this.apiService.getJobs({}).subscribe({
+      next: res => {
+        this.jobs.set(res.data || []);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.loadError.set(true);
+      }
     });
   }
 

@@ -34,7 +34,7 @@ exports.getAllJobs = async (req, res) => {
     res.json({ success: true, count: jobs.length, data: jobs });
   } catch (error) {
     console.error('Error fetching jobs:', error);
-    res.status(500).json({ success: false, message: 'Server error retrieving jobs', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error retrieving jobs' });
   }
 };
 
@@ -48,7 +48,7 @@ exports.getJobById = async (req, res) => {
     res.json({ success: true, data: jobs[0] });
   } catch (error) {
     console.error('Error fetching job details:', error);
-    res.status(500).json({ success: false, message: 'Server error retrieving job details', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error retrieving job details' });
   }
 };
 
@@ -85,6 +85,6 @@ exports.createJob = async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating job:', error);
-    res.status(500).json({ success: false, message: 'Server error publishing job position', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error publishing job position' });
   }
 };

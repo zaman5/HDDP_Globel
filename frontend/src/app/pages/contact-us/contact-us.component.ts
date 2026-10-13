@@ -95,7 +95,7 @@ export class ContactUsComponent {
     this.apiService.submitContactInquiry({ ...f, subject: f.subject.trim() || 'Not provided' }).subscribe({
       next: () => {
         this.isSubmitting.set(false);
-        this.toastService.success('Consultation request sent', 'Our team will contact you shortly.');
+        this.toastService.success('Message sent', 'Our team will contact you within one business day.');
         this.formData = this.emptyForm();
       },
       error: (err) => {

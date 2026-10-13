@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { isEmail, fieldTooLong } = require('../utils/validation');
 const path = require('path');
 const fs = require('fs');
 
@@ -40,6 +41,15 @@ exports.submitCandidateApplication = async (req, res) => {
       });
     }
 
+    if (!isEmail(email)) {
+      discardUpload(req.file);
+      return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
+    }
+    if (fieldTooLong(req.body)) {
+      discardUpload(req.file);
+      return res.status(400).json({ success: false, message: 'One of the fields is too long. Please shorten it and try again.' });
+    }
+
     // Notice-and-consent is required before we store a CV (UK GDPR, PIPEDA / Quebec Law 25, US state privacy laws)
     if (privacy_consent !== 'true' && privacy_consent !== true) {
       discardUpload(req.file);
@@ -47,6 +57,10 @@ exports.submitCandidateApplication = async (req, res) => {
         success: false,
         message: 'Please confirm you have read the Privacy Policy and agree to your application being processed.'
       });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'Please upload your CV / resume.' });
     }
 
     let resumeFilename = null;
@@ -98,8 +112,7 @@ exports.submitCandidateApplication = async (req, res) => {
     console.error('Error submitting candidate application:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error processing application',
-      error: error.message
+      message: 'Server error processing application'
     });
   }
 };
@@ -121,7 +134,7 @@ exports.downloadResume = async (req, res) => {
     });
   } catch (error) {
     console.error('Error downloading resume:', error);
-    res.status(500).json({ success: false, message: 'Server error downloading CV', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error downloading CV' });
   }
 };
 
@@ -148,6 +161,6 @@ exports.getAllCandidates = async (req, res) => {
     res.json({ success: true, count: candidates.length, data: candidates });
   } catch (error) {
     console.error('Error fetching candidates:', error);
-    res.status(500).json({ success: false, message: 'Server error retrieving candidates', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error retrieving candidates' });
   }
 };

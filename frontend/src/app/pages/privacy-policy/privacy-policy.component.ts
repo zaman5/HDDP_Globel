@@ -20,10 +20,10 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
     </section>
 
     <section class="band-tight">
-      <div class="wrap grid gap-10 lg:grid-cols-12">
+      <div class="wrap grid grid-cols-1 gap-10 lg:grid-cols-12">
 
         <!-- Contents -->
-        <aside class="lg:col-span-3">
+        <aside class="lg:col-span-3 min-w-0">
           <details class="lg:hidden rounded-lg border border-line p-4" >
             <summary class="font-semibold text-navy cursor-pointer">Contents</summary>
             <nav aria-label="Privacy policy contents" class="toc mt-3">
@@ -37,7 +37,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
           </nav>
         </aside>
 
-        <article class="legal legal-numbered lg:col-span-9 max-w-3xl">
+        <article class="legal legal-numbered lg:col-span-9 max-w-3xl min-w-0">
 
           <div class="callout">
             <p class="font-semibold text-navy">The short version</p>
