@@ -35,7 +35,7 @@ import { TalentRequest } from '../../models/models';
           
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label for="rt-organization-name" class="block font-semibold text-slate-700 mb-1">Organization / Facility Name *</label>
+              <label for="rt-organization-name" class="block font-semibold text-slate-700 mb-1">Organization Name *</label>
               <input id="rt-organization-name" 
                 type="text" 
                 [(ngModel)]="formData.organization_name" 
@@ -81,13 +81,16 @@ import { TalentRequest } from '../../models/models';
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label for="rt-facility-type" class="block font-semibold text-slate-700 mb-1">Facility Type</label>
+              <label for="rt-facility-type" class="block font-semibold text-slate-700 mb-1">Organization Type</label>
               <select id="rt-facility-type" 
                 [(ngModel)]="formData.facility_type" 
                 name="facility_type" 
                 class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#004b87] bg-white text-slate-900">
-                <option value="Healthcare Staffing Agency">Healthcare Staffing Agency</option>
-                <option value="Healthcare Provider">Healthcare Provider</option>
+                <option value="Healthcare Staffing Agency">Nurse / Healthcare Staffing Agency</option>
+                <option value="Hospital or Health System">Hospital or Health System</option>
+                <option value="Long-Term Care / Post-Acute">Long-Term Care / Post-Acute</option>
+                <option value="MSP / VMS Provider">MSP / VMS Provider</option>
+                <option value="Healthcare Provider">Other Healthcare Provider</option>
               </select>
             </div>
             <div>

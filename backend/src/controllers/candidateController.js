@@ -28,7 +28,8 @@ exports.submitCandidateApplication = async (req, res) => {
       job_title,
       country,
       work_authorization,
-      privacy_consent
+      privacy_consent,
+      sms_consent
     } = req.body;
 
     if (!first_name || !last_name || !email || !phone || !specialty) {
@@ -58,8 +59,8 @@ exports.submitCandidateApplication = async (req, res) => {
 
     const result = await db.query(
       `INSERT INTO candidates 
-      (first_name, last_name, email, phone, specialty, license_type, compact_license, years_experience, preferred_shift, desired_pay, current_city, current_state, willing_to_relocate, resume_filename, resume_path, notes, job_id, job_title, country, work_authorization, privacy_consent_at, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'New / Under Review')`,
+      (first_name, last_name, email, phone, specialty, license_type, compact_license, years_experience, preferred_shift, desired_pay, current_city, current_state, willing_to_relocate, resume_filename, resume_path, notes, job_id, job_title, country, work_authorization, privacy_consent_at, sms_consent_at, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'New / Under Review')`,
       [
         first_name,
         last_name,
@@ -81,7 +82,9 @@ exports.submitCandidateApplication = async (req, res) => {
         job_title || null,
         country || null,
         work_authorization || null,
-        new Date().toISOString()
+        new Date().toISOString(),
+        // Separate, optional opt-in for recruiting text messages (TCPA / carrier A2P rules)
+        sms_consent === 'true' || sms_consent === true ? new Date().toISOString() : null
       ]
     );
 

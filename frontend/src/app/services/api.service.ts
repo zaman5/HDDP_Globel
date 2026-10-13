@@ -1,15 +1,21 @@
-import { Injectable } from '@angular/core';
-import { Observable, from, of, catchError, map } from 'rxjs';
+import { Injectable, PLATFORM_ID, inject, isDevMode } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { EMPTY, Observable, from, of, catchError, map } from 'rxjs';
 import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, ContactInquiry, PlatformStats } from '../models/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:5000/api';
+  // In production the API is served from the same origin as the site (server.js mounts /api).
+  private baseUrl = isDevMode() ? 'http://localhost:5000/api' : '/api';
+
+  private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   // Helper request method
   private request<T>(endpoint: string, options: RequestInit = {}): Observable<T> {
+    // No API calls while prerendering pages at build time; data loads in the browser.
+    if (!this.isBrowser) return EMPTY;
     return from(
       fetch(`${this.baseUrl}${endpoint}`, {
         ...options,

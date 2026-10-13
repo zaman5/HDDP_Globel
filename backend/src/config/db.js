@@ -252,6 +252,7 @@ async function createMysqlTables() {
       country VARCHAR(50) NULL,
       work_authorization VARCHAR(100) NULL,
       privacy_consent_at VARCHAR(40) NULL,
+      sms_consent_at VARCHAR(40) NULL,
       status VARCHAR(50) DEFAULT 'New / Under Review',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -319,6 +320,7 @@ async function createMysqlTables() {
     ['candidates', 'country VARCHAR(50) NULL'],
     ['candidates', 'work_authorization VARCHAR(100) NULL'],
     ['candidates', 'privacy_consent_at VARCHAR(40) NULL'],
+    ['candidates', 'sms_consent_at VARCHAR(40) NULL'],
     ['job_positions', "country VARCHAR(50) DEFAULT 'United States'"]
   ];
   for (const [table, col] of addedColumns) {
@@ -441,6 +443,7 @@ async function query(sql, params = []) {
           country: params[18],
           work_authorization: params[19],
           privacy_consent_at: params[20],
+          sms_consent_at: params[21],
           status: 'New / Under Review'
         };
       } else if (tableName === 'talent_requests') {

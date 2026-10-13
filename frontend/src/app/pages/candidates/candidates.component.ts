@@ -54,7 +54,7 @@ import { JobPosition } from '../../models/models';
 
         <ul *ngIf="!loading() && filteredJobs().length" class="ruled mt-4">
           <li *ngFor="let job of filteredJobs()" class="!p-0">
-            <a [routerLink]="['/candidates', job.id]" class="group grid gap-2 py-6 md:grid-cols-12 md:items-center hover:bg-mist -mx-4 px-4 rounded">
+            <a [routerLink]="['/jobs', job.id]" class="group grid gap-2 py-6 md:grid-cols-12 md:items-center hover:bg-mist -mx-4 px-4 rounded">
               <span class="md:col-span-6">
                 <span class="block font-heading font-semibold text-navy text-lg group-hover:underline underline-offset-4 decoration-1">{{ job.title }}</span>
                 <span class="block text-sm text-muted mt-1">{{ job.specialty }}</span>

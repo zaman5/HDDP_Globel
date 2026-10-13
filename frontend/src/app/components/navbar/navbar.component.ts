@@ -21,7 +21,8 @@ import { ModalService } from '../../services/modal.service';
              class="py-1 border-b-2 border-transparent hover:text-navy transition-colors">{{ l.label }}</a>
         </nav>
 
-        <div class="flex items-center gap-3 shrink-0">
+        <div class="flex items-center gap-5 shrink-0">
+          <a routerLink="/jobs" routerLinkActive="!text-navy" class="hidden lg:inline text-[0.95rem] font-semibold text-teal-ink hover:text-navy">Find jobs</a>
           <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-primary !py-2.5 !px-5 hidden sm:inline-flex">Request talent</button>
           <button type="button" (click)="toggleMobileMenu()" class="lg:hidden p-2 rounded text-navy" [attr.aria-expanded]="isMobileMenuOpen()" aria-label="Menu">
             <span class="material-symbols-outlined text-[28px]" aria-hidden="true">{{ isMobileMenuOpen() ? 'close' : 'menu' }}</span>
@@ -35,8 +36,9 @@ import { ModalService } from '../../services/modal.service';
              class="py-3 border-b border-line text-ink">{{ l.label }}</a>
           <div class="pt-4 grid gap-2">
             <button type="button" (click)="modalService.openRequestTalent(); closeMobileMenu()" class="btn btn-primary btn-block">Request talent</button>
-            <button type="button" (click)="modalService.openResumeModal(); closeMobileMenu()" class="btn btn-outline btn-block">Submit your resume</button>
           </div>
+          <p class="mt-6 mb-2 text-sm font-semibold text-muted">For nurses and healthcare professionals</p>
+          <a routerLink="/jobs" (click)="closeMobileMenu()" class="btn btn-outline btn-block">Find jobs</a>
         </nav>
       </div>
     </header>
@@ -47,10 +49,10 @@ export class NavbarComponent {
   isMobileMenuOpen = signal<boolean>(false);
 
   links = [
-    { path: '/healthcare-solutions', label: 'Solutions' },
-    { path: '/partner-with-us', label: 'Partner with us' },
-    { path: '/process', label: 'Process' },
-    { path: '/candidates', label: 'Jobs' },
+    // Menu is for hospital HR and staffing agency clients; nurses get the separate "Find jobs" link.
+    { path: '/services', label: 'Services' },
+    { path: '/who-we-serve', label: 'Who we serve' },
+    { path: '/how-it-works', label: 'How it works' },
     { path: '/about-us', label: 'About' },
     { path: '/contact-us', label: 'Contact' }
   ];

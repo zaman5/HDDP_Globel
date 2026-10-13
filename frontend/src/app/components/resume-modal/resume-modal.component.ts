@@ -98,6 +98,13 @@ const MAX_FILE_BYTES = 10 * 1024 * 1024;
               <label for="rm-license" class="block font-semibold text-slate-700 mb-1">Licence / Registration &amp; Certifications</label>
               <input id="rm-license" type="text" [(ngModel)]="formData.license_type" name="license_type" placeholder="e.g. RN (Texas), NCLEX-RN, NMC PIN, CNO registration, BLS" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-[#006a68] text-slate-900" />
             </div>
+            <div *ngIf="formData.country === 'United States'" class="sm:col-span-2">
+              <label for="rm-compact" class="block font-semibold text-slate-700 mb-1">Do you hold a multistate licence under the Nurse Licensure Compact (NLC)?</label>
+              <select id="rm-compact" [(ngModel)]="formData.compact_license" name="compact_license" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-[#006a68] bg-white text-slate-900">
+                <option [ngValue]="false">No, or not applicable</option>
+                <option [ngValue]="true">Yes, multistate (compact) licence</option>
+              </select>
+            </div>
             <div class="sm:col-span-2">
               <label for="rm-auth" class="block font-semibold text-slate-700 mb-1">Are you legally authorized to work in the country where you want to work? *</label>
               <select id="rm-auth" [(ngModel)]="formData.work_authorization" name="work_authorization" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-[#006a68] bg-white text-slate-900">
@@ -127,6 +134,13 @@ const MAX_FILE_BYTES = 10 * 1024 * 1024;
               I have read the <a routerLink="/privacy-policy" target="_blank" class="text-[#004b87] font-semibold underline">Privacy Policy</a> and agree that HDDP Consultants may store my details and CV, process them (including by our team outside my country), and share them with partner staffing agencies and healthcare providers for suitable roles. I can withdraw consent or ask for deletion at any time. *
             </label>
           </div>
+          <div class="flex items-start gap-3 px-3">
+            <input id="rm-sms" type="checkbox" [(ngModel)]="formData.sms_consent" name="sms_consent" class="mt-0.5 h-5 w-5 shrink-0 rounded border-slate-400 text-[#006a68] focus:ring-[#006a68]" />
+            <label for="rm-sms" class="plain text-xs text-slate-700 leading-relaxed">
+              Optional: text me about suitable roles at the number above. Up to 4 messages a week; message and data rates may apply. Reply STOP to opt out or HELP for help. Not a condition of applying.
+            </label>
+          </div>
+          <p class="px-3 text-xs text-slate-600">California residents: see our <a routerLink="/privacy-policy" fragment="us-rights" target="_blank" class="text-[#004b87] font-semibold underline">notice at collection</a>.</p>
 
           <!-- Action Buttons -->
           <div class="pt-3 border-t border-slate-200 flex items-center justify-end gap-3">
@@ -210,6 +224,8 @@ export class ResumeModalComponent {
     postData.append('current_city', f.current_city.trim());
     postData.append('work_authorization', f.work_authorization);
     postData.append('privacy_consent', 'true');
+    postData.append('sms_consent', String(!!f.sms_consent));
+    postData.append('compact_license', String(f.country === 'United States' && !!f.compact_license));
     const jobTitle = this.modalService.selectedJobTitle();
     if (jobTitle) postData.append('job_title', jobTitle);
     postData.append('resume', this.selectedFile, this.selectedFile.name);
@@ -242,7 +258,9 @@ export class ResumeModalComponent {
       license_type: '',
       years_experience: '1-2 Years',
       work_authorization: '',
-      privacy_consent: false
+      privacy_consent: false,
+      sms_consent: false,
+      compact_license: false
     };
   }
 }

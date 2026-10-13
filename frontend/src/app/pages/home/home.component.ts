@@ -12,17 +12,17 @@ import { ModalService } from '../../services/modal.service';
     <section class="band !pt-16 lg:!pt-20">
       <div class="wrap grid gap-14 lg:grid-cols-12 lg:items-center">
         <div class="lg:col-span-7">
-          <p class="t-kicker">Nurse staffing and healthcare recruitment partner for the USA, UK and Canada</p>
+          <p class="t-kicker">Recruitment partner for hospital HR teams and nurse staffing agencies</p>
           <h1 class="t-display max-w-[19ch]">Connecting healthcare talent to where it matters most</h1>
           <p class="t-lede mt-6">
-            HDDP Consultants partners with healthcare staffing agencies and providers to deliver pre-screened, job-ready nurses and healthcare professionals—quickly, efficiently, and at scale.
+            HDDP Consultants works behind US hospital HR teams and nurse staffing agencies to deliver pre-screened, credential-ready nurses and healthcare professionals—quickly, efficiently and at scale. We also support clients in the UK and Canada.
           </p>
           <p class="t-body mt-4">
             From critical staffing shortages to urgent placements, we act as your extended recruitment engine—helping you fill roles faster while reducing hiring costs and operational strain.
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
             <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-primary">Request talent</button>
-            <a routerLink="/partner-with-us" class="btn btn-outline">Partner with us</a>
+            <a routerLink="/how-it-works" class="btn btn-outline">See how it works</a>
           </div>
         </div>
 
@@ -109,11 +109,11 @@ import { ModalService } from '../../services/modal.service';
         <div>
           <h2 class="t-h2">Core services</h2>
           <p class="t-body mt-4">Recruitment support for nurse and healthcare staffing agencies. We add capacity to your team; your agency keeps its clients and its operations.</p>
-          <a routerLink="/healthcare-solutions" class="link inline-block mt-6">See roles and delivery models</a>
+          <a routerLink="/services" class="link inline-block mt-6">All services, roles and specialties</a>
         </div>
         <ul class="ruled">
           <li *ngFor="let s of services" class="def-row">
-            <h3 class="t-h3">{{ s.title }}</h3>
+            <h3 class="t-h3"><a routerLink="/services" [fragment]="s.id" class="hover:underline underline-offset-4 decoration-1">{{ s.title }}</a></h3>
             <p class="t-body m-0">{{ s.text }}</p>
           </li>
         </ul>
@@ -130,20 +130,20 @@ import { ModalService } from '../../services/modal.service';
         <ol class="steps steps-row">
           <li *ngFor="let step of steps"><span class="font-semibold text-navy">{{ step }}</span></li>
         </ol>
-        <a routerLink="/process" class="link inline-block mt-8">Read about our process</a>
+        <a routerLink="/how-it-works" class="link inline-block mt-8">Steps, submittal packet and compliance</a>
       </div>
     </section>
 
-    <!-- WHY HDDP -->
+    <!-- WHO WE SERVE -->
     <section class="band band-mist">
-      <div class="wrap split">
-        <h2 class="t-h2">Why agencies work with HDDP</h2>
-        <ul class="ruled">
-          <li *ngFor="let w of whyHddp" class="def-row">
-            <h3 class="t-h3">{{ w.title }}</h3>
-            <p class="t-body m-0">{{ w.text }}</p>
-          </li>
-        </ul>
+      <div class="wrap">
+        <h2 class="t-h2">Who we serve</h2>
+        <div class="mt-10 grid gap-10 md:grid-cols-2">
+          <a *ngFor="let a of audiences" routerLink="/who-we-serve" [fragment]="a.id" class="group block border-t-2 border-teal pt-6">
+            <h3 class="t-h3 group-hover:underline underline-offset-4 decoration-1">{{ a.title }}</h3>
+            <p class="t-body mt-2 m-0">{{ a.text }}</p>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -155,8 +155,8 @@ import { ModalService } from '../../services/modal.service';
           <p class="mt-3 text-lg text-white/80">Let HDDP deliver pre-screened candidates—fast, reliable, and ready.</p>
         </div>
         <div class="flex flex-wrap gap-3 shrink-0">
-          <a routerLink="/contact-us" class="btn btn-light">Schedule a consultation</a>
-          <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-ghost-light">Request talent</button>
+          <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-light">Request talent</button>
+          <a routerLink="/contact-us" class="btn btn-ghost-light">Talk to our team</a>
         </div>
       </div>
     </section>
@@ -187,25 +187,22 @@ export class HomeComponent {
   ];
 
   services = [
-    { title: 'Healthcare talent sourcing', text: 'We identify and deliver qualified healthcare professionals aligned with your specific requirements.' },
-    { title: 'Recruitment process outsourcing (RPO)', text: 'Dedicated offshore recruiters acting as an extension of your internal hiring team.' },
-    { title: 'Credentialing and compliance support', text: 'We assist with documentation, verification coordination, and candidate readiness.' },
-    { title: 'Back-office recruitment support', text: 'Interview scheduling, pipeline management, and administrative coordination.' }
+    { id: 'talent-sourcing', title: 'Nurse and healthcare talent sourcing', text: 'We identify and deliver qualified healthcare professionals aligned with your specific requirements.' },
+    { id: 'rpo', title: 'Recruitment process outsourcing (RPO)', text: 'Dedicated offshore recruiters acting as an extension of your internal hiring team.' },
+    { id: 'credentialing', title: 'Credentialing and compliance support', text: 'Primary source licence verification, certification tracking and credential files built to your checklist.' },
+    { id: 'back-office', title: 'Back-office recruitment support', text: 'Interview scheduling, ATS updates, VMS submittals and onboarding paperwork.' }
   ];
 
   steps = [
-    'Requirement understanding',
-    'Targeted talent sourcing',
-    'Screening and evaluation',
-    'Credentialing coordination',
-    'Candidate submission'
+    'Requirement intake',
+    'Targeted sourcing',
+    'Screening',
+    'Licence and credential verification',
+    'Submittal and follow-up'
   ];
 
-  whyHddp = [
-    { title: 'Speed-driven recruitment', text: 'Qualified candidates within 48–96 hours of receiving your requirement.' },
-    { title: 'Global talent reach', text: 'Sourcing from a global talent network for roles in the USA, UK and Canada.' },
-    { title: 'Cost efficiency', text: 'Offshore recruitment capacity for less than the cost of growing an in-house team.' },
-    { title: 'Deep industry understanding', text: 'Recruiters who know nursing, allied health and healthcare IT roles.' },
-    { title: 'Scalable delivery model', text: 'Add recruiters as your requisitions grow, and scale back when they slow.' }
+  audiences = [
+    { id: 'hospitals', title: 'Hospitals and health systems', text: 'Extra recruiting capacity for HR and talent acquisition teams filling RN, LPN, CNA and allied roles.' },
+    { id: 'staffing-agencies', title: 'Nurse staffing agencies', text: 'White-label sourcing, dedicated recruiters and credentialing support for travel, per diem and permanent desks.' }
   ];
 }

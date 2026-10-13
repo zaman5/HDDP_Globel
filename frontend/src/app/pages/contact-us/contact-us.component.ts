@@ -28,11 +28,11 @@ import { ContactInquiry } from '../../models/models';
               <dd class="m-0"><a href="tel:8005554337" class="link">(800) 555-4337</a></dd>
             </div>
           </dl>
-          <p class="t-small mt-6">Looking for a job? <a routerLink="/candidates" class="link">See open jobs</a> instead.</p>
+          <p class="t-small mt-6">Looking for a job? <a routerLink="/jobs" class="link">See open jobs</a> instead.</p>
         </div>
 
         <form (ngSubmit)="submitInquiry()" class="hd-form bg-mist rounded-lg p-6 sm:p-10 space-y-5" novalidate>
-          <h2 class="t-h2">Book a consultation</h2>
+          <h2 class="t-h2">Talk to our team</h2>
           <div class="grid gap-5 sm:grid-cols-2">
             <div>
               <label for="ct-name">Name *</label>
@@ -67,7 +67,7 @@ import { ContactInquiry } from '../../models/models';
           </div>
           <p class="t-small">We use these details only to respond to you. See our <a routerLink="/privacy-policy" class="link">privacy policy</a>.</p>
           <button type="submit" [disabled]="isSubmitting()" class="btn btn-primary">
-            {{ isSubmitting() ? 'Sending…' : 'Book a consultation' }}
+            {{ isSubmitting() ? 'Sending…' : 'Send message' }}
           </button>
         </form>
       </div>

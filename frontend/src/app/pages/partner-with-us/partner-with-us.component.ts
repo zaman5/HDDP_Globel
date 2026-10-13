@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
+import { ModalService } from '../../services/modal.service';
 import { PartnerApplication } from '../../models/models';
 
 @Component({
@@ -13,44 +14,50 @@ import { PartnerApplication } from '../../models/models';
   template: `
     <!-- HERO -->
     <section class="band !pb-14">
-      <div class="wrap grid gap-12 lg:grid-cols-12 lg:items-end">
-        <div class="lg:col-span-7">
-          <p class="t-kicker">Partner with us</p>
-          <h1 class="t-h1 max-w-[20ch]">Your recruitment engine for healthcare staffing</h1>
-          <p class="t-lede mt-5">Scale faster without increasing internal hiring costs.</p>
-          <button type="button" (click)="scrollToForm()" class="btn btn-primary mt-8">Become a partner</button>
-        </div>
-        <div class="lg:col-span-5 border-l-4 border-teal pl-6">
-          <p class="text-lg leading-relaxed text-ink">
-            HDDP Consultants works as a strategic recruitment partner to licensed nurse and healthcare staffing agencies in the USA, UK and Canada.
-          </p>
-          <p class="mt-3 font-semibold text-navy">We strengthen your delivery capability without replacing your core operations.</p>
-        </div>
+      <div class="wrap">
+        <p class="t-kicker">Who we serve</p>
+        <h1 class="t-h1 max-w-[24ch]">Recruitment support for nurse staffing agencies and hospital HR teams</h1>
+        <p class="t-lede mt-5">We add recruiting and compliance capacity behind your team. We never contact your clients or place candidates with them directly.</p>
+        <nav aria-label="Audiences" class="mt-8 flex flex-wrap gap-2">
+          <a *ngFor="let a of audiences" [routerLink]="[]" [fragment]="a.id" class="px-4 py-2 rounded-full border border-line text-sm font-semibold text-navy hover:border-navy">{{ a.title }}</a>
+        </nav>
       </div>
     </section>
 
-    <!-- PARTNERSHIP MODELS -->
-    <section class="band band-mist">
+    <!-- AUDIENCES -->
+    <section *ngFor="let a of audiences; let odd = odd" [id]="a.id" class="band scroll-mt-20" [class.band-mist]="!odd">
       <div class="wrap split">
         <div>
-          <h2 class="t-h2">Partnership models</h2>
-          <p class="t-body mt-4">Offshore recruitment support that plugs into your existing hiring workflow.</p>
+          <h2 class="t-h2">{{ a.title }}</h2>
+          <p class="t-body mt-4">{{ a.intro }}</p>
         </div>
-        <ul class="ruled">
-          <li *ngFor="let m of models" class="def-row">
-            <h3 class="t-h3">{{ m.title }}</h3>
-            <p class="t-body m-0">{{ m.text }}</p>
-          </li>
-        </ul>
+        <div class="grid gap-10 sm:grid-cols-2">
+          <div>
+            <p class="font-semibold text-navy mb-3">Common challenges</p>
+            <ul class="list-disc pl-5 m-0 space-y-2 text-muted">
+              <li *ngFor="let c of a.challenges">{{ c }}</li>
+            </ul>
+          </div>
+          <div>
+            <p class="font-semibold text-navy mb-3">How we help</p>
+            <ul class="tick-list">
+              <li *ngFor="let h of a.help">{{ h }}</li>
+            </ul>
+            <a routerLink="/services" [fragment]="a.service" class="link inline-block mt-4">{{ a.serviceLabel }}</a>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- VALUE -->
-    <section class="band">
+    <!-- RESULTS -->
+    <section class="band" [class.band-mist]="audiences.length % 2 === 0">
       <div class="wrap split">
-        <h2 class="t-h2">What partners gain</h2>
-        <ul class="tick-list grid sm:grid-cols-2 gap-x-10 text-lg">
-          <li *ngFor="let v of value" class="font-semibold text-navy">{{ v }}</li>
+        <h2 class="t-h2">What clients gain</h2>
+        <ul class="ruled">
+          <li *ngFor="let v of value" class="def-row">
+            <h3 class="t-h3">{{ v.title }}</h3>
+            <p class="t-body m-0">{{ v.text }}</p>
+          </li>
         </ul>
       </div>
     </section>
@@ -59,8 +66,9 @@ import { PartnerApplication } from '../../models/models';
     <section id="partner-form" class="band band-mist scroll-mt-24">
       <div class="wrap split">
         <div>
-          <h2 class="t-h2">Start a recruitment partnership</h2>
-          <p class="t-body mt-4">Tell us about your agency and hiring needs. Our partnership team will follow up to discuss the right model.</p>
+          <h2 class="t-h2">Talk to our team</h2>
+          <p class="t-body mt-4">Tell us about your organization and hiring needs. We reply within one business day to discuss the right service and model.</p>
+          <p class="t-body mt-3">Need candidates for specific open roles now? <button type="button" (click)="modalService.openRequestTalent()" class="link bg-transparent border-0 p-0 cursor-pointer">Request talent</button> instead.</p>
           <p class="t-small mt-4">We use these details only to respond to you. See our <a routerLink="/privacy-policy" class="link">privacy policy</a>.</p>
         </div>
 
@@ -89,8 +97,11 @@ import { PartnerApplication } from '../../models/models';
             <div>
               <label for="pt-type">Organization type</label>
               <select id="pt-type" [(ngModel)]="formData.organization_type" name="organization_type">
-                <option value="Healthcare Staffing Agency">Healthcare staffing agency</option>
-                <option value="Healthcare Provider">Healthcare provider</option>
+                <option value="Healthcare Staffing Agency">Nurse / healthcare staffing agency</option>
+                <option value="Hospital or Health System">Hospital or health system</option>
+                <option value="Long-Term Care / Post-Acute">Long-term care / post-acute provider</option>
+                <option value="MSP / VMS Provider">MSP / VMS provider</option>
+                <option value="Healthcare Provider">Other healthcare provider</option>
               </select>
             </div>
             <div>
@@ -118,10 +129,10 @@ import { PartnerApplication } from '../../models/models';
           </div>
           <div>
             <label for="pt-msg">Anything else we should know</label>
-            <textarea id="pt-msg" rows="4" [(ngModel)]="formData.message" name="message" placeholder="Preferred model (talent supply, dedicated recruitment team, back-office support) and current hiring needs"></textarea>
+            <textarea id="pt-msg" rows="4" [(ngModel)]="formData.message" name="message" placeholder="Services you are interested in (sourcing, RPO, credentialing, back-office) and current hiring needs"></textarea>
           </div>
           <button type="submit" [disabled]="isSubmitting()" class="btn btn-primary">
-            {{ isSubmitting() ? 'Sending…' : 'Send partnership request' }}
+            {{ isSubmitting() ? 'Sending…' : 'Send message' }}
           </button>
         </form>
       </div>
@@ -131,22 +142,59 @@ import { PartnerApplication } from '../../models/models';
 export class PartnerWithUsComponent {
   apiService = inject(ApiService);
   toastService = inject(ToastService);
+  modalService = inject(ModalService);
 
   isSubmitting = signal<boolean>(false);
 
-  models = [
-    { title: 'Talent supply model', text: 'Receive pre-screened candidates ready for submission.' },
-    { title: 'Dedicated recruitment teams', text: 'Offshore recruiters aligned with your hiring needs.' },
-    { title: 'Back-office support', text: 'Credentialing, documentation, and coordination.' }
+  audiences = [
+    {
+      id: 'staffing-agencies',
+      title: 'Nurse staffing agencies',
+      intro: 'Travel, local contract, per diem and permanent placement firms that need more recruiting and credentialing capacity.',
+      challenges: [
+        'More open orders from clients than recruiters can work',
+        'Slow submittals losing orders to competing agencies',
+        'Credentialing backlogs delaying start dates',
+        'High cost of hiring and training in-house recruiters'
+      ],
+      help: [
+        'Pre-screened candidates for your orders in 48–96 hours',
+        'Dedicated offshore recruiters working in your ATS',
+        'Credential files built to your client checklists',
+        'White-label: your agency owns the client and the candidate relationship'
+      ],
+      service: 'rpo',
+      serviceLabel: 'See recruitment process outsourcing'
+    },
+    {
+      id: 'hospitals',
+      title: 'Hospitals and health systems',
+      intro: 'HR and talent acquisition teams at hospitals, health systems and long-term care providers hiring nurses and allied staff.',
+      challenges: [
+        'Persistent RN vacancies and rising agency spend',
+        'Talent acquisition teams stretched across many requisitions',
+        'Opening new units or service lines on tight timelines',
+        'Compliance files that must be complete before day one'
+      ],
+      help: [
+        'Sourcing for permanent and contract roles to reduce reliance on premium agency rates',
+        'Extra recruiting capacity during hiring surges or unit openings',
+        'Primary source licence verification and credential file preparation',
+        'Candidates screened against your unit, shift and specialty requirements'
+      ],
+      service: 'talent-sourcing',
+      serviceLabel: 'See talent sourcing'
+    }
   ];
 
-  value = ['Faster placements', 'Lower operational cost', 'Increased fill rates', 'Scalable hiring capacity'];
+  value = [
+    { title: 'Faster fills', text: 'Shorter time from requisition to submittal, so fewer orders are lost.' },
+    { title: 'Lower cost per hire', text: 'Recruiting capacity without adding full-time salaries and benefits.' },
+    { title: 'Higher fill rates', text: 'More candidates screened per requisition, across more specialties.' },
+    { title: 'Capacity that flexes', text: 'Add recruiters when census rises, and scale back when it slows.' }
+  ];
 
   formData: PartnerApplication = this.emptyForm();
-
-  scrollToForm() {
-    document.getElementById('partner-form')?.scrollIntoView({ behavior: 'smooth' });
-  }
 
   submitPartner() {
     const f = this.formData;
@@ -163,7 +211,7 @@ export class PartnerWithUsComponent {
     }).subscribe({
       next: () => {
         this.isSubmitting.set(false);
-        this.toastService.success('Partnership request sent', 'Our partnership team will contact you shortly.');
+        this.toastService.success('Message sent', 'Our team will contact you within one business day.');
         this.formData = this.emptyForm();
       },
       error: (err) => {

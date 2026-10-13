@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ModalService } from '../../services/modal.service';
+import { CookieConsentService } from '../../services/cookie-consent.service';
 
 @Component({
   selector: 'app-footer',
@@ -15,7 +16,7 @@ import { ModalService } from '../../services/modal.service';
           <div class="md:col-span-4">
             <p class="font-heading text-xl font-semibold text-white">HDDP Consultants</p>
             <p class="mt-3 text-[0.95rem] leading-relaxed text-white/75 max-w-sm">
-              Recruitment partner to nurse and healthcare staffing agencies in the United States, United Kingdom and Canada.
+              Recruitment partner to hospital HR teams and nurse staffing agencies in the United States, United Kingdom and Canada.
             </p>
             <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-light mt-6">Request talent</button>
           </div>
@@ -23,20 +24,21 @@ import { ModalService } from '../../services/modal.service';
           <div class="md:col-span-3">
             <p class="font-semibold text-white mb-3">Services</p>
             <ul class="space-y-2 text-[0.95rem] text-white/75">
-              <li><a routerLink="/healthcare-solutions" class="hover:text-white">Healthcare talent sourcing</a></li>
-              <li><a routerLink="/healthcare-solutions" class="hover:text-white">Recruitment process outsourcing</a></li>
-              <li><a routerLink="/healthcare-solutions" class="hover:text-white">Credentialing support</a></li>
-              <li><a routerLink="/healthcare-solutions" class="hover:text-white">Back-office recruitment support</a></li>
+              <li><a routerLink="/services" fragment="talent-sourcing" class="hover:text-white">Nurse talent sourcing</a></li>
+              <li><a routerLink="/services" fragment="rpo" class="hover:text-white">Recruitment process outsourcing</a></li>
+              <li><a routerLink="/services" fragment="credentialing" class="hover:text-white">Credentialing and compliance</a></li>
+              <li><a routerLink="/services" fragment="back-office" class="hover:text-white">Back-office support</a></li>
             </ul>
           </div>
 
           <div class="md:col-span-2">
             <p class="font-semibold text-white mb-3">Company</p>
             <ul class="space-y-2 text-[0.95rem] text-white/75">
+              <li><a routerLink="/who-we-serve" fragment="hospitals" class="hover:text-white">Hospitals and health systems</a></li>
+              <li><a routerLink="/who-we-serve" fragment="staffing-agencies" class="hover:text-white">Nurse staffing agencies</a></li>
+              <li><a routerLink="/how-it-works" class="hover:text-white">How it works</a></li>
               <li><a routerLink="/about-us" class="hover:text-white">About</a></li>
-              <li><a routerLink="/process" class="hover:text-white">Our process</a></li>
-              <li><a routerLink="/partner-with-us" class="hover:text-white">Partner with us</a></li>
-              <li><a routerLink="/candidates" class="hover:text-white">Jobs</a></li>
+              <li><a routerLink="/jobs" class="hover:text-white">Find jobs (nurses)</a></li>
             </ul>
           </div>
 
@@ -54,7 +56,9 @@ import { ModalService } from '../../services/modal.service';
           <p>© {{ year }} HDDP Consultants. All rights reserved.</p>
           <div class="flex flex-wrap gap-x-6 gap-y-2">
             <a routerLink="/privacy-policy" class="hover:text-white">Privacy policy</a>
-            <a routerLink="/privacy-policy" fragment="us-rights" class="hover:text-white">US privacy rights</a>
+            <a routerLink="/cookie-policy" class="hover:text-white">Cookie policy</a>
+            <button type="button" (click)="consent.openPreferences()" class="hover:text-white bg-transparent border-0 p-0 cursor-pointer text-inherit">Cookie settings</button>
+            <a routerLink="/privacy-policy" fragment="us-rights" class="hover:text-white">Your privacy choices</a>
             <a routerLink="/privacy-policy" fragment="equal-opportunity" class="hover:text-white">Equal opportunity</a>
           </div>
         </div>
@@ -64,5 +68,6 @@ import { ModalService } from '../../services/modal.service';
 })
 export class FooterComponent {
   modalService = inject(ModalService);
+  consent = inject(CookieConsentService);
   year = new Date().getFullYear();
 }

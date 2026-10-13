@@ -42,6 +42,7 @@ export interface CandidateApplication {
   country?: string | null;
   work_authorization?: string | null;
   privacy_consent_at?: string | null;
+  sms_consent_at?: string | null;
   status?: string;
   created_at?: string;
 }

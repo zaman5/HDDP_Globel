@@ -2,7 +2,8 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Meta, Title } from '@angular/platform-browser';
+import { SeoService } from '../../services/seo.service';
+import { SITE } from '../../site.config';
 import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
 import { JobPosition } from '../../models/models';
@@ -28,7 +29,7 @@ const COUNTRY_INFO: Record<string, { region: string; iso: string }> = {
     <div *ngIf="!loading() && !job()" class="wrap band">
       <h1 class="t-h2">This job is no longer available</h1>
       <p class="t-body mt-3">It may have been filled or closed.</p>
-      <a routerLink="/candidates" class="btn btn-primary mt-6">See open jobs</a>
+      <a routerLink="/jobs" class="btn btn-primary mt-6">See open jobs</a>
     </div>
 
     <ng-container *ngIf="job() as j">
@@ -36,8 +37,8 @@ const COUNTRY_INFO: Record<string, { region: string; iso: string }> = {
       <!-- HEADER -->
       <section class="band !pb-10 border-b border-line">
         <div class="wrap">
-          <a *ngIf="!applyMode()" routerLink="/candidates" class="link text-sm">All jobs</a>
-          <a *ngIf="applyMode()" [routerLink]="['/candidates', j.id]" class="link text-sm">Back to job details</a>
+          <a *ngIf="!applyMode()" routerLink="/jobs" class="link text-sm">All jobs</a>
+          <a *ngIf="applyMode()" [routerLink]="['/jobs', j.id]" class="link text-sm">Back to job details</a>
           <p *ngIf="applyMode()" class="t-kicker mt-6 !mb-2">Job application</p>
           <h1 class="t-h1 max-w-[26ch]" [ngClass]="applyMode() ? 'mt-0' : 'mt-4'">{{ j.title }}</h1>
           <dl class="mt-5 flex flex-wrap gap-x-10 gap-y-3 text-[0.95rem]">
@@ -45,7 +46,7 @@ const COUNTRY_INFO: Record<string, { region: string; iso: string }> = {
             <div><dt class="text-sm text-muted">Job type</dt><dd class="m-0 font-semibold">{{ j.job_type }}</dd></div>
             <div *ngIf="j.pay_range"><dt class="text-sm text-muted">Pay</dt><dd class="m-0 font-semibold">{{ j.pay_range }}</dd></div>
           </dl>
-          <a *ngIf="!applyMode()" [routerLink]="['/candidates', j.id, 'apply']" class="btn btn-primary mt-8">Apply for this job</a>
+          <a *ngIf="!applyMode()" [routerLink]="['/jobs', j.id, 'apply']" class="btn btn-primary mt-8">Apply for this job</a>
         </div>
       </section>
 
@@ -75,7 +76,7 @@ const COUNTRY_INFO: Record<string, { region: string; iso: string }> = {
                   <dd class="m-0 font-semibold text-ink">{{ row.value }}</dd>
                 </div>
               </dl>
-              <a [routerLink]="['/candidates', j.id, 'apply']" class="btn btn-primary btn-block mt-6">Apply now</a>
+              <a [routerLink]="['/jobs', j.id, 'apply']" class="btn btn-primary btn-block mt-6">Apply now</a>
               <p class="t-small mt-3 text-center">Takes about 3 minutes. Have your CV ready.</p>
             </div>
           </aside>
@@ -88,7 +89,7 @@ const COUNTRY_INFO: Record<string, { region: string; iso: string }> = {
           <div *ngIf="submitted()" class="max-w-2xl bg-white border border-line rounded-lg p-8" role="status">
             <h2 class="t-h2">Application sent</h2>
             <p class="t-body mt-3">Thank you for applying for <strong>{{ j.title }}</strong>. A recruiter will review your profile and contact you by email or phone.</p>
-            <a routerLink="/candidates" class="btn btn-outline mt-6">See more jobs</a>
+            <a routerLink="/jobs" class="btn btn-outline mt-6">See more jobs</a>
           </div>
 
           <form *ngIf="!submitted()" (ngSubmit)="submit(j)" class="hd-form max-w-3xl bg-white border border-line rounded-lg p-6 sm:p-10" novalidate>
@@ -146,6 +147,14 @@ const COUNTRY_INFO: Record<string, { region: string; iso: string }> = {
               <div>
                 <label for="ap-license">Licence, registration and certifications</label>
                 <input id="ap-license" type="text" [(ngModel)]="form.license_type" name="license_type" placeholder="e.g. RN (Texas), NCLEX-RN, NMC PIN, CNO registration, BLS" />
+                <p class="help">List the licence type and issuing state or body. Don’t enter licence numbers here — we verify licences with the issuing board.</p>
+              </div>
+              <div *ngIf="countryOf(j) === 'United States'">
+                <label for="ap-compact">Do you hold a multistate licence under the Nurse Licensure Compact (NLC)?</label>
+                <select id="ap-compact" [(ngModel)]="form.compact_license" name="compact_license">
+                  <option [ngValue]="false">No, or not applicable</option>
+                  <option [ngValue]="true">Yes, multistate (compact) licence</option>
+                </select>
               </div>
               <div>
                 <label for="ap-auth">Are you legally authorized to work in {{ countryWithArticle(j) }}? *</label>
@@ -186,6 +195,13 @@ const COUNTRY_INFO: Record<string, { region: string; iso: string }> = {
                 I have read the <a routerLink="/privacy-policy" target="_blank" class="link">privacy policy</a> and agree that HDDP Consultants may store my application and CV, process it (including by its team outside my country), and share it with partner staffing agencies and healthcare providers for this and similar roles. I can withdraw consent or ask for deletion at any time. *
               </label>
             </div>
+            <div class="flex items-start gap-3 mt-4">
+              <input id="ap-sms" type="checkbox" [(ngModel)]="form.sms_consent" name="sms_consent" class="mt-1 shrink-0" />
+              <label for="ap-sms" class="plain text-[0.9rem] leading-relaxed text-muted">
+                Optional: text me about this application and similar roles at the number above. Up to 4 messages a week; message and data rates may apply. Reply STOP to opt out or HELP for help. Not a condition of applying.
+              </label>
+            </div>
+            <p class="t-small mt-4">California residents: see our <a routerLink="/privacy-policy" fragment="us-rights" target="_blank" class="link">notice at collection</a>.</p>
 
             <button type="submit" [disabled]="isSubmitting()" class="btn btn-primary mt-8">
               {{ isSubmitting() ? 'Sending application…' : 'Send application' }}
@@ -202,12 +218,11 @@ export class JobDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private apiService = inject(ApiService);
   private toastService = inject(ToastService);
-  private title = inject(Title);
-  private meta = inject(Meta);
+  private seo = inject(SeoService);
   private document = inject(DOCUMENT);
 
   job = signal<JobPosition | null>(null);
-  // true on /candidates/:id/apply (form page), false on /candidates/:id (details page)
+  // true on /jobs/:id/apply (form page), false on /jobs/:id (details page)
   applyMode = signal<boolean>(false);
   loading = signal<boolean>(true);
   isSubmitting = signal<boolean>(false);
@@ -233,10 +248,12 @@ export class JobDetailComponent implements OnInit {
           this.job.set(job);
           this.loading.set(false);
           if (job) this.applySeo(job);
+          else this.markUnavailable();
         },
         error: () => {
           this.job.set(null);
           this.loading.set(false);
+          this.markUnavailable();
         }
       });
     });
@@ -328,6 +345,8 @@ export class JobDetailComponent implements OnInit {
     data.append('current_state', f.current_state.trim());
     data.append('work_authorization', f.work_authorization);
     data.append('privacy_consent', 'true');
+    data.append('sms_consent', String(!!f.sms_consent));
+    data.append('compact_license', String(this.countryOf(j) === 'United States' && !!f.compact_license));
     data.append('notes', f.notes.trim());
     data.append('job_id', String(j.id));
     data.append('job_title', j.title);
@@ -351,14 +370,21 @@ export class JobDetailComponent implements OnInit {
     });
   }
 
+  // Closed or missing jobs drop out of search results instead of becoming soft 404s
+  private markUnavailable() {
+    this.document.getElementById(JSON_LD_ID)?.remove();
+    this.seo.setPage({ title: 'Job No Longer Available | HDDP Consultants', robots: 'noindex, follow' });
+  }
+
   // Page title, meta description and Google for Jobs (JobPosting) structured data
   private applySeo(j: JobPosition) {
     const country = this.countryOf(j);
     const place = `${j.location}, ${country}`;
-    this.title.setTitle(`${this.applyMode() ? 'Apply: ' : ''}${j.title} – ${place} | HDDP Consultants`);
-    this.meta.updateTag({
-      name: 'description',
-      content: `${j.title} (${j.job_type}) in ${place}. ${(j.description || '').slice(0, 120)} Apply online with your CV.`
+    const pay = j.pay_range ? ` Pay: ${j.pay_range}.` : '';
+    this.seo.setPage({
+      title: `${this.applyMode() ? 'Apply: ' : ''}${j.title} – ${j.location} | HDDP`,
+      description: `${j.job_type} ${j.title} job in ${place}.${pay} ${(j.description || '').slice(0, 110)}`.trim().slice(0, 160),
+      robots: this.applyMode() ? 'noindex, follow' : undefined
     });
 
     const city = (j.location || '').split('(')[0].split(',')[0].trim();
@@ -369,7 +395,10 @@ export class JobDetailComponent implements OnInit {
       description: `<p>${this.escape(j.description)}</p><p><strong>Requirements:</strong> ${this.escape(j.requirements)}</p>`,
       datePosted: (j.created_at || new Date().toISOString()).slice(0, 10),
       employmentType: this.employmentType(j.job_type),
-      hiringOrganization: { '@type': 'Organization', name: 'HDDP Consultants', sameAs: this.document.location.origin },
+      hiringOrganization: { '@type': 'Organization', name: SITE.name, sameAs: SITE.url, logo: SITE.url + SITE.logo },
+      identifier: { '@type': 'PropertyValue', name: SITE.name, value: String(j.id) },
+      url: `${SITE.url}/jobs/${j.id}`,
+      baseSalary: this.baseSalary(j.pay_range, country),
       jobLocation: {
         '@type': 'Place',
         address: {
@@ -392,6 +421,21 @@ export class JobDetailComponent implements OnInit {
       this.document.head.appendChild(script);
     }
     script.textContent = JSON.stringify(jsonLd);
+  }
+
+  // "$48.00 - $60.00 / hr" -> schema.org MonetaryAmount; omitted when the range can't be read
+  private baseSalary(payRange: string | undefined, country: string) {
+    const nums = (payRange || '').replace(/,/g, '').match(/\d+(?:\.\d+)?/g)?.map(Number);
+    if (!nums?.length) return undefined;
+    const p = (payRange || '').toLowerCase();
+    const unit = /hr|hour/.test(p) ? 'HOUR' : /week|wk/.test(p) ? 'WEEK' : /month/.test(p) ? 'MONTH' : /year|yr|annum|annual/.test(p) ? 'YEAR' : undefined;
+    if (!unit) return undefined;
+    const currency = /£|gbp/.test(p) ? 'GBP' : /cad|c\$/.test(p) || country === 'Canada' ? 'CAD' : country === 'United Kingdom' ? 'GBP' : 'USD';
+    return {
+      '@type': 'MonetaryAmount',
+      currency,
+      value: { '@type': 'QuantitativeValue', minValue: nums[0], maxValue: nums[nums.length - 1], unitText: unit }
+    };
   }
 
   private employmentType(jobType: string): string[] {
@@ -420,7 +464,9 @@ export class JobDetailComponent implements OnInit {
       work_authorization: '',
       desired_pay: '',
       notes: '',
-      privacy_consent: false
+      privacy_consent: false,
+      sms_consent: false,
+      compact_license: false
     };
   }
 }

@@ -162,6 +162,8 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Location</span>{{ locationOf(c) }}<span *ngIf="c.country"> — {{ c.country }}</span></div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Work Authorization</span>{{ c.work_authorization || '—' }}</div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Privacy Consent Given</span>{{ c.privacy_consent_at ? (c.privacy_consent_at | date:'medium') : 'Not recorded' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Text Messages</span>{{ c.sms_consent_at ? 'Opted in ' + (c.sms_consent_at | date:'medium') : 'No consent — do not text' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">NLC Multistate Licence</span>{{ c.compact_license ? 'Yes (verify on Nursys)' : 'No / not stated' }}</div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Applied For</span>{{ c.job_title || 'General application' }}<span *ngIf="c.job_id" class="text-slate-400"> (Job #{{ c.job_id }})</span></div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Specialty</span>{{ c.specialty || '—' }}</div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">License / Certifications</span>{{ c.license_type || '—' }}</div>
