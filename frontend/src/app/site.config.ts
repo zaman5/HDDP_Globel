@@ -6,5 +6,5 @@ export const SITE = {
   name: 'HDDP Consultants',
   logo: '/assets/MainLogoHDDP.png',
   shareImage: '/assets/MainLogoHDDP.png',
-  defaultDescription: 'Pre-screened, credential-ready nurses and allied health candidates for US hospital HR teams and nurse staffing agencies, delivered in 48–96 hours.'
+  defaultDescription: 'Global healthcare staffing partner for US hospitals and staffing agencies: travel, locum, contract and per diem nurses, pre-screened in 48–96 hours.'
 };

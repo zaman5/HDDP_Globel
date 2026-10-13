@@ -12,7 +12,7 @@ import { ModalService } from '../../services/modal.service';
       <div class="wrap">
         <p class="t-kicker">How it works</p>
         <h1 class="t-h1 max-w-[22ch]">From requisition to submittal in 48–96 hours</h1>
-        <p class="t-lede mt-5">Five steps, the same for every client. Each candidate arrives with a submittal packet your team can review in minutes.</p>
+        <p class="t-lede mt-5">Our healthcare candidate screening and credentialing process follows five steps, the same for every client. Each candidate arrives with a submittal packet your team can review in minutes.</p>
       </div>
     </section>
 
@@ -49,7 +49,7 @@ import { ModalService } from '../../services/modal.service';
     <section id="compliance" class="band scroll-mt-20">
       <div class="wrap split">
         <div>
-          <h2 class="t-h2">US credentialing and compliance standards</h2>
+          <h2 class="t-h2">Credentialing and compliance support for nurses</h2>
           <p class="t-body mt-4">Our screening follows the primary-source verification approach used in The Joint Commission’s Health Care Staffing Services standards, so it fits agencies that are certified or working towards it.</p>
           <p class="t-small mt-4">Responsibilities are confirmed in each client agreement.</p>
         </div>
@@ -102,7 +102,7 @@ export class ProcessComponent {
 
   steps = [
     { title: 'Requirement intake', time: 'Day 0', text: 'We confirm the role, specialty, unit, licence state or compact eligibility, certifications, experience, shift, pay rate, start date and assignment length with your team.' },
-    { title: 'Targeted sourcing', time: 'Day 0–2', text: 'Recruiters search our candidate database, job boards and referral networks for clinicians who match the requirement and the location.' },
+    { title: 'Targeted sourcing', time: 'Day 0–2', text: 'Recruiters search our candidate database, job boards, referral networks and international nurse recruitment channels for clinicians who match the requirement and the location.' },
     { title: 'Screening', time: 'Day 1–3', text: 'Phone screen for clinical experience, specialty skills, communication, availability and shift preferences, plus a skills checklist for the specialty.' },
     { title: 'Verification', time: 'Day 2–4', text: 'Licence verified with the state board of nursing or Nursys®, certifications checked, exclusion lists searched and references requested.' },
     { title: 'Submittal and follow-up', time: 'Day 2–4, then ongoing', text: 'We send the candidate with a submittal packet, schedule interviews, keep the candidate engaged and support onboarding until the start date.' }

@@ -16,8 +16,8 @@ import { PartnerApplication } from '../../models/models';
     <section class="band !pb-14">
       <div class="wrap">
         <p class="t-kicker">Who we serve</p>
-        <h1 class="t-h1 max-w-[24ch]">Recruitment support for nurse staffing agencies and hospital HR teams</h1>
-        <p class="t-lede mt-5">We add recruiting and compliance capacity behind your team. We never contact your clients or place candidates with them directly.</p>
+        <h1 class="t-h1 max-w-[24ch]">Nurse staffing solutions for hospitals and staffing agencies</h1>
+        <p class="t-lede mt-5">A healthcare staffing partner that adds recruiting and compliance capacity behind your team. We never contact your clients or place candidates with them directly.</p>
         <nav aria-label="Audiences" class="mt-8 flex flex-wrap gap-2">
           <a *ngFor="let a of audiences" [routerLink]="[]" [fragment]="a.id" class="px-4 py-2 rounded-full border border-line text-sm font-semibold text-navy hover:border-navy">{{ a.title }}</a>
         </nav>
@@ -43,7 +43,7 @@ import { PartnerApplication } from '../../models/models';
             <ul class="tick-list">
               <li *ngFor="let h of a.help">{{ h }}</li>
             </ul>
-            <a routerLink="/services" [fragment]="a.service" class="link inline-block mt-4">{{ a.serviceLabel }}</a>
+            <a [routerLink]="a.servicePath" [fragment]="a.service" class="link inline-block mt-4">{{ a.serviceLabel }}</a>
           </div>
         </div>
       </div>
@@ -150,7 +150,7 @@ export class PartnerWithUsComponent {
     {
       id: 'staffing-agencies',
       title: 'Nurse staffing agencies',
-      intro: 'Travel, local contract, per diem and permanent placement firms that need more recruiting and credentialing capacity.',
+      intro: 'Travel nurse staffing agencies and locum, per diem and permanent placement firms that need more recruiting capacity and back office support for their healthcare staffing company.',
       challenges: [
         'More open orders from clients than recruiters can work',
         'Slow submittals losing orders to competing agencies',
@@ -159,17 +159,18 @@ export class PartnerWithUsComponent {
       ],
       help: [
         'Pre-screened candidates for your orders in 48–96 hours',
-        'Dedicated offshore recruiters working in your ATS',
+        'Offshore recruiter teams working in your ATS',
         'Credential files built to your client checklists',
         'White-label: your agency owns the client and the candidate relationship'
       ],
+      servicePath: '/services',
       service: 'rpo',
       serviceLabel: 'See recruitment process outsourcing'
     },
     {
       id: 'hospitals',
       title: 'Hospitals and health systems',
-      intro: 'HR and talent acquisition teams at hospitals, health systems and long-term care providers hiring nurses and allied staff.',
+      intro: 'Hospital staffing solutions for HR and talent acquisition teams at hospitals, health systems and long-term care providers who need to hire travel nurses quickly, hire locum nurses or fill permanent roles.',
       challenges: [
         'Persistent RN vacancies and rising agency spend',
         'Talent acquisition teams stretched across many requisitions',
@@ -177,13 +178,35 @@ export class PartnerWithUsComponent {
         'Compliance files that must be complete before day one'
       ],
       help: [
-        'Sourcing for permanent and contract roles to reduce reliance on premium agency rates',
-        'Extra recruiting capacity during hiring surges or unit openings',
+        'Contract healthcare staff and permanent hires, reducing reliance on premium agency rates',
+        'Urgent nurse staffing services for census surges and unit openings',
+        'Locum nurse staffing solutions for leave cover and short-term gaps',
         'Primary source licence verification and credential file preparation',
         'Candidates screened against your unit, shift and specialty requirements'
       ],
+      servicePath: '/services',
       service: 'talent-sourcing',
       serviceLabel: 'See talent sourcing'
+    },
+    {
+      id: 'new-agencies',
+      title: 'New and growing staffing agencies',
+      intro: 'Founders planning to start a nurse staffing agency, and young agencies building their first processes.',
+      challenges: [
+        'Unclear state licensing and compliance requirements',
+        'No recruitment SOPs or credentialing process yet',
+        'Too few recruiters to respond to first client orders',
+        'Payroll, scheduling and back-office work taking over'
+      ],
+      help: [
+        'Staffing agency setup services and business advisory',
+        'Healthcare compliance consulting and recruitment SOP development',
+        'Offshore recruiter teams from day one',
+        'Back-office, scheduling and payroll processing support'
+      ],
+      servicePath: '/staffing-agency-consulting',
+      service: undefined,
+      serviceLabel: 'See healthcare staffing consulting'
     }
   ];
 
@@ -191,7 +214,7 @@ export class PartnerWithUsComponent {
     { title: 'Faster fills', text: 'Shorter time from requisition to submittal, so fewer orders are lost.' },
     { title: 'Lower cost per hire', text: 'Recruiting capacity without adding full-time salaries and benefits.' },
     { title: 'Higher fill rates', text: 'More candidates screened per requisition, across more specialties.' },
-    { title: 'Capacity that flexes', text: 'Add recruiters when census rises, and scale back when it slows.' }
+    { title: 'Scalable healthcare workforce', text: 'Add recruiters when census rises, and scale back when it slows.' }
   ];
 
   formData: PartnerApplication = this.emptyForm();

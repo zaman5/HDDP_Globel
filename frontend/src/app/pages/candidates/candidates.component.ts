@@ -15,10 +15,10 @@ import { JobPosition } from '../../models/models';
     <section class="band !pb-12">
       <div class="wrap grid gap-10 lg:grid-cols-12 lg:items-end">
         <div class="lg:col-span-8">
-          <p class="t-kicker">Jobs for nurses and healthcare professionals</p>
-          <h1 class="t-h1">Advance your healthcare career</h1>
+          <p class="t-kicker">Nurse job listings</p>
+          <h1 class="t-h1">Travel nurse, locum and per diem nursing jobs</h1>
           <p class="t-lede mt-5">
-            We connect qualified nurses and healthcare professionals with trusted opportunities through our partner network in the United States, United Kingdom and Canada.
+            Browse travel RN jobs, ICU and ER travel nurse assignments, locum nurse jobs, per diem and contract roles, and allied health jobs across the USA, UK and Canada. Our healthcare job board is updated as partner agencies and hospitals open new roles.
           </p>
         </div>
         <div class="lg:col-span-4 lg:text-right">
@@ -72,6 +72,17 @@ import { JobPosition } from '../../models/models';
           <p class="font-semibold text-navy">No open jobs match your search.</p>
           <p class="t-body mt-1">Clear the filters, or submit your resume and we’ll contact you when a matching role opens.</p>
           <button type="button" (click)="modalService.openResumeModal()" class="btn btn-primary mt-4">Submit your resume</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT THE JOB BOARD -->
+    <section class="band rule-top">
+      <div class="wrap split">
+        <h2 class="t-h2">A travel nurse job portal for the USA, UK and Canada</h2>
+        <div>
+          <p class="t-body m-0">Our healthcare job board brings travel nurse jobs, locum and per diem roles, contract assignments and permanent positions from partner agencies and hospitals into one place. Think of it as a simple nurse job marketplace and locum jobs platform: browse open roles, apply in minutes and a recruiter will call you.</p>
+          <p class="t-body mt-4 mb-0">Hiring? Hospitals and staffing agencies can add roles to our healthcare staffing marketplace by sending a requisition. <a routerLink="/contact-us" class="link">Talk to our team</a>.</p>
         </div>
       </div>
     </section>

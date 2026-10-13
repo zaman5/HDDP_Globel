@@ -13,8 +13,8 @@ import { ModalService } from '../../services/modal.service';
     <section class="band !pb-14">
       <div class="wrap">
         <p class="t-kicker">Services</p>
-        <h1 class="t-h1 max-w-[24ch]">Nurse and healthcare recruitment services for hospital HR and staffing agencies</h1>
-        <p class="t-lede mt-5">Four services, used on their own or together. Your team keeps the client relationship and the hiring decision; we add sourcing, screening and paperwork capacity behind you.</p>
+        <h1 class="t-h1 max-w-[24ch]">Healthcare recruitment services and nurse staffing support</h1>
+        <p class="t-lede mt-5">Healthcare outsourcing services for hospital HR teams and nurse staffing agencies: talent sourcing, RPO, credentialing, back-office support and consulting. Use them on their own or together—you keep the client relationship and the hiring decision.</p>
         <nav aria-label="Services on this page" class="mt-8 flex flex-wrap gap-2">
           <a *ngFor="let s of services" [routerLink]="[]" [fragment]="s.id" class="px-4 py-2 rounded-full border border-line text-sm font-semibold text-navy hover:border-navy">{{ s.title }}</a>
         </nav>
@@ -28,6 +28,7 @@ import { ModalService } from '../../services/modal.service';
           <h2 class="t-h2">{{ s.title }}</h2>
           <p class="t-body mt-4">{{ s.summary }}</p>
           <p class="mt-5 text-sm"><span class="font-semibold text-navy">Best for:</span> <span class="text-muted">{{ s.bestFor }}</span></p>
+          <a *ngIf="s.link" [routerLink]="s.link" class="link inline-block mt-5">{{ s.linkLabel }}</a>
         </div>
         <div>
           <p class="font-semibold text-navy mb-3">What’s included</p>
@@ -42,8 +43,8 @@ import { ModalService } from '../../services/modal.service';
     <section id="roles" class="band scroll-mt-20" [class.band-mist]="services.length % 2 === 0">
       <div class="wrap split">
         <div>
-          <h2 class="t-h2">Roles, specialties and assignment types</h2>
-          <p class="t-body mt-4">US job titles are shown first. For UK and Canadian clients we recruit the equivalent role.</p>
+          <h2 class="t-h2">Nurse and allied health staffing: roles and assignment types</h2>
+          <p class="t-body mt-4">Registered nurse (RN) staffing, LPN and CNA staffing, nurse practitioners, allied health professionals staffing and healthcare IT staffing. US job titles are shown first; for UK and Canadian clients we recruit the equivalent role.</p>
         </div>
         <div>
           <div class="overflow-x-auto">
@@ -90,7 +91,7 @@ import { ModalService } from '../../services/modal.service';
       <div class="wrap split">
         <div>
           <h2 class="t-h2">Engagement models</h2>
-          <p class="t-body mt-4">Pick the commercial model that matches your hiring volume. We confirm scope and fees in a written agreement before work starts.</p>
+          <p class="t-body mt-4">Affordable healthcare staffing services, priced to match your hiring volume. We confirm scope and fees in a written agreement before work starts.</p>
         </div>
         <ul class="ruled">
           <li *ngFor="let m of engagementModels" class="def-row">
@@ -119,12 +120,12 @@ import { ModalService } from '../../services/modal.service';
 export class HealthcareSolutionsComponent {
   modalService = inject(ModalService);
 
-  services = [
+  services: { id: string; title: string; summary: string; bestFor: string; included: string[]; link?: string; linkLabel?: string }[] = [
     {
       id: 'talent-sourcing',
       title: 'Nurse and healthcare talent sourcing',
-      summary: 'We find, screen and submit candidates for your open requisitions, ready for your recruiters or hiring managers to interview.',
-      bestFor: 'Hard-to-fill specialties, surge demand and new contracts.',
+      summary: 'Medical staff sourcing and candidate screening for travel nurses, locum nurses, contract and per diem roles. We find, screen and submit candidates for your open requisitions.',
+      bestFor: 'Urgent nurse staffing, hard-to-fill specialties, surge demand and new contracts.',
       included: [
         'Sourcing from job boards, our candidate database and referral networks',
         'Phone screen for experience, specialty, shift and location preferences',
@@ -135,8 +136,8 @@ export class HealthcareSolutionsComponent {
     },
     {
       id: 'rpo',
-      title: 'Recruitment process outsourcing (RPO)',
-      summary: 'Dedicated recruiters who work only on your requisitions, inside your workflow, during your US business hours.',
+      title: 'Recruitment process outsourcing (RPO) for healthcare',
+      summary: 'Offshore recruiter teams who work only on your requisitions, inside your workflow, during your US business hours—offshore healthcare recruitment teams that work like your own nurse recruitment agency, at a fraction of in-house cost.',
       bestFor: 'Agencies and HR teams with steady volume who want to grow capacity without growing payroll.',
       included: [
         'Recruiters and sourcers assigned to your account',
@@ -149,7 +150,7 @@ export class HealthcareSolutionsComponent {
     {
       id: 'credentialing',
       title: 'Credentialing and compliance support',
-      summary: 'We collect and organise the documents your compliance team needs, so candidates are ready to start sooner.',
+      summary: 'Credentialing support services for nurses and allied staff. We collect and organise the documents your compliance team needs, so candidates are ready to start sooner.',
       bestFor: 'Agencies and hospitals with credentialing backlogs or tight start dates.',
       included: [
         'Primary source licence verification with state boards of nursing and Nursys®',
@@ -161,16 +162,32 @@ export class HealthcareSolutionsComponent {
     },
     {
       id: 'back-office',
-      title: 'Back-office recruitment support',
-      summary: 'Administrative work that slows recruiters down, handled by a trained support team.',
+      title: 'Back-office support for staffing agencies',
+      summary: 'Offshore staffing support for the administrative work that slows recruiters down—scheduling, payroll inputs and paperwork handled by a trained team.',
       bestFor: 'Recruiting teams spending too much time on admin.',
       included: [
-        'Interview scheduling and confirmations',
+        'Nurse scheduling support, shift confirmations and interview scheduling',
+        'Timesheet collection and healthcare payroll processing support',
         'ATS data entry, pipeline updates and candidate re-engagement',
         'Submittals into client VMS/MSP portals',
         'Onboarding document chasing and reminders',
         'Job posting and refresh across boards'
       ]
+    },
+    {
+      id: 'consulting',
+      title: 'Healthcare staffing consulting',
+      summary: 'Staffing agency setup services and staffing business advisory for founders and growing agencies.',
+      bestFor: 'Anyone planning to start a nurse staffing agency, or an agency ready to scale.',
+      included: [
+        'Business model, niche and market advisory',
+        'Healthcare compliance consulting and state licensing checklists',
+        'Recruitment SOP development',
+        'ATS, VMS and MSP readiness',
+        'Offshore recruiter and back-office team setup'
+      ],
+      link: '/staffing-agency-consulting',
+      linkLabel: 'Staffing agency setup and startup guide'
     }
   ];
 
@@ -210,11 +227,11 @@ export class HealthcareSolutionsComponent {
   ];
 
   assignmentTypes = [
-    { title: 'Travel contracts', text: 'Typically 13-week assignments away from home.' },
-    { title: 'Local contracts', text: 'Contract roles for clinicians living near the facility.' },
-    { title: 'Per diem / PRN', text: 'Shift-by-shift cover for gaps and call-outs.' },
+    { title: 'Travel nurses', text: 'Typically 13-week travel RN assignments, including ICU travel nurses and ER travel nurses.' },
+    { title: 'Locum and contract nurses', text: 'Locum nurses, locum tenens healthcare staff and local contract nurses for fixed-term cover.' },
+    { title: 'Per diem nurses / PRN', text: 'Shift-by-shift cover for gaps and call-outs.' },
     { title: 'Permanent / direct hire', text: 'Full-time hires onto the facility’s own staff.' },
-    { title: 'Rapid response', text: 'Short-notice cover for census surges and new units.' }
+    { title: 'Rapid response', text: 'Temporary healthcare staffing at short notice for census surges and new units.' }
   ];
 
   engagementModels = [

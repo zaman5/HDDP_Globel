@@ -15,7 +15,7 @@ import { RouterLink } from '@angular/router';
         </div>
         <div class="lg:pt-10">
           <p class="t-lede !text-ink">
-            HDDP Consultants is a global workforce solutions firm delivering recruitment and staffing support across healthcare, IT, and professional services sectors.
+            HDDP Consultants is a global healthcare staffing partner and healthcare staffing outsourcing company, delivering recruitment and staffing support across healthcare, IT and professional services.
           </p>
           <p class="t-body mt-5">
             In healthcare, we work behind hospital HR teams and nurse staffing agencies—mainly in the United States, and also in the United Kingdom and Canada—sourcing, screening and credentialing candidates so our clients can fill roles faster.
@@ -56,6 +56,6 @@ export class AboutUsComponent {
     { title: 'Healthcare specialists', text: 'Recruiters who know US nursing specialties, licensure and the Nurse Licensure Compact.' },
     { title: 'Compliance first', text: 'Primary source verification on every candidate, and clear lines on what you and we each check.' },
     { title: 'We don’t compete with you', text: 'We never approach your clients or place candidates with them directly.' },
-    { title: 'Scalable and cost-efficient', text: 'Offshore recruiting capacity that grows with your requisitions, without adding to your payroll.' }
+    { title: 'Offshore recruitment excellence', text: 'Cost-effective offshore recruiter teams that grow with your requisitions, without adding to your payroll.' }
   ];
 }

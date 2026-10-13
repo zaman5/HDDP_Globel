@@ -77,14 +77,17 @@ export class SitemapComponent implements OnInit {
         { label: 'Credentialing and compliance support', path: '/services', fragment: 'credentialing' },
         { label: 'Back-office recruitment support', path: '/services', fragment: 'back-office' },
         { label: 'Roles, specialties and assignment types', path: '/services', fragment: 'roles' },
-        { label: 'Engagement models', path: '/services', fragment: 'pricing' }
+        { label: 'Engagement models', path: '/services', fragment: 'pricing' },
+        { label: 'Healthcare staffing consulting', path: '/staffing-agency-consulting' },
+        { label: 'How to start a nurse staffing agency', path: '/staffing-agency-consulting', fragment: 'startup-guide' }
       ]
     },
     {
       id: 'who-we-serve', title: 'Who we serve', path: '/who-we-serve',
       links: [
         { label: 'Nurse staffing agencies', path: '/who-we-serve', fragment: 'staffing-agencies' },
-        { label: 'Hospitals and health systems', path: '/who-we-serve', fragment: 'hospitals' }
+        { label: 'Hospitals and health systems', path: '/who-we-serve', fragment: 'hospitals' },
+        { label: 'New and growing staffing agencies', path: '/who-we-serve', fragment: 'new-agencies' }
       ]
     },
     {

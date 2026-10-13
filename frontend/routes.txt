@@ -8,3 +8,4 @@
 /privacy-policy
 /cookie-policy
 /sitemap
+/staffing-agency-consulting

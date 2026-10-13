@@ -10,36 +10,43 @@ import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { SitemapComponent } from './pages/sitemap/sitemap.component';
+import { StaffingAgencyConsultingComponent } from './pages/staffing-agency-consulting/staffing-agency-consulting.component';
 
 // SEO: keep titles under ~60 characters and descriptions around 140–160.
+// Each page owns one keyword cluster (see the comment above each route) so pages don't compete.
 // SeoService turns `title` and `data` into meta, canonical and social tags.
 // Public pages listed here must also be in routes.txt (prerender), public/sitemap.xml,
 // STATIC_PAGES in server.js and the site map page (pages/sitemap).
 export const routes: Routes = [
   {
+    // nurse staffing services, healthcare staffing partner, travel/locum/contract/per diem nurses
     path: '', component: HomeComponent,
-    title: 'Nurse Recruitment Partner for Hospitals & Agencies | HDDP',
-    data: { description: 'Pre-screened, credential-ready nurses and allied health candidates for US hospital HR teams and nurse staffing agencies, delivered in 48–96 hours.' }
+    title: 'Nurse Staffing Services & Healthcare Staffing Partner | HDDP',
+    data: { description: 'Global healthcare staffing partner for US hospitals and staffing agencies: travel, locum, contract and per diem nurses, pre-screened in 48–96 hours.' }
   },
   {
+    // healthcare recruitment services, RPO healthcare, credentialing support, back office, payroll, scheduling
     path: 'services', component: HealthcareSolutionsComponent,
-    title: 'Nurse Sourcing, RPO & Credentialing Services | HDDP',
-    data: { description: 'Nurse and healthcare talent sourcing, recruitment process outsourcing (RPO), credentialing and back-office support for hospitals and staffing agencies.' }
+    title: 'Healthcare Recruitment, RPO & Credentialing Services | HDDP',
+    data: { description: 'Healthcare recruitment services: nurse sourcing, offshore recruiter teams (RPO), credentialing support, back-office, payroll and scheduling support.' }
   },
   {
+    // nurse staffing solutions for hospitals, hire travel/locum nurses, back office support for staffing companies
     path: 'who-we-serve', component: PartnerWithUsComponent,
-    title: 'Recruiting Support for Hospitals & Staffing Agencies | HDDP',
-    data: { description: 'White-label recruiting and credentialing capacity for nurse staffing agencies and for hospital HR and talent acquisition teams across the US.' }
+    title: 'Nurse Staffing Solutions for Hospitals & Agencies | HDDP',
+    data: { description: 'Hospital staffing solutions and back office support for healthcare staffing companies. Hire travel and locum nurses quickly with a scalable partner.' }
   },
   {
+    // candidate screening healthcare, credentialing and compliance support for nurses
     path: 'how-it-works', component: ProcessComponent,
-    title: 'Nurse Screening & Credentialing Process | HDDP',
+    title: 'Healthcare Candidate Screening & Credentialing | HDDP',
     data: { description: 'From requisition to submittal in 48–96 hours: sourcing, screening, primary source licence verification, skills checklists and a complete submittal packet.' }
   },
   {
+    // travel nurse jobs USA, travel RN jobs, locum nurse jobs, nurse job listings, healthcare job board
     path: 'jobs', component: CandidatesComponent,
-    title: 'Nursing Jobs: RN, LPN, CNA & Allied Health | HDDP',
-    data: { description: 'Browse travel, per diem, contract and permanent nursing and allied health jobs in the USA, UK and Canada, and apply online in minutes.' }
+    title: 'Travel Nurse, Locum & Per Diem Nursing Jobs USA | HDDP',
+    data: { description: 'Nurse job listings: travel RN jobs, ICU and ER travel nurse roles, locum and per diem nursing jobs and allied health jobs in the USA, UK and Canada.' }
   },
   {
     path: 'jobs/:id', component: JobDetailComponent,
@@ -52,14 +59,22 @@ export const routes: Routes = [
     data: { apply: true, robots: 'noindex, follow' }
   },
   {
+    // global healthcare staffing partner, offshore recruitment excellence
     path: 'about-us', component: AboutUsComponent,
-    title: 'About HDDP Consultants | Healthcare Recruitment Partner',
-    data: { description: 'HDDP Consultants is a healthcare recruitment partner helping US hospitals and nurse staffing agencies source, screen and credential clinical talent.' }
+    title: 'About HDDP | Global Healthcare Staffing Partner',
+    data: { description: 'HDDP Consultants is a global healthcare staffing partner helping US hospitals and nurse staffing agencies source, screen and credential clinical talent.' }
   },
   {
+    // hire locum nurses, contract healthcare staff providers
     path: 'contact-us', component: ContactUsComponent,
-    title: 'Contact HDDP Consultants | Request Nurse Candidates',
-    data: { description: 'Talk to our team about nurse sourcing, recruitment process outsourcing, credentialing or back-office support, or send open requisitions today.' }
+    title: 'Hire Travel & Locum Nurses | Contact HDDP Consultants',
+    data: { description: 'Hire travel nurses, locum nurses and contract healthcare staff, or ask about RPO, credentialing, back-office support or staffing agency consulting.' }
+  },
+  {
+    // healthcare staffing consulting, start a nurse staffing agency, staffing agency setup services
+    path: 'staffing-agency-consulting', component: StaffingAgencyConsultingComponent,
+    title: 'Start a Nurse Staffing Agency | Staffing Consulting | HDDP',
+    data: { description: 'Healthcare staffing consulting and staffing agency setup services, plus a step-by-step guide on how to start a nurse staffing agency in the US.' }
   },
   {
     path: 'privacy-policy',

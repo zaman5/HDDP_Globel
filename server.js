@@ -46,7 +46,7 @@ function fsExists(p) {
 const SITE_URL = (process.env.SITE_URL || 'https://hddpconsultants.com').replace(/\/$/, '');
 const STATIC_PAGES = [
   ['/', '1.0', 'weekly'], ['/services', '0.9', 'monthly'], ['/who-we-serve', '0.9', 'monthly'],
-  ['/how-it-works', '0.8', 'monthly'], ['/jobs', '0.9', 'daily'], ['/about-us', '0.6', 'monthly'],
+  ['/how-it-works', '0.8', 'monthly'], ['/jobs', '0.9', 'daily'], ['/staffing-agency-consulting', '0.8', 'monthly'], ['/about-us', '0.6', 'monthly'],
   ['/contact-us', '0.7', 'yearly'], ['/privacy-policy', '0.2', 'yearly'], ['/cookie-policy', '0.2', 'yearly'],
   ['/sitemap', '0.3', 'monthly']
 ];

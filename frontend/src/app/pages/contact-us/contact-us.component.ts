@@ -16,7 +16,7 @@ import { ContactInquiry } from '../../models/models';
         <div>
           <p class="t-kicker">Contact</p>
           <h1 class="t-h1">Let’s build your healthcare workforce</h1>
-          <p class="t-body mt-5">Tell us about your hiring requirements and we’ll recommend the right talent sourcing, RPO or back-office support model.</p>
+          <p class="t-body mt-5">Hire travel nurses, locum nurses and contract healthcare staff, or ask about RPO, credentialing, back-office support or staffing agency consulting. Tell us your requirements and we’ll recommend the right model.</p>
 
           <dl class="mt-10 m-0">
             <div class="py-4 border-t border-line">
@@ -57,6 +57,7 @@ import { ContactInquiry } from '../../models/models';
               <option value="Talent Request">Candidates for open roles</option>
               <option value="Staffing Agency Partnership">A recruitment partnership</option>
               <option value="Credentialing & Back-Office Support">Credentialing or back-office support</option>
+              <option value="Staffing Agency Consulting">Starting or growing a staffing agency</option>
               <option value="Candidate Inquiry">I’m a candidate</option>
               <option value="General Consultation">Something else</option>
             </select>

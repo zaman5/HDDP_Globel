@@ -16,7 +16,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
           <div class="md:col-span-4">
             <p class="font-heading text-xl font-semibold text-white">HDDP Consultants</p>
             <p class="mt-3 text-[0.95rem] leading-relaxed text-white/75 max-w-sm">
-              Recruitment partner to hospital HR teams and nurse staffing agencies in the United States, United Kingdom and Canada.
+              Global healthcare staffing partner for hospitals and nurse staffing agencies: travel, locum, contract and per diem nurses in the United States, United Kingdom and Canada.
             </p>
             <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-light mt-6">Request talent</button>
           </div>
@@ -28,6 +28,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
               <li><a routerLink="/services" fragment="rpo" class="hover:text-white">Recruitment process outsourcing</a></li>
               <li><a routerLink="/services" fragment="credentialing" class="hover:text-white">Credentialing and compliance</a></li>
               <li><a routerLink="/services" fragment="back-office" class="hover:text-white">Back-office support</a></li>
+              <li><a routerLink="/staffing-agency-consulting" class="hover:text-white">Staffing agency consulting</a></li>
             </ul>
           </div>
 

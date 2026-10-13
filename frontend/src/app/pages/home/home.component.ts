@@ -12,13 +12,13 @@ import { ModalService } from '../../services/modal.service';
     <section class="band !pt-16 lg:!pt-20">
       <div class="wrap grid gap-14 lg:grid-cols-12 lg:items-center">
         <div class="lg:col-span-7">
-          <p class="t-kicker">Recruitment partner for hospital HR teams and nurse staffing agencies</p>
-          <h1 class="t-display max-w-[19ch]">Connecting healthcare talent to where it matters most</h1>
+          <p class="t-kicker">Global healthcare staffing partner for hospitals and nurse staffing agencies</p>
+          <h1 class="t-display max-w-[19ch]">Nurse staffing services that fill healthcare roles fast</h1>
           <p class="t-lede mt-6">
-            HDDP Consultants works behind US hospital HR teams and nurse staffing agencies to deliver pre-screened, credential-ready nurses and healthcare professionals—quickly, efficiently and at scale. We also support clients in the UK and Canada.
+            HDDP Consultants delivers pre-screened, credential-ready travel nurses, locum nurses, contract and per diem nurses and allied health professionals to US hospitals and nurse staffing agencies—with fast turnaround, cost-effective nurse staffing and scalable healthcare workforce solutions. We also support clients in the UK and Canada.
           </p>
           <p class="t-body mt-4">
-            From critical staffing shortages to urgent placements, we act as your extended recruitment engine—helping you fill roles faster while reducing hiring costs and operational strain.
+            From urgent nurse staffing needs to long-term hospital staffing solutions, we act as your extended recruitment engine—so you can hire travel nurses quickly, cover locum and temporary healthcare staffing gaps, and reduce hiring costs.
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
             <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-primary">Request talent</button>
@@ -107,13 +107,13 @@ import { ModalService } from '../../services/modal.service';
     <section class="band band-mist">
       <div class="wrap split">
         <div>
-          <h2 class="t-h2">Core services</h2>
-          <p class="t-body mt-4">Recruitment support for nurse and healthcare staffing agencies. We add capacity to your team; your agency keeps its clients and its operations.</p>
+          <h2 class="t-h2">Healthcare recruitment services</h2>
+          <p class="t-body mt-4">Healthcare talent acquisition, offshore support and consulting for nurse staffing agencies and hospitals. We add capacity to your team; you keep your clients and your operations.</p>
           <a routerLink="/services" class="link inline-block mt-6">All services, roles and specialties</a>
         </div>
         <ul class="ruled">
           <li *ngFor="let s of services" class="def-row">
-            <h3 class="t-h3"><a routerLink="/services" [fragment]="s.id" class="hover:underline underline-offset-4 decoration-1">{{ s.title }}</a></h3>
+            <h3 class="t-h3"><a [routerLink]="s.id === 'consulting' ? '/staffing-agency-consulting' : '/services'" [fragment]="s.id === 'consulting' ? undefined : s.id" class="hover:underline underline-offset-4 decoration-1">{{ s.title }}</a></h3>
             <p class="t-body m-0">{{ s.text }}</p>
           </li>
         </ul>
@@ -147,12 +147,28 @@ import { ModalService } from '../../services/modal.service';
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="band">
+      <div class="wrap split">
+        <h2 class="t-h2">Frequently asked questions</h2>
+        <div class="border-t border-line">
+          <details *ngFor="let f of faqs" class="group border-b border-line py-5">
+            <summary class="flex justify-between gap-6 cursor-pointer list-none font-semibold text-navy text-[1.05rem]">
+              {{ f.q }}
+              <span class="text-teal-ink text-xl leading-none transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+            </summary>
+            <p class="t-body mt-3 mb-0">{{ f.a }}</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA -->
     <section class="band band-navy">
       <div class="wrap flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
         <div>
-          <h2 class="t-h1">Struggling to fill healthcare roles?</h2>
-          <p class="mt-3 text-lg text-white/80">Let HDDP deliver pre-screened candidates—fast, reliable, and ready.</p>
+          <h2 class="t-h1">Need nurses urgently?</h2>
+          <p class="mt-3 text-lg text-white/80">Hire locum nurses, travel nurses and contract healthcare staff—pre-screened and ready in 48–96 hours.</p>
         </div>
         <div class="flex flex-wrap gap-3 shrink-0">
           <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-light">Request talent</button>
@@ -175,8 +191,8 @@ export class HomeComponent {
   trust = [
     { title: 'Trusted recruitment partner', text: 'We support agencies; we don’t compete with them.' },
     { title: '25+ years combined expertise', text: 'In healthcare recruitment and staffing.' },
-    { title: 'Global talent network', text: 'Sourcing for roles in the USA, UK and Canada.' },
-    { title: 'Fast delivery', text: 'Candidates within 48–96 hours.' }
+    { title: 'Global talent network', text: 'International nurse recruitment for the USA, UK and Canada.' },
+    { title: 'Fast turnaround', text: 'Pre-screened candidates within 48–96 hours.' }
   ];
 
   challenges = [
@@ -188,9 +204,10 @@ export class HomeComponent {
 
   services = [
     { id: 'talent-sourcing', title: 'Nurse and healthcare talent sourcing', text: 'We identify and deliver qualified healthcare professionals aligned with your specific requirements.' },
-    { id: 'rpo', title: 'Recruitment process outsourcing (RPO)', text: 'Dedicated offshore recruiters acting as an extension of your internal hiring team.' },
+    { id: 'rpo', title: 'Recruitment process outsourcing (RPO) for healthcare', text: 'Dedicated offshore recruiters acting as an extension of your internal hiring team.' },
     { id: 'credentialing', title: 'Credentialing and compliance support', text: 'Primary source licence verification, certification tracking and credential files built to your checklist.' },
-    { id: 'back-office', title: 'Back-office recruitment support', text: 'Interview scheduling, ATS updates, VMS submittals and onboarding paperwork.' }
+    { id: 'back-office', title: 'Back-office support for staffing agencies', text: 'Nurse scheduling support, payroll processing support, ATS updates, VMS submittals and onboarding paperwork.' },
+    { id: 'consulting', title: 'Healthcare staffing consulting', text: 'Staffing agency setup services, healthcare compliance consulting and recruitment SOP development.' }
   ];
 
   steps = [
@@ -201,8 +218,17 @@ export class HomeComponent {
     'Submittal and follow-up'
   ];
 
+  faqs = [
+    { q: 'How quickly can you supply travel nurses or contract nurses?', a: 'For contract nurse staffing and travel nurse requests we usually submit pre-screened, credential-checked candidates within 48–96 hours. Urgent requests for common specialties are often filled at the faster end of that window.' },
+    { q: 'Do you provide locum nurses and per diem nurses?', a: 'Yes. We source locum nurses and other locum healthcare staff, per diem nurses, contract nurses and travel nurses, as well as permanent hires, across RN, LPN/LVN, CNA, nurse practitioner and allied health roles.' },
+    { q: 'Are you a healthcare staffing agency?', a: 'We are a healthcare staffing partner. We recruit, screen and credential candidates for hospitals and nurse staffing agencies, and provide offshore recruiter teams and back-office support. Your agency or facility makes the hiring decision.' },
+    { q: 'Do you offer back office support for healthcare staffing companies?', a: 'Yes. Our offshore staffing support covers credentialing, nurse scheduling support, payroll processing support, ATS updates and VMS submittals, so your recruiters can focus on filling orders.' },
+    { q: 'Can you help me start a nurse staffing agency?', a: 'Yes. Our healthcare staffing consulting covers staffing agency setup, healthcare compliance, recruitment SOP development and offshore team setup. See our guide on how to start a nurse staffing agency in the US.' },
+    { q: 'Do you recruit nurses internationally?', a: 'Yes. Alongside healthcare staffing in the USA we run international nurse recruitment and overseas nurse staffing. Every candidate must hold the licence and work authorization that the role requires before we submit them.' }
+  ];
+
   audiences = [
-    { id: 'hospitals', title: 'Hospitals and health systems', text: 'Extra recruiting capacity for HR and talent acquisition teams filling RN, LPN, CNA and allied roles.' },
-    { id: 'staffing-agencies', title: 'Nurse staffing agencies', text: 'White-label sourcing, dedicated recruiters and credentialing support for travel, per diem and permanent desks.' }
+    { id: 'hospitals', title: 'Hospitals and health systems', text: 'Nurse staffing solutions for hospitals: registered nurse (RN), LPN, CNA, allied health and healthcare IT staffing for HR and talent acquisition teams.' },
+    { id: 'staffing-agencies', title: 'Nurse staffing agencies', text: 'White-label sourcing, offshore recruiter teams and back office support for healthcare staffing companies on travel, per diem and permanent desks.' }
   ];
 }
