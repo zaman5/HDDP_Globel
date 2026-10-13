@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild, effect, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, ViewChild, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -10,7 +10,10 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
     <!-- First-visit banner: not a cookie wall, the site stays usable -->
-    <section *ngIf="consent.bannerVisible()" role="region" aria-labelledby="cb-title"
+    <!-- Spacer the size of the banner, so the footer (and its privacy links) can scroll clear of it -->
+    <!-- Default heights until the real one is measured -->
+    <div *ngIf="consent.bannerVisible()" aria-hidden="true" class="h-[340px] sm:h-[250px] lg:h-[200px]" [style.height.px]="bannerHeight() || null"></div>
+    <section #banner *ngIf="consent.bannerVisible()" role="region" aria-labelledby="cb-title"
       class="fixed inset-x-0 bottom-0 z-[60] p-4 sm:p-6 pointer-events-none">
       <div class="pointer-events-auto mx-auto max-w-5xl bg-white border border-line rounded-lg shadow-modal p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center gap-5">
         <div class="flex-1">
@@ -85,10 +88,24 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
     .switch input:disabled + .switch-track { opacity: .6; }
   `]
 })
-export class CookieBannerComponent {
+export class CookieBannerComponent implements OnDestroy {
   consent = inject(CookieConsentService);
 
   @ViewChild('dialog') dialog?: ElementRef<HTMLElement>;
+
+  bannerHeight = signal(0);
+  private resizeObserver?: ResizeObserver;
+
+  // Track the banner's height (it changes with screen width) for the spacer above.
+  @ViewChild('banner') set bannerEl(el: ElementRef<HTMLElement> | undefined) {
+    this.resizeObserver?.disconnect();
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    this.resizeObserver = new ResizeObserver(([entry]) => {
+      // A signal, because ResizeObserver callbacks run outside change detection
+      this.bannerHeight.set(Math.ceil(entry.target.getBoundingClientRect().height));
+    });
+    this.resizeObserver.observe(el.nativeElement);
+  }
   private returnFocus: HTMLElement | null = null;
 
   choices = { analytics: false, marketing: false };
@@ -134,6 +151,10 @@ export class CookieBannerComponent {
   close() {
     this.consent.closePreferences();
     this.restoreFocus();
+  }
+
+  ngOnDestroy() {
+    this.resizeObserver?.disconnect();
   }
 
   @HostListener('document:keydown.escape')
