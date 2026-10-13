@@ -8,135 +8,139 @@ import { ModalService } from '../../services/modal.service';
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <div class="flex flex-col w-full">
-      
-      <!-- HERO -->
-      <section class="bg-[#003461] text-white py-16 lg:py-24 px-6 lg:px-12 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto relative z-10 text-center max-w-4xl mx-auto">
-          <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 text-xs font-bold uppercase tracking-wider text-[#86f4f1] mb-4">
-            The HDDP Precision Deployment Methodology
-          </span>
-          <h1 class="font-heading text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-            Our 5-Step Clinical Trust & Deployment System
-          </h1>
-          <p class="mt-4 text-base sm:text-lg text-slate-200 leading-relaxed max-w-2xl mx-auto">
-            From initial requirement ingestion to day-one shift orientation, our standardized 5-phase protocol guarantees 100% compliance and ultra-fast 48–96h delivery.
-          </p>
+    <section class="band !pb-12">
+      <div class="wrap">
+        <p class="t-kicker">How it works</p>
+        <h1 class="t-h1 max-w-[22ch]">From requisition to submittal in 48–96 hours</h1>
+        <p class="t-lede mt-5">Our healthcare candidate screening and credentialing process follows five steps, the same for every client. Each candidate arrives with a submittal packet your team can review in minutes.</p>
+      </div>
+    </section>
+
+    <!-- STEPS -->
+    <section class="band !pt-0">
+      <div class="wrap">
+        <ol class="list-none m-0 p-0 border-t border-line">
+          <li *ngFor="let step of steps; let i = index" class="grid gap-3 py-8 border-b border-line md:grid-cols-12 md:gap-8">
+            <span class="md:col-span-1 font-heading font-semibold text-teal-ink text-2xl leading-none" aria-hidden="true">{{ i + 1 }}</span>
+            <div class="md:col-span-4">
+              <h2 class="t-h3 !text-xl">{{ step.title }}</h2>
+              <p class="text-sm text-muted mt-1">{{ step.time }}</p>
+            </div>
+            <p class="md:col-span-7 t-body m-0">{{ step.text }}</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- SUBMITTAL PACKET -->
+    <section id="submittal-packet" class="band band-mist scroll-mt-20">
+      <div class="wrap split">
+        <div>
+          <h2 class="t-h2">What’s in every submittal packet</h2>
+          <p class="t-body mt-4">Formatted to your template, ready to forward to a hiring manager or upload to a VMS.</p>
         </div>
-      </section>
+        <ul class="tick-list grid sm:grid-cols-2 gap-x-10">
+          <li *ngFor="let p of packet">{{ p }}</li>
+        </ul>
+      </div>
+    </section>
 
-      <!-- 5-STEP TIMELINE -->
-      <section class="py-16 lg:py-24 bg-[#F5F7FA]">
-        <div class="max-w-5xl mx-auto px-6 lg:px-12">
-          
-          <div class="space-y-12 relative before:absolute before:inset-0 before:left-8 md:before:left-1/2 before:w-1 before:bg-teal-200 before:-translate-x-1/2">
-            
-            <!-- Step 1 -->
-            <div class="relative flex flex-col md:flex-row items-center gap-8">
-              <div class="md:w-1/2 flex md:justify-end text-left md:text-right">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-md">
-                  <span class="text-xs font-bold uppercase tracking-wider text-[#006a68]">Phase 01 • Requisition</span>
-                  <h3 class="font-heading text-lg font-bold text-[#003461] mt-1">Intake & Clinical Scoping</h3>
-                  <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-                    We capture exact clinical unit acuity, EHR software proficiency, shift rotation, compact state requirements, and target start dates.
-                  </p>
-                  <span class="inline-block mt-3 px-2.5 py-1 rounded bg-teal-50 text-teal-800 text-[11px] font-bold">Turnaround: 0–4 Hours</span>
-                </div>
-              </div>
-              <div class="z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#004b87] text-white font-extrabold shadow-lg text-lg border-4 border-white">
-                1
-              </div>
-              <div class="md:w-1/2 hidden md:block"></div>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="relative flex flex-col md:flex-row items-center gap-8">
-              <div class="md:w-1/2 hidden md:block"></div>
-              <div class="z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#004b87] text-white font-extrabold shadow-lg text-lg border-4 border-white">
-                2
-              </div>
-              <div class="md:w-1/2 flex justify-start text-left">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-md">
-                  <span class="text-xs font-bold uppercase tracking-wider text-[#006a68]">Phase 02 • Sourcing</span>
-                  <h3 class="font-heading text-lg font-bold text-[#003461] mt-1">AI-Assisted Candidate Matching</h3>
-                  <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-                    Our database of 14,500+ pre-vetted clinicians is queried against specialty skills, compact license status, and historical facility ratings.
-                  </p>
-                  <span class="inline-block mt-3 px-2.5 py-1 rounded bg-teal-50 text-teal-800 text-[11px] font-bold">Turnaround: 4–24 Hours</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="relative flex flex-col md:flex-row items-center gap-8">
-              <div class="md:w-1/2 flex md:justify-end text-left md:text-right">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-md">
-                  <span class="text-xs font-bold uppercase tracking-wider text-[#006a68]">Phase 03 • Compliance</span>
-                  <h3 class="font-heading text-lg font-bold text-[#003461] mt-1">10-Point Credentialing Audit</h3>
-                  <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-                    Nursys primary license verification, 10-panel drug screening, FBI background checks, health immunizations, and clinical reference audits.
-                  </p>
-                  <span class="inline-block mt-3 px-2.5 py-1 rounded bg-teal-50 text-teal-800 text-[11px] font-bold">100% Joint Commission Compliant</span>
-                </div>
-              </div>
-              <div class="z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#004b87] text-white font-extrabold shadow-lg text-lg border-4 border-white">
-                3
-              </div>
-              <div class="md:w-1/2 hidden md:block"></div>
-            </div>
-
-            <!-- Step 4 -->
-            <div class="relative flex flex-col md:flex-row items-center gap-8">
-              <div class="md:w-1/2 hidden md:block"></div>
-              <div class="z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#004b87] text-white font-extrabold shadow-lg text-lg border-4 border-white">
-                4
-              </div>
-              <div class="md:w-1/2 flex justify-start text-left">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-md">
-                  <span class="text-xs font-bold uppercase tracking-wider text-[#006a68]">Phase 04 • Presentation</span>
-                  <h3 class="font-heading text-lg font-bold text-[#003461] mt-1">Profile Submissions & Interview</h3>
-                  <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-                    We present comprehensive clinical packages with blind skills checklists, reference transcripts, and coordinate seamless hospital hiring interviews.
-                  </p>
-                  <span class="inline-block mt-3 px-2.5 py-1 rounded bg-teal-50 text-teal-800 text-[11px] font-bold">Turnaround: 24–48 Hours</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Step 5 -->
-            <div class="relative flex flex-col md:flex-row items-center gap-8">
-              <div class="md:w-1/2 flex md:justify-end text-left md:text-right">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-md">
-                  <span class="text-xs font-bold uppercase tracking-wider text-[#006a68]">Phase 05 • Deployment</span>
-                  <h3 class="font-heading text-lg font-bold text-[#003461] mt-1">Orientation & 24/7 Support</h3>
-                  <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-                    Logistics, lodging, parking, badge pickup, unit orientation coordination, and ongoing weekly clinical check-ins to ensure complete retention.
-                  </p>
-                  <span class="inline-block mt-3 px-2.5 py-1 rounded bg-emerald-50 text-emerald-800 text-[11px] font-bold">98.4% Retention Guarantee</span>
-                </div>
-              </div>
-              <div class="z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#5FCF80] text-slate-900 font-extrabold shadow-lg text-lg border-4 border-white">
-                5
-              </div>
-              <div class="md:w-1/2 hidden md:block"></div>
-            </div>
-
-          </div>
-
-          <!-- Bottom Action -->
-          <div class="mt-16 text-center">
-            <button (click)="modalService.openRequestTalent()" class="bg-[#004b87] hover:bg-[#0B3C5D] text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all text-sm inline-flex items-center gap-2">
-              <span>Initiate Requisition Under Our 5-Step SLA</span>
-              <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </button>
-          </div>
-
+    <!-- COMPLIANCE -->
+    <section id="compliance" class="band scroll-mt-20">
+      <div class="wrap split">
+        <div>
+          <h2 class="t-h2">Credentialing and compliance support for nurses</h2>
+          <p class="t-body mt-4">Our screening follows the primary-source verification approach used in The Joint Commission’s Health Care Staffing Services standards, so it fits agencies that are certified or working towards it.</p>
+          <p class="t-small mt-4">Responsibilities are confirmed in each client agreement.</p>
         </div>
-      </section>
+        <div class="grid gap-10 sm:grid-cols-2">
+          <div>
+            <p class="font-semibold text-navy mb-3">Completed by HDDP</p>
+            <ul class="tick-list">
+              <li *ngFor="let c of weDo">{{ c }}</li>
+            </ul>
+          </div>
+          <div>
+            <p class="font-semibold text-navy mb-3">Completed by your agency or facility</p>
+            <ul class="list-disc pl-5 m-0 space-y-2 text-muted">
+              <li *ngFor="let c of clientDoes">{{ c }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    </div>
+    <!-- DATA PROTECTION -->
+    <section class="band band-mist">
+      <div class="wrap split">
+        <h2 class="t-h2">Candidate data handling</h2>
+        <ul class="ruled">
+          <li *ngFor="let d of dataHandling" class="def-row">
+            <h3 class="t-h3">{{ d.title }}</h3>
+            <p class="t-body m-0">{{ d.text }}</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-navy">
+      <div class="wrap flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        <div>
+          <h2 class="t-h1">Ready to send your first requisition?</h2>
+          <p class="mt-3 text-lg text-white/80">Share the role and we will confirm requirements within one business day.</p>
+        </div>
+        <div class="flex flex-wrap gap-3 shrink-0">
+          <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-light">Request talent</button>
+          <a routerLink="/contact-us" class="btn btn-ghost-light">Talk to our team</a>
+        </div>
+      </div>
+    </section>
   `
 })
 export class ProcessComponent {
   modalService = inject(ModalService);
+
+  steps = [
+    { title: 'Requirement intake', time: 'Day 0', text: 'We confirm the role, specialty, unit, licence state or compact eligibility, certifications, experience, shift, pay rate, start date and assignment length with your team.' },
+    { title: 'Targeted sourcing', time: 'Day 0–2', text: 'Recruiters search our candidate database, job boards, referral networks and international nurse recruitment channels for clinicians who match the requirement and the location.' },
+    { title: 'Screening', time: 'Day 1–3', text: 'Phone screen for clinical experience, specialty skills, communication, availability and shift preferences, plus a skills checklist for the specialty.' },
+    { title: 'Verification', time: 'Day 2–4', text: 'Licence verified with the state board of nursing or Nursys®, certifications checked, exclusion lists searched and references requested.' },
+    { title: 'Submittal and follow-up', time: 'Day 2–4, then ongoing', text: 'We send the candidate with a submittal packet, schedule interviews, keep the candidate engaged and support onboarding until the start date.' }
+  ];
+
+  packet = [
+    'Candidate summary and right-to-represent confirmation',
+    'Updated resume with work history gaps explained',
+    'Licence verification printout (state board or Nursys®)',
+    'Certifications with expiry dates (BLS, ACLS, PALS, NRP, TNCC)',
+    'Completed specialty skills checklist',
+    'Professional references',
+    'Availability, shift preference and pay expectations',
+    'Recruiter screening notes'
+  ];
+
+  weDo = [
+    'Primary source licence verification, including multistate (NLC) status',
+    'Certification and expiry tracking',
+    'OIG LEIE and SAM.gov exclusion checks',
+    'Skills checklists and reference collection',
+    'Work history and gap review',
+    'Credential file audit against your checklist'
+  ];
+
+  clientDoes = [
+    'Background checks, with FCRA disclosure and authorization',
+    'Drug screening',
+    'Health records: immunizations, TB testing, physicals and fit testing',
+    'Form I-9 and E-Verify after an offer',
+    'Facility orientation and competency validation',
+    'Hiring decision and employment contract'
+  ];
+
+  dataHandling = [
+    { title: 'Consent-based', text: 'Candidates agree to their profile being shared with you before we submit them.' },
+    { title: 'Need-to-know access', text: 'Resumes and documents are accessible only to the recruiters working your account.' },
+    { title: 'No health records', text: 'We do not collect or store candidate health information; it stays with you.' },
+    { title: 'Fair hiring', text: 'We screen on qualifications only, in line with EEOC guidance and state fair-chance and salary-history laws.' }
+  ];
 }

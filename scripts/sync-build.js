@@ -15,6 +15,19 @@ for (const target of targets) {
   }
 }
 
+// index.html is the prerendered home page. Routes that aren't prerendered (job pages,
+// unknown URLs) need an empty app shell instead, or they would briefly show home-page
+// content and the home page's canonical tag to crawlers.
+const prerenderedHome = path.join(browserDir, 'index.html');
+if (fs.existsSync(prerenderedHome)) {
+  const shell = fs.readFileSync(prerenderedHome, 'utf8')
+    .replace(/<app-root[\s\S]*<\/app-root>/, '<app-root></app-root>')
+    .replace(/\s*<link rel="canonical"[^>]*>/, '')
+    .replace(/\s*<meta property="og:url"[^>]*>/, '');
+  fs.writeFileSync(path.join(browserDir, 'index.csr.html'), shell);
+  console.log('[BUILD-SYNC] Wrote index.csr.html app shell for non-prerendered routes.');
+}
+
 if (fs.existsSync(browserDir)) {
   console.log('[BUILD-SYNC] Copying browser build artifacts to all hosting targets...');
   const files = fs.readdirSync(browserDir);

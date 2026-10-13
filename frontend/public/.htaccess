@@ -2,18 +2,61 @@
   Require all granted
 </IfModule>
 
+Options -Indexes
 DirectoryIndex index.html
+
+# Prerendered pages live at /services/index.html etc. Serve them at /services
+# (no trailing slash), which is the canonical URL in each page and in sitemap.xml.
+<IfModule mod_dir.c>
+  DirectorySlash Off
+</IfModule>
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
-  # Serve existing files/directories directly
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  # --- Canonical host (uncomment once HTTPS works on the domain) ---
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+  # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  # RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # Old addresses -> new ones (permanent)
+  RewriteRule ^healthcare-solutions/?$ /services [R=301,L]
+  RewriteRule ^partner-with-us/?$ /who-we-serve [R=301,L]
+  RewriteRule ^process/?$ /how-it-works [R=301,L]
+  RewriteRule ^candidates/?$ /jobs [R=301,L]
+  RewriteRule ^candidates/([0-9]+)(/apply)?/?$ /jobs/$1$2 [R=301,L]
+
+  # /services/ -> /services (one URL per page)
   RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} ^(.+)/$
+  RewriteRule ^ %1 [R=301,L]
+
+  # /services -> prerendered /services/index.html
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.+)$ $1/index.html [L]
+
+  # Serve existing files directly
+  RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
 
-  # Route all other URLs to index.html for Angular routing
+  # Everything else (job pages, unknown URLs): Angular app shell
+  RewriteCond %{DOCUMENT_ROOT}/index.csr.html -f
+  RewriteRule ^ index.csr.html [L]
   RewriteRule ^ index.html [L]
 </IfModule>
 
+# Long-lived caching for hashed build files; HTML always revalidates
+<IfModule mod_headers.c>
+  <FilesMatch "-[A-Z0-9]{8}\.(js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml application/xml text/plain
+</IfModule>

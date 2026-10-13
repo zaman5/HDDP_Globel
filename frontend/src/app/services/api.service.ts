@@ -1,29 +1,78 @@
-import { Injectable } from '@angular/core';
-import { Observable, from, of, catchError, map } from 'rxjs';
+import { Injectable, PLATFORM_ID, inject, isDevMode, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { EMPTY, Observable, from, of, catchError, map } from 'rxjs';
 import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, ContactInquiry, PlatformStats } from '../models/models';
+
+const ADMIN_TOKEN_KEY = 'hddp_admin_token';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:5000/api';
+  // In production the API is served from the same origin as the site (server.js mounts /api).
+  private baseUrl = isDevMode() ? 'http://localhost:5000/api' : '/api';
+
+  private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  /** Admin token for this browser tab only (cleared when the tab closes or on sign-out). */
+  readonly adminToken = signal<string | null>(this.readAdminToken());
 
   // Helper request method
-  private request<T>(endpoint: string, options: RequestInit = {}): Observable<T> {
-    return from(
-      fetch(`${this.baseUrl}${endpoint}`, {
-        ...options,
-        headers: {
-          ...options.headers
-        }
-      }).then(async (res) => {
-        const json = await res.json();
-        if (!res.ok) {
-          throw new Error(json.message || 'API request failed');
-        }
-        return json as T;
-      })
-    );
+  private request<T>(endpoint: string, options: RequestInit = {}, admin = false): Observable<T> {
+    // No API calls while prerendering pages at build time; data loads in the browser.
+    if (!this.isBrowser) return EMPTY;
+    return from(this.send(endpoint, options, admin).then(res => res.json() as Promise<T>));
+  }
+
+  // Sends a request and turns any failure (including non-JSON error pages) into a readable Error
+  private async send(endpoint: string, options: RequestInit = {}, admin = false): Promise<Response> {
+    const headers: Record<string, string> = { ...(options.headers as Record<string, string>) };
+    if (admin && this.adminToken()) headers['Authorization'] = `Bearer ${this.adminToken()}`;
+
+    let res: Response;
+    try {
+      res = await fetch(`${this.baseUrl}${endpoint}`, { ...options, headers });
+    } catch {
+      throw new Error('Could not reach the server. Check your connection and try again.');
+    }
+    if (!res.ok) {
+      let message = res.status === 413 ? 'The file is too large. The maximum size is 10 MB.' : 'Something went wrong. Please try again.';
+      try {
+        const json = await res.clone().json();
+        if (json?.message) message = json.message;
+      } catch { /* not JSON */ }
+      if (admin && res.status === 401) this.signOutAdmin();
+      const error = new Error(message) as Error & { status?: number };
+      error.status = res.status;
+      throw error;
+    }
+    return res;
+  }
+
+  // ---- Admin session ----
+  verifyAdminToken(token: string): Observable<{ success: boolean }> {
+    if (!this.isBrowser) return EMPTY;
+    return from(fetch(`${this.baseUrl}/admin/session`, { headers: { Authorization: `Bearer ${token}` } }).then(async res => {
+      if (res.ok) {
+        this.adminToken.set(token);
+        try { sessionStorage.setItem(ADMIN_TOKEN_KEY, token); } catch { /* storage blocked */ }
+        return { success: true };
+      }
+      let message = 'That admin key is not correct.';
+      try { message = (await res.json())?.message || message; } catch { /* not JSON */ }
+      if (res.status === 401) message = 'That admin key is not correct.';
+      throw new Error(message);
+    }, () => { throw new Error('Could not reach the server.'); }));
+  }
+
+  signOutAdmin() {
+    this.adminToken.set(null);
+    try { sessionStorage.removeItem(ADMIN_TOKEN_KEY); } catch { /* storage blocked */ }
+  }
+
+  private readAdminToken(): string | null {
+    if (!this.isBrowser) return null;
+    try { return sessionStorage.getItem(ADMIN_TOKEN_KEY); } catch { return null; }
   }
 
   // Health check
@@ -62,12 +111,7 @@ export class ApiService {
     if (filters?.job_type) params.append('job_type', filters.job_type);
 
     const query = params.toString() ? `?${params.toString()}` : '';
-    return this.request<{ success: boolean; count: number; data: JobPosition[] }>(`/jobs${query}`).pipe(
-      catchError((err) => {
-        console.warn('Jobs fetch fallback:', err);
-        return of({ success: true, count: 0, data: [] });
-      })
-    );
+    return this.request<{ success: boolean; count: number; data: JobPosition[] }>(`/jobs${query}`);
   }
 
   getJobById(id: number): Observable<{ success: boolean; data: JobPosition }> {
@@ -79,7 +123,7 @@ export class ApiService {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(job)
-    });
+    }, true);
   }
 
   // Candidates & Applications
@@ -90,15 +134,29 @@ export class ApiService {
     });
   }
 
+  // Downloads a candidate's CV with the admin token (a plain link can't send it)
+  async downloadResume(candidateId: number, fallbackName = 'cv'): Promise<void> {
+    const res = await this.send(`/candidates/${candidateId}/resume`, {}, true);
+    const disposition = res.headers.get('Content-Disposition') || '';
+    const match = disposition.match(/filename\*?=(?:UTF-8'')?"?([^";]+)"?/i);
+    const name = match ? decodeURIComponent(match[1]) : fallbackName;
+    const url = URL.createObjectURL(await res.blob());
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
   getCandidates(specialty?: string, status?: string): Observable<{ success: boolean; count: number; data: CandidateApplication[] }> {
     const params = new URLSearchParams();
     if (specialty) params.append('specialty', specialty);
     if (status) params.append('status', status);
     const query = params.toString() ? `?${params.toString()}` : '';
 
-    return this.request<{ success: boolean; count: number; data: CandidateApplication[] }>(`/candidates${query}`).pipe(
-      catchError(() => of({ success: true, count: 0, data: [] }))
-    );
+    return this.request<{ success: boolean; count: number; data: CandidateApplication[] }>(`/candidates${query}`, {}, true);
   }
 
   // Talent Requisitions
@@ -111,9 +169,7 @@ export class ApiService {
   }
 
   getTalentRequests(): Observable<{ success: boolean; count: number; data: TalentRequest[] }> {
-    return this.request<{ success: boolean; count: number; data: TalentRequest[] }>('/talent-requests').pipe(
-      catchError(() => of({ success: true, count: 0, data: [] }))
-    );
+    return this.request<{ success: boolean; count: number; data: TalentRequest[] }>('/talent-requests', {}, true);
   }
 
   // Partner Applications
@@ -126,9 +182,7 @@ export class ApiService {
   }
 
   getPartners(): Observable<{ success: boolean; count: number; data: PartnerApplication[] }> {
-    return this.request<{ success: boolean; count: number; data: PartnerApplication[] }>('/partners').pipe(
-      catchError(() => of({ success: true, count: 0, data: [] }))
-    );
+    return this.request<{ success: boolean; count: number; data: PartnerApplication[] }>('/partners', {}, true);
   }
 
   // Contact Inquiries
@@ -141,8 +195,6 @@ export class ApiService {
   }
 
   getContactInquiries(): Observable<{ success: boolean; count: number; data: ContactInquiry[] }> {
-    return this.request<{ success: boolean; count: number; data: ContactInquiry[] }>('/contact').pipe(
-      catchError(() => of({ success: true, count: 0, data: [] }))
-    );
+    return this.request<{ success: boolean; count: number; data: ContactInquiry[] }>('/contact', {}, true);
   }
 }

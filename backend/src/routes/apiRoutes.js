@@ -11,6 +11,7 @@ const partnerController = require('../controllers/partnerController');
 const contactController = require('../controllers/contactController');
 const statsController = require('../controllers/statsController');
 const db = require('../config/db');
+const requireAdmin = require('../middleware/requireAdmin');
 
 // Multer Storage Configuration
 const uploadsDir = path.join(__dirname, '..', '..', 'uploads');
@@ -57,25 +58,29 @@ router.get('/health', (req, res) => {
 // Platform Statistics
 router.get('/stats', statsController.getStats);
 
+// Admin page sign-in check
+router.get('/admin/session', requireAdmin, (req, res) => res.json({ success: true }));
+
 // Job Positions
 router.get('/jobs', jobController.getAllJobs);
 router.get('/jobs/:id', jobController.getJobById);
-router.post('/jobs', jobController.createJob);
+router.post('/jobs', requireAdmin, jobController.createJob);
 
 // Candidates & Resumes
 router.post('/candidates/apply', upload.single('resume'), candidateController.submitCandidateApplication);
-router.get('/candidates', candidateController.getAllCandidates);
+router.get('/candidates', requireAdmin, candidateController.getAllCandidates);
+router.get('/candidates/:id/resume', requireAdmin, candidateController.downloadResume);
 
 // Talent Requisitions (Hospitals & Staffing Partners)
 router.post('/talent-requests', talentRequestController.submitTalentRequest);
-router.get('/talent-requests', talentRequestController.getAllTalentRequests);
+router.get('/talent-requests', requireAdmin, talentRequestController.getAllTalentRequests);
 
 // Partner Applications
 router.post('/partners', partnerController.submitPartnerApplication);
-router.get('/partners', partnerController.getAllPartners);
+router.get('/partners', requireAdmin, partnerController.getAllPartners);
 
 // Contact Inquiries
 router.post('/contact', contactController.submitContactInquiry);
-router.get('/contact', contactController.getAllContactInquiries);
+router.get('/contact', requireAdmin, contactController.getAllContactInquiries);
 
 module.exports = router;

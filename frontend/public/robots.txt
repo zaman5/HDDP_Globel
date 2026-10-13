@@ -1,0 +1,8 @@
+# HDDP Consultants
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /uploads/
+
+Sitemap: https://hddpconsultants.com/sitemap.xml

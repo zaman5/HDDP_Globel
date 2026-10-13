@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllJobs = async (req, res) => {
   try {
-    const { search, specialty, state, job_type, limit = 50 } = req.query;
+    const { search, specialty, state, job_type, limit = 500 } = req.query;
     let sql = 'SELECT * FROM job_positions WHERE status = ?';
     const params = ['Open'];
 
@@ -34,7 +34,7 @@ exports.getAllJobs = async (req, res) => {
     res.json({ success: true, count: jobs.length, data: jobs });
   } catch (error) {
     console.error('Error fetching jobs:', error);
-    res.status(500).json({ success: false, message: 'Server error retrieving jobs', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error retrieving jobs' });
   }
 };
 
@@ -48,7 +48,7 @@ exports.getJobById = async (req, res) => {
     res.json({ success: true, data: jobs[0] });
   } catch (error) {
     console.error('Error fetching job details:', error);
-    res.status(500).json({ success: false, message: 'Server error retrieving job details', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error retrieving job details' });
   }
 };
 
@@ -58,7 +58,7 @@ exports.createJob = async (req, res) => {
       title, department, specialty, location, state,
       compact_eligible = 1, job_type = 'Travel Contract', shift,
       pay_range, experience_required, urgency_level = 'Immediate Need',
-      description, requirements, is_featured = 1
+      description, requirements, is_featured = 1, country = 'United States'
     } = req.body;
 
     if (!title || !specialty || !location) {
@@ -67,13 +67,14 @@ exports.createJob = async (req, res) => {
 
     const result = await db.query(
       `INSERT INTO job_positions 
-      (title, department, specialty, location, state, compact_eligible, job_type, shift, pay_range, experience_required, urgency_level, description, requirements, is_featured, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Open')`,
+      (title, department, specialty, location, state, compact_eligible, job_type, shift, pay_range, experience_required, urgency_level, description, requirements, is_featured, country, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Open')`,
       [
         title, department || 'General Clinical', specialty, location, state || 'National',
         compact_eligible ? 1 : 0, job_type, shift || '12h Days',
         pay_range || 'Competitive Compensation', experience_required || '1+ Year',
-        urgency_level, description || '', requirements || '', is_featured ? 1 : 0
+        urgency_level, description || '', requirements || '', is_featured ? 1 : 0,
+        country || 'United States'
       ]
     );
 
@@ -84,6 +85,6 @@ exports.createJob = async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating job:', error);
-    res.status(500).json({ success: false, message: 'Server error publishing job position', error: error.message });
+    res.status(500).json({ success: false, message: 'Server error publishing job position' });
   }
 };

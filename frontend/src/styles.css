@@ -1,33 +1,181 @@
-/* Clinical Trust & Deployment System Global Styles */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+
+/* HDDP Consultants — global styles
+   Palette and type follow the USA website wireframe brief:
+   Deep Blue #0B3C5D, Teal #2CA6A4, Soft Green #5FCF80, Light Gray #F5F7FA,
+   Poppins for headings, Open Sans for body. */
 
 :root {
-  --primary: #003461;
-  --primary-container: #004b87;
-  --secondary: #006a68;
-  --tertiary: #f2a900;
-  --deep-navy: #0B3C5D;
-  --clinical-green: #5FCF80;
-  --bg-canvas: #F5F7FA;
-  --surface-white: #FFFFFF;
+  --navy: #0B3C5D;
+  --navy-deep: #082C45;
+  --teal: #2CA6A4;
+  --teal-ink: #1D7775;   /* teal darkened for text/links: 4.9:1 on white */
+  --green: #5FCF80;
+  --mist: #F5F7FA;
+  --ink: #16252F;
+  --muted: #4E5F6B;
+  --line: #DCE3EA;
 }
 
 html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #1E293B;
-  background-color: #F5F7FA;
+  font-family: 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  background-color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Poppins', system-ui, sans-serif;
+  color: var(--navy);
+  letter-spacing: -0.01em;
 }
 
-/* Material Symbols alignment */
+:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+}
+
+/* ---------- Layout ---------- */
+.wrap {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.band { padding: 88px 0; }
+.band-tight { padding: 56px 0; }
+.band-mist { background: var(--mist); }
+.band-navy { background: var(--navy); color: #fff; }
+.band-navy h1, .band-navy h2, .band-navy h3 { color: #fff; }
+.rule-top { border-top: 1px solid var(--line); }
+
+/* Heading on the left, content on the right */
+/* minmax(0, …) lets columns shrink below their content, so wide tables scroll inside their box instead of widening the page */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+}
+@media (min-width: 900px) {
+  .split { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 64px; }
+}
+
+/* ---------- Type scale (1.25 ratio) ---------- */
+.t-display { font-size: clamp(2.2rem, 4.6vw, 3.4rem); line-height: 1.12; font-weight: 600; }
+.t-h1 { font-size: clamp(2rem, 3.6vw, 2.75rem); line-height: 1.15; font-weight: 600; }
+.t-h2 { font-size: clamp(1.6rem, 2.6vw, 2rem); line-height: 1.2; font-weight: 600; }
+.t-h3 { font-size: 1.25rem; line-height: 1.35; font-weight: 600; }
+.t-lede { font-size: 1.15rem; line-height: 1.65; color: var(--muted); max-width: 62ch; }
+.t-body { font-size: 1rem; line-height: 1.7; color: var(--muted); max-width: 68ch; }
+.t-small { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
+.text-muted { color: var(--muted); }
+.t-kicker { font-size: 0.95rem; font-weight: 600; color: var(--teal-ink); margin: 0 0 12px; }
+
+/* ---------- Links & buttons ---------- */
+.link { color: var(--teal-ink); font-weight: 600; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.link:hover { color: var(--navy); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border-radius: 4px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.975rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn-primary { background: var(--navy); color: #fff; }
+.btn-primary:hover { background: var(--navy-deep); }
+.btn-outline { background: transparent; color: var(--navy); border-color: var(--navy); }
+.btn-outline:hover { background: var(--navy); color: #fff; }
+.btn-light { background: #fff; color: var(--navy); }
+.btn-light:hover { background: var(--mist); }
+.btn-ghost-light { background: transparent; color: #fff; border-color: rgba(255,255,255,.55); }
+.btn-ghost-light:hover { border-color: #fff; background: rgba(255,255,255,.08); }
+.btn-block { width: 100%; }
+
+/* ---------- Ruled lists (instead of card grids) ---------- */
+.ruled { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.ruled > li { border-bottom: 1px solid var(--line); padding: 24px 0; }
+.ruled-compact > li { padding: 14px 0; }
+
+.def-row { display: grid; grid-template-columns: 1fr; gap: 6px; }
+@media (min-width: 700px) {
+  .def-row { grid-template-columns: 5fr 7fr; gap: 32px; }
+}
+
+.tick-list { list-style: none; margin: 0; padding: 0; }
+.tick-list > li { position: relative; padding-left: 28px; margin: 10px 0; }
+.tick-list > li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.45em;
+  width: 12px;
+  height: 7px;
+  border-left: 2.5px solid var(--teal);
+  border-bottom: 2.5px solid var(--teal);
+  transform: rotate(-45deg);
+}
+.band-navy .tick-list > li::before { border-color: var(--green); }
+
+/* Numbered process steps — only used where the content is a real sequence */
+.steps { counter-reset: step; list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+@media (min-width: 900px) { .steps-row { grid-template-columns: repeat(5, 1fr); } }
+.steps > li { counter-increment: step; padding: 20px 20px 20px 0; border-top: 2px solid var(--line); }
+.steps > li::before {
+  content: counter(step);
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--teal-ink);
+  margin-bottom: 6px;
+}
+.steps > li:first-child { border-top-color: var(--teal); }
+
+/* ---------- Forms ---------- */
+.hd-form label:not(.plain) { display: block; text-transform: none !important; letter-spacing: 0 !important; font-size: 0.9rem !important; font-weight: 600 !important; color: var(--ink) !important; margin-bottom: 6px; }
+.hd-form input:not([type=checkbox]):not([type=file]),
+.hd-form select,
+.hd-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 13px !important;
+  border: 1px solid #B8C4CE !important;
+  border-radius: 4px !important;
+  background: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.95rem !important;
+  color: var(--ink);
+  box-shadow: none !important;
+}
+.hd-form input:focus, .hd-form select:focus, .hd-form textarea:focus {
+  outline: none;
+  border-color: var(--teal) !important;
+  box-shadow: 0 0 0 3px rgba(44,166,164,.25) !important;
+}
+.hd-form input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--navy); }
+.hd-form .help { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+/* Material Symbols alignment (used sparingly: admin, dialogs) */
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   vertical-align: middle;
@@ -35,59 +183,38 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   display: inline-block;
 }
 
-.material-symbols-fill {
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+/* Dialog motion — answers the user's action of opening a form */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.animate-fade-in { animation: fadeIn 0.2s ease-out forwards; }
+.animate-slide-up { animation: slideUp 0.25s ease-out forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #eff4ff;
-}
-::-webkit-scrollbar-thumb {
-  background: #a3c9ff;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #004b87;
-}
+/* ---------- Legal pages (privacy, cookies) ---------- */
+.legal { font-size: 0.995rem; line-height: 1.75; color: var(--ink); }
+.legal > h2, .legal section > h2 { font-size: 1.35rem; line-height: 1.3; font-weight: 600; margin: 48px 0 12px; scroll-margin-top: 100px; }
+.legal h3 { font-size: 1.05rem; font-weight: 600; margin: 24px 0 8px; }
+.legal section { scroll-margin-top: 100px; }
+.legal p { margin: 0 0 14px; }
+.legal ul { margin: 0 0 16px; padding-left: 22px; list-style: disc; }
+.legal ul > li { margin: 6px 0; }
+.legal code { font-size: 0.875em; background: var(--mist); border: 1px solid var(--line); border-radius: 3px; padding: 1px 5px; }
+.legal .table-wrap { overflow-x: auto; margin: 8px 0 20px; border: 1px solid var(--line); border-radius: 6px; }
+.legal table { width: 100%; border-collapse: collapse; font-size: 0.9rem; line-height: 1.55; }
+.legal th, .legal td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.legal th { background: var(--mist); color: var(--navy); font-weight: 600; white-space: nowrap; }
+.legal tbody tr:last-child td { border-bottom: 0; }
+.legal-numbered { counter-reset: sec; }
+.legal-numbered section > h2::before { counter-increment: sec; content: counter(sec) ". "; }
+.legal .callout { background: var(--mist); border-left: 3px solid var(--teal); border-radius: 0 6px 6px 0; padding: 16px 20px; margin: 0 0 16px; }
+.legal .callout p:last-child { margin-bottom: 0; }
 
-/* Smooth Transitions & Card hover */
-.transition-lift {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.transition-lift:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px -5px rgba(11, 60, 93, 0.12), 0 8px 10px -6px rgba(11, 60, 93, 0.05);
-}
+.toc a { display: block; padding: 6px 0 6px 14px; border-left: 2px solid var(--line); color: var(--muted); font-size: 0.9rem; line-height: 1.4; text-decoration: none; }
+.toc a:hover { color: var(--navy); }
+.toc a.active { border-left-color: var(--teal); color: var(--navy); font-weight: 600; }
 
-/* Glow & Accent Rings */
-.glow-gold {
-  box-shadow: 0 0 15px rgba(242, 169, 0, 0.35);
-}
-
-.glow-teal {
-  box-shadow: 0 0 15px rgba(0, 106, 104, 0.3);
-}
-
-/* Modal Backdrop Animation */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px) scale(0.97); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.25s ease-out forwards;
-}
-
-.animate-slide-up {
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
+/* Utilities last so they override the component classes above, as the CDN build did. */
+@tailwind utilities;

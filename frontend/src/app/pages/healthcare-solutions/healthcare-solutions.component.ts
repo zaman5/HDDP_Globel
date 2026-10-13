@@ -3,238 +3,241 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ModalService } from '../../services/modal.service';
 
+// Services page: what HDDP delivers. Who it is for lives on /who-we-serve, the steps on /how-it-works.
 @Component({
   selector: 'app-healthcare-solutions',
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <div class="flex flex-col w-full">
-      
-      <!-- HERO -->
-      <section class="bg-[#003461] text-white py-16 lg:py-24 px-6 lg:px-12 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto relative z-10">
-          <div class="max-w-3xl">
-            <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 text-xs font-bold uppercase tracking-wider text-[#86f4f1] mb-4">
-              Enterprise Clinical Staffing Solutions
-            </span>
-            <h1 class="font-heading text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-              Specialized Workforce Models for Modern Healthcare Networks
-            </h1>
-            <p class="mt-4 text-base sm:text-lg text-slate-200 leading-relaxed">
-              We bridge clinical resource gaps with precision, delivering verified RNs, Allied Health specialists, Locum Tenens physicians, and EHR informatics consultants tailored to your facility's operational tempo.
-            </p>
-            <div class="mt-8 flex flex-wrap gap-4">
-              <button (click)="modalService.openRequestTalent()" class="bg-[#f2a900] hover:bg-amber-400 text-slate-900 font-extrabold px-8 py-3.5 rounded-xl shadow-lg transition-all text-sm flex items-center gap-2">
-                <span>Request Clinical Talent</span>
-                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-              </button>
-              <a routerLink="/partner-with-us" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3.5 rounded-xl border border-white/20 transition-all text-sm">
-                Explore Partnership Tiers
-              </a>
-            </div>
-          </div>
+    <!-- HERO -->
+    <section class="band !pb-14">
+      <div class="wrap">
+        <p class="t-kicker">Services</p>
+        <h1 class="t-h1 max-w-[24ch]">Healthcare recruitment services and nurse staffing support</h1>
+        <p class="t-lede mt-5">Healthcare outsourcing services for hospital HR teams and nurse staffing agencies: talent sourcing, RPO, credentialing, back-office support and consulting. Use them on their own or together—you keep the client relationship and the hiring decision.</p>
+        <nav aria-label="Services on this page" class="mt-8 flex flex-wrap gap-2">
+          <a *ngFor="let s of services" [routerLink]="[]" [fragment]="s.id" class="px-4 py-2 rounded-full border border-line text-sm font-semibold text-navy hover:border-navy">{{ s.title }}</a>
+        </nav>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section *ngFor="let s of services; let odd = odd" [id]="s.id" class="band scroll-mt-20" [class.band-mist]="!odd">
+      <div class="wrap split">
+        <div>
+          <h2 class="t-h2">{{ s.title }}</h2>
+          <p class="t-body mt-4">{{ s.summary }}</p>
+          <p class="mt-5 text-sm"><span class="font-semibold text-navy">Best for:</span> <span class="text-muted">{{ s.bestFor }}</span></p>
+          <a *ngIf="s.link" [routerLink]="s.link" class="link inline-block mt-5">{{ s.linkLabel }}</a>
         </div>
-      </section>
-
-      <!-- 6 SPECIALIZED SERVICE DIVISIONS -->
-      <section class="py-16 lg:py-24 bg-[#F5F7FA]">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-          
-          <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="font-heading text-3xl font-extrabold text-[#003461]">Our Clinical Service Divisions</h2>
-            <p class="text-slate-600 mt-2">Comprehensive staffing capabilities backed by 100% credential verification.</p>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <!-- Division 1 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
-              <div>
-                <div class="w-14 h-14 rounded-xl bg-[#e5eeff] text-[#004b87] flex items-center justify-center mb-5">
-                  <span class="material-symbols-outlined text-[32px]">flight_takeoff</span>
-                </div>
-                <h3 class="font-heading text-xl font-bold text-[#003461]">Travel Nursing Contracts</h3>
-                <p class="text-slate-600 text-sm mt-3 leading-relaxed">
-                  High-caliber Registered Nurses ready for 8, 13, or 26-week assignments. Fully vetted for ICU, CCU, ER, OR, NICU, PICU, Telemetry, and Med-Surg departments.
-                </p>
-                <ul class="mt-4 space-y-2 text-xs text-slate-700 font-medium">
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Compact Licensure verified in 40+ states</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>BLS, ACLS, PALS, TNCC certifications checked</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Minimum 2 years high-acuity acute experience</li>
-                </ul>
-              </div>
-              <button (click)="modalService.openRequestTalent('Travel Nursing')" class="mt-6 w-full py-2.5 bg-[#eff4ff] hover:bg-[#004b87] text-[#004b87] hover:text-white font-bold rounded-lg text-xs transition-colors">
-                Request Travel Nurses
-              </button>
-            </div>
-
-            <!-- Division 2 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
-              <div>
-                <div class="w-14 h-14 rounded-xl bg-[#86f4f1]/20 text-[#006a68] flex items-center justify-center mb-5">
-                  <span class="material-symbols-outlined text-[32px]">local_hospital</span>
-                </div>
-                <h3 class="font-heading text-xl font-bold text-[#003461]">Per Diem & PRN Sourcing</h3>
-                <p class="text-slate-600 text-sm mt-3 leading-relaxed">
-                  On-demand clinical staffing to solve sudden headcount deficits, medical leaves, and census spikes. 24/7 responsiveness for same-day or next-day shift coverage.
-                </p>
-                <ul class="mt-4 space-y-2 text-xs text-slate-700 font-medium">
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>2-hour dispatch SLA for emergency shifts</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Local regional talent pools</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Automated shift confirmation & timesheets</li>
-                </ul>
-              </div>
-              <button (click)="modalService.openRequestTalent('Per Diem / PRN')" class="mt-6 w-full py-2.5 bg-[#eff4ff] hover:bg-[#004b87] text-[#004b87] hover:text-white font-bold rounded-lg text-xs transition-colors">
-                Request PRN Staffing
-              </button>
-            </div>
-
-            <!-- Division 3 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
-              <div>
-                <div class="w-14 h-14 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center mb-5">
-                  <span class="material-symbols-outlined text-[32px]">biotech</span>
-                </div>
-                <h3 class="font-heading text-xl font-bold text-[#003461]">Allied Health & Diagnostics</h3>
-                <p class="text-slate-600 text-sm mt-3 leading-relaxed">
-                  Essential clinical specialists including ARRT Radiologic Technologists, Sonographers, MRI/CT Techs, Respiratory Therapists, and Medical Laboratory Technologists.
-                </p>
-                <ul class="mt-4 space-y-2 text-xs text-slate-700 font-medium">
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>ARRT, ARDMS, RRT, ASCP credentials</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Interventional radiology & cath lab experts</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Pediatric & adult diagnostic competencies</li>
-                </ul>
-              </div>
-              <button (click)="modalService.openRequestTalent('Allied Health')" class="mt-6 w-full py-2.5 bg-[#eff4ff] hover:bg-[#004b87] text-[#004b87] hover:text-white font-bold rounded-lg text-xs transition-colors">
-                Request Allied Specialists
-              </button>
-            </div>
-
-            <!-- Division 4 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
-              <div>
-                <div class="w-14 h-14 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center mb-5">
-                  <span class="material-symbols-outlined text-[32px]">stethoscope</span>
-                </div>
-                <h3 class="font-heading text-xl font-bold text-[#003461]">Locum Tenens & Physicians</h3>
-                <p class="text-slate-600 text-sm mt-3 leading-relaxed">
-                  Board-certified and board-eligible physicians and Advanced Practice Registered Nurses (APRN / NP / PA) across Hospital Medicine, Critical Care, Emergency, and Surgery.
-                </p>
-                <ul class="mt-4 space-y-2 text-xs text-slate-700 font-medium">
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Full NPDB and DEA registration vetting</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Comprehensive malpractice coverage</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Hospital credentialing packet assistance</li>
-                </ul>
-              </div>
-              <button (click)="modalService.openRequestTalent('Locum Tenens')" class="mt-6 w-full py-2.5 bg-[#eff4ff] hover:bg-[#004b87] text-[#004b87] hover:text-white font-bold rounded-lg text-xs transition-colors">
-                Request Locum Tenens
-              </button>
-            </div>
-
-            <!-- Division 5 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
-              <div>
-                <div class="w-14 h-14 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-5">
-                  <span class="material-symbols-outlined text-[32px]">terminal</span>
-                </div>
-                <h3 class="font-heading text-xl font-bold text-[#003461]">EHR & Clinical Informatics</h3>
-                <p class="text-slate-600 text-sm mt-3 leading-relaxed">
-                  Epic, Cerner, Meditech, and Altera certified specialists to ensure flawless system implementations, staff elbow-to-elbow training, and custom clinical workflow optimization.
-                </p>
-                <ul class="mt-4 space-y-2 text-xs text-slate-700 font-medium">
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Epic ClinDoc, Willow, Cadence, Stork, ASAP</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Go-Live support & 24/7 post-deployment</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Dual clinical + IT certified consultants</li>
-                </ul>
-              </div>
-              <button (click)="modalService.openRequestTalent('EHR & Informatics')" class="mt-6 w-full py-2.5 bg-[#eff4ff] hover:bg-[#004b87] text-[#004b87] hover:text-white font-bold rounded-lg text-xs transition-colors">
-                Request EHR Consultants
-              </button>
-            </div>
-
-            <!-- Division 6 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
-              <div>
-                <div class="w-14 h-14 rounded-xl bg-red-100 text-red-800 flex items-center justify-center mb-5">
-                  <span class="material-symbols-outlined text-[32px]">emergency</span>
-                </div>
-                <h3 class="font-heading text-xl font-bold text-[#003461]">Crisis & Strike Surge Units</h3>
-                <p class="text-slate-600 text-sm mt-3 leading-relaxed">
-                  Rapid deployment strike teams and surge staff for natural disasters, pandemic escalations, facility renovations, and labor dispute contingencies.
-                </p>
-                <ul class="mt-4 space-y-2 text-xs text-slate-700 font-medium">
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>24 to 48-hour on-site boots on the ground</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Fully self-contained logistical orientation</li>
-                  <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[#5FCF80] text-[16px]">check_circle</span>Coordinated command center oversight</li>
-                </ul>
-              </div>
-              <button (click)="modalService.openRequestTalent('Crisis / Strike Surge')" class="mt-6 w-full py-2.5 bg-[#eff4ff] hover:bg-[#004b87] text-[#004b87] hover:text-white font-bold rounded-lg text-xs transition-colors">
-                Request Crisis Teams
-              </button>
-            </div>
-
-          </div>
-
+        <div>
+          <p class="font-semibold text-navy mb-3">What’s included</p>
+          <ul class="tick-list">
+            <li *ngFor="let i of s.included">{{ i }}</li>
+          </ul>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- QUALITY & COMPLIANCE STANDARD -->
-      <section class="py-16 bg-white border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <span class="text-xs font-bold uppercase tracking-wider text-[#006a68]">10-Point Credentialing Protocol</span>
-            <h2 class="font-heading text-3xl font-extrabold text-[#003461] mt-2">Zero-Tolerance Quality & Compliance Standard</h2>
-            <p class="text-slate-600 text-sm mt-3 leading-relaxed">
-              Every clinician represented by HDDP Consultants undergoes rigorous primary-source verification prior to submission. We align seamlessly with Joint Commission, CMS, and facility-specific bylaws.
-            </p>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 text-xs text-slate-700">
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-2">
-                <span class="material-symbols-outlined text-[#5FCF80] text-[18px]">verified</span>
-                <span>Nursys Primary Source Licensure</span>
-              </div>
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-2">
-                <span class="material-symbols-outlined text-[#5FCF80] text-[18px]">verified</span>
-                <span>10-Panel Drug & Nicotine Screen</span>
-              </div>
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-2">
-                <span class="material-symbols-outlined text-[#5FCF80] text-[18px]">verified</span>
-                <span>OIG / SAM / GSA Sanction Checks</span>
-              </div>
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-2">
-                <span class="material-symbols-outlined text-[#5FCF80] text-[18px]">verified</span>
-                <span>FBI Fingerprint Background Screen</span>
-              </div>
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-2">
-                <span class="material-symbols-outlined text-[#5FCF80] text-[18px]">verified</span>
-                <span>Comprehensive Health & Titers</span>
-              </div>
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-2">
-                <span class="material-symbols-outlined text-[#5FCF80] text-[18px]">verified</span>
-                <span>Peer Clinical Reference Audits</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-[#0B3C5D] text-white p-8 rounded-3xl shadow-xl flex flex-col justify-between">
-            <div>
-              <span class="text-xs font-bold uppercase tracking-wider text-[#86f4f1]">Ready to order talent?</span>
-              <h3 class="font-heading text-2xl font-bold text-white mt-1">Submit Your Requirements Today</h3>
-              <p class="text-slate-300 text-sm mt-3">
-                Our team can present pre-qualified candidate profiles within 24 to 48 hours for immediate review and interview scheduling.
-              </p>
-            </div>
-            <button (click)="modalService.openRequestTalent()" class="mt-8 bg-[#f2a900] hover:bg-amber-400 text-slate-900 font-bold py-3.5 px-6 rounded-xl transition-all shadow text-sm flex items-center justify-center gap-2">
-              <span>Launch Staffing Requisition</span>
-              <span class="material-symbols-outlined text-[18px]">send</span>
-            </button>
-          </div>
+    <!-- ROLES & SPECIALTIES -->
+    <section id="roles" class="band scroll-mt-20" [class.band-mist]="services.length % 2 === 0">
+      <div class="wrap split">
+        <div>
+          <h2 class="t-h2">Nurse and allied health staffing: roles and assignment types</h2>
+          <p class="t-body mt-4">Registered nurse (RN) staffing, LPN and CNA staffing, nurse practitioners, allied health professionals staffing and healthcare IT staffing. US job titles are shown first; for UK and Canadian clients we recruit the equivalent role.</p>
         </div>
-      </section>
+        <div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[560px]">
+              <caption class="sr-only">Roles we recruit for, with the equivalent title in each country</caption>
+              <thead>
+                <tr class="text-sm text-muted">
+                  <th scope="col" class="font-semibold pb-3 pr-4">USA</th>
+                  <th scope="col" class="font-semibold pb-3 pr-4">UK</th>
+                  <th scope="col" class="font-semibold pb-3">Canada</th>
+                </tr>
+              </thead>
+              <ng-container *ngFor="let g of roleGroups">
+                <tbody>
+                  <tr><th scope="rowgroup" colspan="3" class="pt-6 pb-2 font-heading font-semibold text-navy text-lg">{{ g.group }}</th></tr>
+                  <tr *ngFor="let r of g.roles" class="border-t border-line align-top">
+                    <th scope="row" class="py-3 pr-4 font-semibold text-ink">{{ r.us }}</th>
+                    <td class="py-3 pr-4 text-muted">{{ r.uk }}</td>
+                    <td class="py-3 text-muted">{{ r.ca }}</td>
+                  </tr>
+                </tbody>
+              </ng-container>
+            </table>
+          </div>
 
-    </div>
+          <h3 class="t-h3 mt-10">Nursing specialties</h3>
+          <ul class="mt-3 flex flex-wrap gap-2 list-none p-0">
+            <li *ngFor="let sp of specialties" class="px-3 py-1.5 rounded bg-white border border-line text-sm">{{ sp }}</li>
+          </ul>
+
+          <h3 class="t-h3 mt-10">Assignment types</h3>
+          <ul class="ruled ruled-compact mt-3">
+            <li *ngFor="let a of assignmentTypes" class="def-row">
+              <span class="font-semibold text-navy">{{ a.title }}</span>
+              <span class="text-muted">{{ a.text }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENGAGEMENT MODELS -->
+    <section id="pricing" class="band scroll-mt-20" [class.band-mist]="services.length % 2 !== 0">
+      <div class="wrap split">
+        <div>
+          <h2 class="t-h2">Engagement models</h2>
+          <p class="t-body mt-4">Affordable healthcare staffing services, priced to match your hiring volume. We confirm scope and fees in a written agreement before work starts.</p>
+        </div>
+        <ul class="ruled">
+          <li *ngFor="let m of engagementModels" class="def-row">
+            <h3 class="t-h3">{{ m.label }}</h3>
+            <p class="t-body m-0">{{ m.text }}</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="band band-navy">
+      <div class="wrap flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        <div>
+          <h2 class="t-h1">Have open requisitions?</h2>
+          <p class="mt-3 text-lg text-white/80">Send the roles and receive pre-screened candidates within 48–96 hours.</p>
+        </div>
+        <div class="flex flex-wrap gap-3 shrink-0">
+          <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-light">Request talent</button>
+          <a routerLink="/contact-us" class="btn btn-ghost-light">Talk to our team</a>
+        </div>
+      </div>
+    </section>
   `
 })
 export class HealthcareSolutionsComponent {
   modalService = inject(ModalService);
+
+  services: { id: string; title: string; summary: string; bestFor: string; included: string[]; link?: string; linkLabel?: string }[] = [
+    {
+      id: 'talent-sourcing',
+      title: 'Nurse and healthcare talent sourcing',
+      summary: 'Medical staff sourcing and candidate screening for travel nurses, locum nurses, contract and per diem roles. We find, screen and submit candidates for your open requisitions.',
+      bestFor: 'Urgent nurse staffing, hard-to-fill specialties, surge demand and new contracts.',
+      included: [
+        'Sourcing from job boards, our candidate database and referral networks',
+        'Phone screen for experience, specialty, shift and location preferences',
+        'Licence and certification check against the requirement',
+        'Candidate summary and submittal packet with each profile',
+        'Interview scheduling and candidate follow-up'
+      ]
+    },
+    {
+      id: 'rpo',
+      title: 'Recruitment process outsourcing (RPO) for healthcare',
+      summary: 'Offshore recruiter teams who work only on your requisitions, inside your workflow, during your US business hours—offshore healthcare recruitment teams that work like your own nurse recruitment agency, at a fraction of in-house cost.',
+      bestFor: 'Agencies and HR teams with steady volume who want to grow capacity without growing payroll.',
+      included: [
+        'Recruiters and sourcers assigned to your account',
+        'Work inside your ATS and job-board accounts with your access rules',
+        'Coverage across US time zones, including evenings and weekends by agreement',
+        'Weekly reporting on submittals, interviews and fills',
+        'Scale the team up or down with notice'
+      ]
+    },
+    {
+      id: 'credentialing',
+      title: 'Credentialing and compliance support',
+      summary: 'Credentialing support services for nurses and allied staff. We collect and organise the documents your compliance team needs, so candidates are ready to start sooner.',
+      bestFor: 'Agencies and hospitals with credentialing backlogs or tight start dates.',
+      included: [
+        'Primary source licence verification with state boards of nursing and Nursys®',
+        'Tracking BLS, ACLS, PALS, NRP, TNCC and specialty certifications and expiry dates',
+        'Skills checklists and professional reference collection',
+        'OIG and SAM.gov exclusion list checks',
+        'Credential file audit against your client or facility checklist'
+      ]
+    },
+    {
+      id: 'back-office',
+      title: 'Back-office support for staffing agencies',
+      summary: 'Offshore staffing support for the administrative work that slows recruiters down—scheduling, payroll inputs and paperwork handled by a trained team.',
+      bestFor: 'Recruiting teams spending too much time on admin.',
+      included: [
+        'Nurse scheduling support, shift confirmations and interview scheduling',
+        'Timesheet collection and healthcare payroll processing support',
+        'ATS data entry, pipeline updates and candidate re-engagement',
+        'Submittals into client VMS/MSP portals',
+        'Onboarding document chasing and reminders',
+        'Job posting and refresh across boards'
+      ]
+    },
+    {
+      id: 'consulting',
+      title: 'Healthcare staffing consulting',
+      summary: 'Staffing agency setup services and staffing business advisory for founders and growing agencies.',
+      bestFor: 'Anyone planning to start a nurse staffing agency, or an agency ready to scale.',
+      included: [
+        'Business model, niche and market advisory',
+        'Healthcare compliance consulting and state licensing checklists',
+        'Recruitment SOP development',
+        'ATS, VMS and MSP readiness',
+        'Offshore recruiter and back-office team setup'
+      ],
+      link: '/staffing-agency-consulting',
+      linkLabel: 'Staffing agency setup and startup guide'
+    }
+  ];
+
+  roleGroups = [
+    {
+      group: 'Nursing',
+      roles: [
+        { us: 'Registered Nurse (RN)', uk: 'Registered Nurse (NMC)', ca: 'Registered Nurse (RN)' },
+        { us: 'Licensed Practical / Vocational Nurse (LPN / LVN)', uk: 'Nursing Associate', ca: 'Registered / Licensed Practical Nurse (RPN / LPN)' },
+        { us: 'Certified Nursing Assistant (CNA)', uk: 'Healthcare Assistant (HCA)', ca: 'Personal Support Worker (PSW)' },
+        { us: 'Nurse Practitioner (NP)', uk: 'Advanced Nurse Practitioner', ca: 'Nurse Practitioner (NP)' }
+      ]
+    },
+    {
+      group: 'Allied health',
+      roles: [
+        { us: 'Radiologic Technologist', uk: 'Radiographer', ca: 'Medical Radiation Technologist' },
+        { us: 'Medical Lab Technician / Scientist', uk: 'Biomedical Scientist', ca: 'Medical Laboratory Technologist' },
+        { us: 'Respiratory Therapist', uk: 'Respiratory Physiologist', ca: 'Respiratory Therapist' },
+        { us: 'Surgical Technologist', uk: 'Operating Department Practitioner', ca: 'Operating Room Technician' },
+        { us: 'Physical / Occupational Therapist', uk: 'Physiotherapist / Occupational Therapist', ca: 'Physiotherapist / Occupational Therapist' }
+      ]
+    },
+    {
+      group: 'Healthcare IT',
+      roles: [
+        { us: 'EHR Analyst (Epic, Cerner / Oracle Health)', uk: 'EPR Specialist', ca: 'EHR / EMR Specialist' },
+        { us: 'Clinical Data Analyst', uk: 'Clinical Data Analyst', ca: 'Clinical Data Analyst' }
+      ]
+    }
+  ];
+
+  specialties = [
+    'ICU / Critical Care', 'Emergency (ER)', 'Operating Room (OR)', 'PACU', 'Labor & Delivery', 'NICU', 'PICU',
+    'Med-Surg', 'Telemetry', 'Step-Down / PCU', 'Oncology', 'Dialysis', 'Behavioral Health', 'Cath Lab',
+    'Home Health', 'Long-Term Care / SNF', 'Case Management'
+  ];
+
+  assignmentTypes = [
+    { title: 'Travel nurses', text: 'Typically 13-week travel RN assignments, including ICU travel nurses and ER travel nurses.' },
+    { title: 'Locum and contract nurses', text: 'Locum nurses, locum tenens healthcare staff and local contract nurses for fixed-term cover.' },
+    { title: 'Per diem nurses / PRN', text: 'Shift-by-shift cover for gaps and call-outs.' },
+    { title: 'Permanent / direct hire', text: 'Full-time hires onto the facility’s own staff.' },
+    { title: 'Rapid response', text: 'Temporary healthcare staffing at short notice for census surges and new units.' }
+  ];
+
+  engagementModels = [
+    { label: 'Per placement', text: 'A fee for each candidate placed. Suited to occasional or hard-to-fill roles.' },
+    { label: 'Monthly retainer', text: 'A fixed monthly fee for an ongoing flow of screened candidates.' },
+    { label: 'Dedicated recruiter (RPO)', text: 'A monthly fee per recruiter working only on your requisitions.' },
+    { label: 'Project-based', text: 'A defined number of hires over a set period, such as a unit opening or a new contract.' }
+  ];
 }
