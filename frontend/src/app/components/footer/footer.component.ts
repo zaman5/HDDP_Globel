@@ -13,7 +13,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
       <div class="wrap pt-16 pb-10">
         <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-12">
 
-          <div class="sm:col-span-2 lg:col-span-3">
+          <div class="sm:col-span-2 lg:col-span-4">
             <p class="font-heading text-xl font-semibold text-white">HDDP Consultants</p>
             <p class="mt-3 text-[0.95rem] leading-relaxed text-white/75 max-w-sm">
               Global healthcare staffing partner for hospitals and nurse staffing agencies: travel, locum, contract and per diem nurses in the United States, United Kingdom and Canada.
@@ -26,7 +26,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
             <button type="button" (click)="modalService.openRequestTalent()" class="btn btn-light mt-6">Request talent</button>
           </div>
 
-          <div class="lg:col-span-3">
+          <div class="lg:col-span-4">
             <p class="font-semibold text-white mb-3">Services</p>
             <ul class="space-y-2 text-[0.95rem] text-white/75">
               <li><a routerLink="/services" fragment="talent-sourcing" class="hover:text-white">Nurse talent sourcing</a></li>
@@ -37,7 +37,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
             </ul>
           </div>
 
-          <div class="lg:col-span-3">
+          <div class="lg:col-span-4">
             <p class="font-semibold text-white mb-3">Company</p>
             <ul class="space-y-2 text-[0.95rem] text-white/75">
               <li><a routerLink="/who-we-serve" fragment="hospitals" class="hover:text-white">Hospitals and health systems</a></li>
@@ -47,26 +47,15 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
               <li><a routerLink="/jobs" class="hover:text-white">Find jobs (nurses)</a></li>
             </ul>
           </div>
-
-          <nav class="lg:col-span-3" aria-label="Legal">
-            <p class="font-semibold text-white mb-3">Legal</p>
-            <ul class="space-y-2 text-[0.95rem] text-white/75">
-              <li><a routerLink="/privacy-policy" class="hover:text-white">Privacy policy</a></li>
-              <li><a routerLink="/cookie-policy" class="hover:text-white">Cookie policy</a></li>
-              <li><button type="button" (click)="consent.openPreferences()" class="hover:text-white bg-transparent border-0 p-0 cursor-pointer text-left text-white/75">Cookie settings</button></li>
-              <li><a routerLink="/privacy-policy" fragment="us-rights" class="hover:text-white">Your privacy choices</a></li>
-              <li><a routerLink="/privacy-policy" fragment="equal-opportunity" class="hover:text-white">Equal opportunity</a></li>
-            </ul>
-          </nav>
         </div>
 
         <div class="mt-14 pt-6 border-t border-white/15 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between text-sm text-white/60">
           <p class="m-0">© {{ year }} HDDP Consultants. All rights reserved.</p>
-          <div class="flex flex-wrap gap-x-6 gap-y-2">
-            <a routerLink="/privacy-policy" class="hover:text-white">Privacy policy</a>
-            <a routerLink="/cookie-policy" class="hover:text-white">Cookie policy</a>
+          <nav class="flex flex-wrap gap-x-6 gap-y-2" aria-label="Legal">
+            <a routerLink="/privacy-policy" class="hover:text-white">Privacy &amp; cookies</a>
+            <button type="button" (click)="consent.openPreferences()" class="hover:text-white bg-transparent border-0 p-0 cursor-pointer text-white/60">Cookie settings</button>
             <a routerLink="/sitemap" class="hover:text-white">Site map</a>
-          </div>
+          </nav>
         </div>
       </div>
     </footer>
