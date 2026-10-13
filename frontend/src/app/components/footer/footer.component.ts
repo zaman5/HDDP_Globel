@@ -55,6 +55,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
         <div class="mt-14 pt-6 border-t border-white/15 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between text-sm text-white/60">
           <p>© {{ year }} HDDP Consultants. All rights reserved.</p>
           <div class="flex flex-wrap gap-x-6 gap-y-2">
+            <a routerLink="/sitemap" class="hover:text-white">Site map</a>
             <a routerLink="/privacy-policy" class="hover:text-white">Privacy policy</a>
             <a routerLink="/cookie-policy" class="hover:text-white">Cookie policy</a>
             <button type="button" (click)="consent.openPreferences()" class="hover:text-white bg-transparent border-0 p-0 cursor-pointer text-inherit">Cookie settings</button>

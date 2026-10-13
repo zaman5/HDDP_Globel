@@ -9,10 +9,12 @@ import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { SitemapComponent } from './pages/sitemap/sitemap.component';
 
 // SEO: keep titles under ~60 characters and descriptions around 140–160.
 // SeoService turns `title` and `data` into meta, canonical and social tags.
-// Public pages listed here must also be in routes.txt (prerender) and public/sitemap.xml.
+// Public pages listed here must also be in routes.txt (prerender), public/sitemap.xml,
+// STATIC_PAGES in server.js and the site map page (pages/sitemap).
 export const routes: Routes = [
   {
     path: '', component: HomeComponent,
@@ -70,6 +72,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/cookie-policy/cookie-policy.component').then(m => m.CookiePolicyComponent),
     title: 'Cookie Policy | HDDP Consultants',
     data: { description: 'The cookies the HDDP Consultants website uses, why we use them, and how to change your cookie settings.' }
+  },
+  {
+    path: 'sitemap', component: SitemapComponent,
+    title: 'Site Map | HDDP Consultants',
+    data: { description: 'All pages on the HDDP Consultants website: services, who we serve, how it works, nursing jobs, about, contact and policies.' }
   },
   {
     path: 'admin', component: AdminComponent,
