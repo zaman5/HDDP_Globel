@@ -2,60 +2,62 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
+// Copy follows "HDDP USA Website Rewritten Copy", section 6 (About HDDP Consultants).
 @Component({
   selector: 'app-about-us',
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
     <section class="band">
-      <div class="wrap split">
-        <div>
+      <div class="wrap grid gap-12 lg:grid-cols-12 lg:items-center">
+        <div class="lg:col-span-7">
           <p class="t-kicker">About HDDP Consultants</p>
-          <h1 class="t-h1">Empowering workforces. Elevating healthcare staffing.</h1>
+          <h1 class="t-h1">Empowering Workforces. Elevating Business.</h1>
+          <p class="t-lede mt-5">HDDP Consultants provides recruitment, workforce advisory, and operational support to organizations seeking practical, flexible ways to strengthen their people operations.</p>
         </div>
-        <div class="lg:pt-10">
-          <p class="t-lede !text-ink">
-            HDDP Consultants is a global healthcare staffing partner and healthcare staffing outsourcing company, delivering recruitment and staffing support across healthcare, IT and professional services.
-          </p>
-          <p class="t-body mt-5">
-            In healthcare, we work behind hospital HR teams and nurse staffing agencies—mainly in the United States, and also in the United Kingdom and Canada—sourcing, screening and credentialing candidates so our clients can fill roles faster.
-          </p>
-          <p class="t-body mt-5">
-            HDDP stands for Hiring, Development &amp; Deployment Process Consultants.
-          </p>
+        <div class="lg:col-span-5">
+          <div class="photo-frame aspect-[4/3]">
+            <img class="photo" src="assets/images/about-team.jpg" width="1400" height="915" fetchpriority="high"
+                 alt="HDDP team members collaborating around a laptop in the office" />
+          </div>
         </div>
       </div>
     </section>
 
     <section class="band band-mist">
       <div class="wrap split">
-        <h2 class="t-h2">Why clients choose HDDP</h2>
-        <ul class="ruled">
-          <li *ngFor="let s of strengths" class="def-row">
-            <h3 class="t-h3">{{ s.title }}</h3>
-            <p class="t-body m-0">{{ s.text }}</p>
-          </li>
-        </ul>
+        <h2 class="t-h2">Who we are</h2>
+        <p class="t-body m-0">We combine recruitment experience, structured delivery processes, and global sourcing capabilities to support clients across healthcare, technology, and professional services. For the U.S. healthcare market, our focus is on recruitment sourcing and back-office support for appropriate hiring partners, not on directly employing or assigning healthcare professionals.</p>
       </div>
     </section>
 
     <section class="band">
-      <div class="wrap flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-        <h2 class="t-h2">Work with us</h2>
-        <div class="flex flex-wrap gap-3">
-          <a routerLink="/contact-us" class="btn btn-primary">Talk to our team</a>
-          <a routerLink="/jobs" class="btn btn-outline">Find jobs</a>
+      <div class="wrap split">
+        <h2 class="t-h2">How we work</h2>
+        <ul class="ruled">
+          <li *ngFor="let s of principles" class="t-body !max-w-none"><strong class="font-heading font-semibold text-navy">{{ s.title }}:</strong> {{ s.text }}</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="band band-navy">
+      <div class="wrap flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        <div>
+          <h2 class="t-h1">Our commitment</h2>
+          <p class="mt-3 text-lg text-white/80 max-w-[60ch]">We aim to help clients build stronger candidate pipelines, reduce avoidable recruitment administration, and create a more consistent hiring experience.</p>
+        </div>
+        <div class="flex flex-wrap gap-3 shrink-0">
+          <a routerLink="/contact-us" class="btn btn-light">Get to Know HDDP</a>
         </div>
       </div>
     </section>
   `
 })
 export class AboutUsComponent {
-  strengths = [
-    { title: 'Speed', text: 'Qualified candidates within 48–96 hours of receiving a requisition.' },
-    { title: 'Healthcare specialists', text: 'Recruiters who know US nursing specialties, licensure and the Nurse Licensure Compact.' },
-    { title: 'Compliance first', text: 'Primary source verification on every candidate, and clear lines on what you and we each check.' },
-    { title: 'We don’t compete with you', text: 'We never approach your clients or place candidates with them directly.' },
-    { title: 'Offshore recruitment excellence', text: 'Cost-effective offshore recruiter teams that grow with your requisitions, without adding to your payroll.' }
+  principles = [
+    { title: 'Partnership first', text: 'we align our work to the client’s needs and agreed responsibilities.' },
+    { title: 'Structured delivery', text: 'we use clear workflows, candidate tracking, and regular communication.' },
+    { title: 'Flexible capacity', text: 'support can be configured around requisitions, projects, or dedicated teams.' },
+    { title: 'Responsible handling', text: 'candidate information is managed according to agreed privacy and data-handling requirements.' }
   ];
 }

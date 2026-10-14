@@ -23,7 +23,7 @@ import { DialogDirective } from '../dialog.directive';
             </div>
             <div>
               <h2 id="rt-title" class="font-heading text-lg font-bold text-white m-0">Request talent</h2>
-              <p class="text-sm text-white/75">Pre-screened candidates within 48–96 hours</p>
+              <p class="text-sm text-white/75">Tell us about your open requirements</p>
             </div>
           </div>
           <button type="button" (click)="modalService.closeRequestTalent()" aria-label="Close" class="text-slate-300 hover:text-white p-1 rounded-lg">
@@ -143,7 +143,7 @@ import { DialogDirective } from '../dialog.directive';
                 [(ngModel)]="formData.urgency_level" 
                 name="urgency_level" 
                 class="w-full px-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#004b87] bg-white text-slate-900">
-                <option value="Urgent (Candidates in 48-96h)">Urgent (Candidates in 48–96h)</option>
+                <option value="Urgent (Candidates in 48-96h)">Urgent</option>
                 <option value="Immediate Need (Within 1-2 Weeks)">Immediate Need (Within 1-2 Weeks)</option>
                 <option value="Planned Sourcing (30 Days+)">Planned Sourcing (30 Days+)</option>
                 <option value="Ongoing Talent Pipeline">Ongoing Talent Pipeline</option>

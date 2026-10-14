@@ -88,7 +88,7 @@ const COUNTRY_INFO: Record<string, { region: string; iso: string }> = {
         <div class="wrap">
           <div *ngIf="submitted()" class="max-w-2xl bg-white border border-line rounded-lg p-8" role="status">
             <h2 class="t-h2">Application sent</h2>
-            <p class="t-body mt-3">Thank you for applying for <strong>{{ j.title }}</strong>. A recruiter will review your profile and contact you by email or phone.</p>
+            <p class="t-body mt-3">Thank you for applying for <strong>{{ j.title }}</strong>. Our team will review your profile and may contact you to clarify your experience and job preferences. Submission does not guarantee an interview, job offer, placement, or specific work assignment.</p>
             <a routerLink="/jobs" class="btn btn-outline mt-6">See more jobs</a>
           </div>
 
@@ -360,7 +360,7 @@ export class JobDetailComponent implements OnInit {
         this.form = this.emptyForm();
         this.file = null;
         this.fileName.set('');
-        this.toastService.success('Application sent', 'A recruiter will contact you shortly.');
+        this.toastService.success('Application sent', 'Our team may contact you to clarify your experience and job preferences.');
         this.scrollToForm();
       },
       error: (err) => {

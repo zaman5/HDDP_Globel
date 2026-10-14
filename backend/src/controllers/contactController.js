@@ -34,7 +34,7 @@ exports.submitContactInquiry = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Thank you for reaching out. Your message has been routed to our team and we will reply within one business day.',
+      message: 'Thank you for contacting HDDP Consultants. Your message has been received. A member of our team will review your request and contact you if there is a potential fit.',
       inquiryId: result.insertId
     });
   } catch (error) {
