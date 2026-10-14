@@ -63,44 +63,33 @@ export class SitemapComponent implements OnInit {
     {
       id: 'home', title: 'Home', path: '/',
       links: [
-        { label: 'Who we serve', path: '/who-we-serve' },
-        { label: 'How it works', path: '/how-it-works' },
-        { label: 'About us', path: '/about-us' },
-        { label: 'Contact us', path: '/contact-us' }
+        { label: 'Partner With HDDP', path: '/who-we-serve' },
+        { label: 'Our Process', path: '/how-it-works' },
+        { label: 'About HDDP Consultants', path: '/about-us' },
+        { label: 'Contact', path: '/contact-us' }
       ]
     },
     {
-      id: 'services', title: 'Services', path: '/services',
+      id: 'services', title: 'Healthcare Recruitment Support', path: '/services',
       links: [
-        { label: 'Nurse and healthcare talent sourcing', path: '/services', fragment: 'talent-sourcing' },
-        { label: 'Recruitment process outsourcing (RPO)', path: '/services', fragment: 'rpo' },
-        { label: 'Credentialing and compliance support', path: '/services', fragment: 'credentialing' },
-        { label: 'Back-office recruitment support', path: '/services', fragment: 'back-office' },
-        { label: 'Roles, specialties and assignment types', path: '/services', fragment: 'roles' },
-        { label: 'Engagement models', path: '/services', fragment: 'pricing' },
-        { label: 'Healthcare staffing consulting', path: '/staffing-agency-consulting' },
-        { label: 'How to start a nurse staffing agency', path: '/staffing-agency-consulting', fragment: 'startup-guide' }
+        { label: 'Our role', path: '/services', fragment: 'our-role' },
+        { label: 'Roles we can help source', path: '/services', fragment: 'roles' },
+        { label: 'Flexible engagement models', path: '/services', fragment: 'engagement-models' },
+        { label: 'Screening and documentation support', path: '/services', fragment: 'screening' }
       ]
     },
     {
-      id: 'who-we-serve', title: 'Who we serve', path: '/who-we-serve',
+      id: 'who-we-serve', title: 'Partner With HDDP', path: '/who-we-serve',
       links: [
-        { label: 'Nurse staffing agencies', path: '/who-we-serve', fragment: 'staffing-agencies' },
-        { label: 'Hospitals and health systems', path: '/who-we-serve', fragment: 'hospitals' },
-        { label: 'New and growing staffing agencies', path: '/who-we-serve', fragment: 'new-agencies' }
+        { label: 'Who we partner with', path: '/who-we-serve', fragment: 'who-we-partner-with' },
+        { label: 'Partnership models', path: '/who-we-serve', fragment: 'partnership-models' },
+        { label: 'Explore a Partnership', path: '/who-we-serve', fragment: 'partner-form' }
       ]
     },
     {
-      id: 'how-it-works', title: 'How it works', path: '/how-it-works',
+      id: 'nurses', title: 'For Candidates', path: '/jobs',
       links: [
-        { label: 'Submittal packet', path: '/how-it-works', fragment: 'submittal-packet' },
-        { label: 'US credentialing and compliance standards', path: '/how-it-works', fragment: 'compliance' }
-      ]
-    },
-    {
-      id: 'nurses', title: 'For nurses', path: '/jobs',
-      links: [
-        { label: 'Find jobs', path: '/jobs' },
+        { label: 'Open roles', path: '/jobs', fragment: 'open-roles' },
         { label: 'Equal opportunity and accommodations', path: '/privacy-policy', fragment: 'equal-opportunity' },
         { label: 'Recruitment scam warning', path: '/privacy-policy', fragment: 'recruitment-fraud' }
       ]

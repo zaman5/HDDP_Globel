@@ -13,23 +13,45 @@ import { JobPosition } from '../../models/models';
   template: `
     <!-- HERO -->
     <section class="band !pb-12">
-      <div class="wrap grid gap-10 lg:grid-cols-12 lg:items-end">
-        <div class="lg:col-span-8">
-          <p class="t-kicker">Nurse job listings</p>
-          <h1 class="t-h1">Travel nurse, locum and per diem nursing jobs</h1>
-          <p class="t-lede mt-5">
-            Browse travel RN jobs, ICU and ER travel nurse assignments, locum nurse jobs, per diem and contract roles, and allied health jobs across the USA, UK and Canada. Our healthcare job board is updated as partner agencies and hospitals open new roles.
-          </p>
+      <div class="wrap grid gap-12 lg:grid-cols-12 lg:items-center">
+        <div class="lg:col-span-7">
+          <p class="t-kicker">For Candidates</p>
+          <h1 class="t-h1">Explore Healthcare Career Opportunities</h1>
+          <p class="t-lede mt-5">HDDP helps candidates connect with potential opportunities shared by independent hiring partners in our recruitment network.</p>
         </div>
-        <div class="lg:col-span-4 lg:text-right">
-          <p class="t-small mb-3">No matching job yet?</p>
-          <button type="button" (click)="modalService.openResumeModal()" class="btn btn-outline">Submit your resume</button>
+        <div class="lg:col-span-5">
+          <div class="photo-frame aspect-[4/3] lg:aspect-square">
+            <img class="photo" src="assets/images/candidate.jpg" width="1400" height="1469" fetchpriority="high"
+                 alt="Smiling healthcare professional holding a stethoscope" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW THE PROCESS WORKS -->
+    <section class="band band-mist">
+      <div class="wrap">
+        <h2 class="t-h2 mb-10">How the process works</h2>
+        <ol class="steps md:grid-cols-2 lg:grid-cols-4 md:grid">
+          <li *ngFor="let step of steps"><span class="font-semibold text-navy">{{ step }}</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- CANDIDATE EXPERIENCE -->
+    <section class="band">
+      <div class="wrap split">
+        <h2 class="t-h2">A clear, respectful candidate experience</h2>
+        <div>
+          <p class="t-body m-0">We aim to communicate clearly, handle candidate information responsibly, and help candidates understand the next steps. Submission of a resume does not guarantee an interview, job offer, placement, or specific work assignment.</p>
+          <p class="notice t-small mt-6 mb-0"><strong class="text-navy">Candidate notice:</strong> HDDP is a recruitment-support partner. Unless expressly stated in a separate written agreement, HDDP is not the employer of record, does not assign clinical shifts, and does not make the hiring partner’s employment or credentialing decisions.</p>
+          <button type="button" (click)="modalService.openResumeModal()" class="btn btn-primary mt-6">Submit Your Resume</button>
         </div>
       </div>
     </section>
 
     <!-- OPEN JOBS -->
-    <section class="band !pt-0">
+    <section id="open-roles" class="band rule-top scroll-mt-20">
       <div class="wrap">
         <div class="hd-form grid gap-4 sm:grid-cols-[1fr_220px] pb-6 border-b border-line">
           <div>
@@ -70,38 +92,17 @@ import { JobPosition } from '../../models/models';
 
         <div *ngIf="loadError()" class="mt-6 p-8 bg-mist rounded" role="alert">
           <p class="font-semibold text-navy m-0">We couldn’t load jobs right now.</p>
-          <p class="t-body mt-2 mb-4">Please try again, or send us your resume and a recruiter will match you to open roles.</p>
+          <p class="t-body mt-2 mb-4">Please try again, or submit your resume and share your preferred role or location.</p>
           <button type="button" (click)="loadJobs()" class="btn btn-outline">Try again</button>
         </div>
         <div *ngIf="!loading() && !loadError() && !filteredJobs().length" class="mt-6 p-8 bg-mist rounded">
           <p class="font-semibold text-navy">No open jobs match your search.</p>
-          <p class="t-body mt-1">Clear the filters, or submit your resume and we’ll contact you when a matching role opens.</p>
-          <button type="button" (click)="modalService.openResumeModal()" class="btn btn-primary mt-4">Submit your resume</button>
+          <p class="t-body mt-1">Clear the filters, or submit your resume and share your preferred role or location.</p>
+          <button type="button" (click)="modalService.openResumeModal()" class="btn btn-primary mt-4">Submit Your Resume</button>
         </div>
       </div>
     </section>
 
-    <!-- ABOUT THE JOB BOARD -->
-    <section class="band rule-top">
-      <div class="wrap split">
-        <h2 class="t-h2">A travel nurse job portal for the USA, UK and Canada</h2>
-        <div>
-          <p class="t-body m-0">Our healthcare job board brings travel nurse jobs, locum and per diem roles, contract assignments and permanent positions from partner agencies and hospitals into one place. Think of it as a simple nurse job marketplace and locum jobs platform: browse open roles, apply in minutes and a recruiter will call you.</p>
-          <p class="t-body mt-4 mb-0">Hiring? Hospitals and staffing agencies can add roles to our healthcare staffing marketplace by sending a requisition. <a routerLink="/contact-us" class="link">Talk to our team</a>.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROCESS -->
-    <section class="band band-mist">
-      <div class="wrap">
-        <h2 class="t-h2 mb-10">How applying works</h2>
-        <ol class="steps steps-row">
-          <li *ngFor="let step of steps"><span class="font-semibold text-navy">{{ step }}</span></li>
-        </ol>
-        <p class="t-small mt-8">Placements are made through our partner network of healthcare staffing agencies and providers. The agency or employer makes the final hiring decision.</p>
-      </div>
-    </section>
   `
 })
 export class CandidatesComponent implements OnInit {
@@ -150,10 +151,9 @@ export class CandidatesComponent implements OnInit {
   }
 
   steps = [
-    'Submit your profile',
-    'Screening',
-    'Matching',
-    'Interview',
-    'Placement through a partner agency'
+    'Share your resume and preferred role or location.',
+    'Our team may contact you to clarify your experience and job preferences.',
+    'With your permission, relevant information may be shared with a suitable hiring partner.',
+    'The hiring partner determines whether to proceed with interviews, credential checks, and its own hiring process.'
   ];
 }

@@ -6,5 +6,5 @@ export const SITE = {
   name: 'HDDP Consultants',
   logo: '/assets/MainLogoHDDP.png',
   shareImage: '/assets/MainLogoHDDP.png',
-  defaultDescription: 'Global healthcare staffing partner for US hospitals and staffing agencies: travel, locum, contract and per diem nurses, pre-screened in 48–96 hours.'
+  defaultDescription: 'HDDP Consultants supports U.S. healthcare staffing agencies with talent sourcing, recruitment process outsourcing, candidate screening coordination, and scalable recruitment operations support.'
 };

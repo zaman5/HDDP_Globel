@@ -234,7 +234,7 @@ export class ResumeModalComponent {
     this.apiService.submitCandidateApplication(postData).subscribe({
       next: () => {
         this.isSubmitting.set(false);
-        this.toastService.success('Application received', 'Thank you. A recruiter will contact you shortly.');
+        this.toastService.success('Application received', 'Thank you. Our team may contact you to clarify your experience and job preferences.');
         this.modalService.closeResumeModal();
         this.formData = this.emptyForm();
         this.selectedFile = null;

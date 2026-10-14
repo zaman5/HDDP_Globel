@@ -23,6 +23,7 @@ DirectoryIndex index.html
 
   # Old addresses -> new ones (permanent)
   RewriteRule ^healthcare-solutions/?$ /services [R=301,L]
+  RewriteRule ^staffing-agency-consulting/?$ /services [R=301,L]
   RewriteRule ^partner-with-us/?$ /who-we-serve [R=301,L]
   RewriteRule ^process/?$ /how-it-works [R=301,L]
   RewriteRule ^candidates/?$ /jobs [R=301,L]
