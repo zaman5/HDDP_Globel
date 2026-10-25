@@ -26,7 +26,7 @@ import { ContactInquiry } from '../../models/models';
           <dl class="mt-8 m-0">
             <div class="py-4 border-t border-line">
               <dt class="text-sm text-muted">Email</dt>
-              <dd class="m-0"><a href="mailto:staffing@hddpconsultants.com" class="link">staffing&#64;hddpconsultants.com</a></dd>
+              <dd class="m-0"><a href="mailto:info@hddpconsultants.com" class="link">info&#64;hddpconsultants.com</a></dd>
             </div>
             <div class="py-4 border-t border-b border-line">
               <dt class="text-sm text-muted">Phone</dt>
@@ -130,7 +130,7 @@ Preferred contact method: ${this.contactMethod}`
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.toastService.error('Request not sent', err?.message || 'Please try again, or email staffing@hddpconsultants.com.');
+        this.toastService.error('Request not sent', err?.message || 'Please try again, or email info@hddpconsultants.com.');
       }
     });
   }

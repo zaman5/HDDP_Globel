@@ -181,7 +181,7 @@ export class PartnerWithUsComponent {
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.toastService.error('Request not sent', err?.message || 'Please try again, or email staffing@hddpconsultants.com.');
+        this.toastService.error('Request not sent', err?.message || 'Please try again, or email info@hddpconsultants.com.');
       }
     });
   }

@@ -15,7 +15,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
           <div class="sm:col-span-2 lg:col-span-4">
             <p class="font-heading text-xl font-semibold text-white">HDDP Consultants</p>
             <ul class="mt-5 space-y-2 text-[0.95rem] text-white/75" aria-label="Contact">
-              <li><a href="mailto:staffing@hddpconsultants.com" class="hover:text-white [overflow-wrap:anywhere]">staffing&#64;hddpconsultants.com</a></li>
+              <li><a href="mailto:info@hddpconsultants.com" class="hover:text-white [overflow-wrap:anywhere]">info&#64;hddpconsultants.com</a></li>
               <li><a href="tel:8005554337" class="hover:text-white">(800) 555-4337</a></li>
               <li><a routerLink="/contact-us" class="hover:text-white">Contact form</a></li>
             </ul>
