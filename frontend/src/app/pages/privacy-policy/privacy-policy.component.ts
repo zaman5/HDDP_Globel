@@ -42,7 +42,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
           <div class="callout">
             <p class="font-semibold text-navy">The short version</p>
             <ul class="!mb-0">
-              <li>We collect what you send us — mainly job applications, CVs and business enquiries — and use it to match candidates with healthcare roles.</li>
+              <li>We collect what you send us (mainly job applications, CVs and business enquiries) and use it to match candidates with healthcare roles.</li>
               <li>We share candidate profiles only with partner agencies and employers considering you for a role. We verify licences with nursing boards but do not run background checks ourselves.</li>
               <li>We only text you if you opt in, and we never share your mobile number for marketing.</li>
               <li>We <strong>do not sell</strong> your personal information or use it for targeted advertising.</li>
@@ -54,7 +54,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
           <section id="who-we-are">
             <h2>Who we are</h2>
             <p>{{ L.brand }} ({{ L.legalEntity }}, registered address {{ L.registeredAddress }}) is a healthcare recruitment partner. We source and screen nurses and healthcare professionals and introduce them to licensed staffing agencies and healthcare providers (“partner agencies”). We also provide recruitment process outsourcing, credentialing support and back-office support to those agencies.</p>
-            <p>For the personal information we collect through this website, we are the <strong>controller</strong> (UK GDPR), the organization <strong>accountable</strong> for your personal information (Canada) and the <strong>business</strong> collecting it (US state laws). When we process data on behalf of a client agency — for example as their outsourced recruiter — we act as their <strong>processor / service provider</strong> and follow their instructions and privacy notice.</p>
+            <p>For the personal information we collect through this website, we are the <strong>controller</strong> (UK GDPR), the organization <strong>accountable</strong> for your personal information (Canada) and the <strong>business</strong> collecting it (US state laws). When we process data on behalf of a client agency (for example as their outsourced recruiter), we act as their <strong>processor / service provider</strong> and follow their instructions and privacy notice.</p>
           </section>
 
           <section id="what-we-collect">
@@ -83,8 +83,8 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
               </table>
             </div>
             <p><strong>What we don’t collect.</strong> Our application forms do not ask about your salary history, criminal history, age or date of birth, health or disability, or for Social Security or licence numbers. We do not collect biometric identifiers (such as fingerprints or face scans) or consumer health data through this website.</p>
-            <p><strong>Please don’t send us sensitive information we haven’t asked for</strong> — for example your date of birth, photo, marital status, religion, health information, Social Security / National Insurance / Social Insurance number or bank details. If it is in your CV, we will not use it to assess you. Where a partner agency later needs such details for a background check or right-to-work check, it will ask you directly under its own privacy notice.</p>
-            <p><strong>Health records and HIPAA.</strong> {{ L.brand }} is not a healthcare provider or health plan and is not a “covered entity” under HIPAA. Health-related credentialing documents — such as immunization and TB records, drug screens, physicals and fit-for-duty forms — are requested and kept by the partner agency or employer through its own secure process, not through this website. If you send them to us by mistake, we will delete them and tell you where to send them.</p>
+            <p><strong>Please don’t send us sensitive information we haven’t asked for</strong>, for example your date of birth, photo, marital status, religion, health information, Social Security / National Insurance / Social Insurance number or bank details. If it is in your CV, we will not use it to assess you. Where a partner agency later needs such details for a background check or right-to-work check, it will ask you directly under its own privacy notice.</p>
+            <p><strong>Health records and HIPAA.</strong> {{ L.brand }} is not a healthcare provider or health plan and is not a “covered entity” under HIPAA. Health-related credentialing documents (such as immunization and TB records, drug screens, physicals and fit-for-duty forms) are requested and kept by the partner agency or employer through its own secure process, not through this website. If you send them to us by mistake, we will delete them and tell you where to send them.</p>
           </section>
 
           <section id="how-we-use">
@@ -97,7 +97,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
                 <tbody>
                   <tr><td>Reviewing your application, screening your experience and contacting you about suitable roles</td><td>Steps at your request before a possible engagement; legitimate interests</td></tr>
                   <tr><td>Sharing your profile with partner agencies and employers for roles you applied for or agreed to be considered for</td><td>Steps at your request; legitimate interests</td></tr>
-                  <tr><td>Keeping your profile so we can tell you about future roles</td><td>Legitimate interests — you can object at any time</td></tr>
+                  <tr><td>Keeping your profile so we can tell you about future roles</td><td>Legitimate interests (you can object at any time)</td></tr>
                   <tr><td>Coordinating interviews and credentialing paperwork</td><td>Steps at your request; contract with our clients</td></tr>
                   <tr><td>Answering client and partner enquiries and running our services</td><td>Legitimate interests; contract</td></tr>
                   <tr><td>Keeping the website secure and preventing fraud</td><td>Legitimate interests</td></tr>
@@ -153,7 +153,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
           <section id="international">
             <h2>International transfers</h2>
             <p>Our recruitment team works from offices outside your country, including {{ L.offshoreCountries }}, and our servers are located in {{ L.hostingCountry }}. Your information may therefore be accessed and stored outside the United States, United Kingdom or Canada, where privacy laws may differ and where courts and authorities may be able to access it.</p>
-            <p>We protect these transfers with contractual safeguards — for UK data, the UK International Data Transfer Agreement or the UK Addendum to the EU Standard Contractual Clauses — and by limiting access to staff who need it. You can ask us for a copy of the safeguards we use.</p>
+            <p>We protect these transfers with contractual safeguards (for UK data, the UK International Data Transfer Agreement or the UK Addendum to the EU Standard Contractual Clauses) and by limiting access to staff who need it. You can ask us for a copy of the safeguards we use.</p>
           </section>
 
           <section id="retention">
@@ -177,23 +177,23 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
 
           <section id="security">
             <h2>Security</h2>
-            <p>CVs are not publicly accessible and only authorised staff can open them. We use encrypted connections (HTTPS), access controls and staff confidentiality obligations, and we only give access to people who need it. No system is perfectly secure. If a breach is likely to affect you, we will tell you and the relevant regulator as the law requires — in the UK within 72 hours of becoming aware of a reportable breach, and in the US as your state’s breach-notification law requires.</p>
+            <p>CVs are not publicly accessible and only authorised staff can open them. We use encrypted connections (HTTPS), access controls and staff confidentiality obligations, and we only give access to people who need it. No system is perfectly secure. If a breach is likely to affect you, we will tell you and the relevant regulator as the law requires: in the UK within 72 hours of becoming aware of a reportable breach, and in the US as your state’s breach-notification law requires.</p>
           </section>
 
           <section id="your-rights">
             <h2>How to use your rights</h2>
-            <p>Email <a [href]="'mailto:' + L.privacyEmail" class="link">{{ L.privacyEmail }}</a> or use our <a routerLink="/contact-us" class="link">contact form</a>, and tell us which country you live in. To protect you, we will check your identity before sharing or changing data — usually by matching the email address and details you gave us. You may ask someone to act for you as your <strong>authorised agent</strong>; we will ask for proof that they are allowed to.</p>
+            <p>Email <a [href]="'mailto:' + L.privacyEmail" class="link">{{ L.privacyEmail }}</a> or use our <a routerLink="/contact-us" class="link">contact form</a>, and tell us which country you live in. To protect you, we will check your identity before sharing or changing data, usually by matching the email address and details you gave us. You may ask someone to act for you as your <strong>authorised agent</strong>; we will ask for proof that they are allowed to.</p>
             <p>We reply within the time the law sets: <strong>one month</strong> in the UK, <strong>30 days</strong> in Canada and <strong>45 days</strong> in the US. These can be extended where the law allows, and we will tell you if they are. Requests are free unless they are clearly unfounded or excessive. We will not treat you differently for using your rights.</p>
           </section>
 
           <section id="us-rights">
             <h2>United States</h2>
-            <p>Residents of California (CCPA/CPRA) and of other states with privacy laws — including Colorado, Connecticut, Virginia, Texas, Oregon and others — may have the right to:</p>
+            <p>Residents of California (CCPA/CPRA) and of other states with privacy laws (including Colorado, Connecticut, Virginia, Texas, Oregon and others) may have the right to:</p>
             <ul>
               <li><strong>Know and access</strong> the personal information we hold and get a copy in a portable format;</li>
               <li><strong>Correct</strong> inaccurate information;</li>
               <li><strong>Delete</strong> your information;</li>
-              <li><strong>Opt out</strong> of its sale, sharing for targeted advertising, or profiling — we don’t do these, and we treat a <strong>Global Privacy Control</strong> signal as a valid opt-out;</li>
+              <li><strong>Opt out</strong> of its sale, sharing for targeted advertising, or profiling. We don’t do these, and we treat a <strong>Global Privacy Control</strong> signal as a valid opt-out;</li>
               <li><strong>Limit</strong> the use of sensitive personal information;</li>
               <li><strong>Appeal</strong> our decision on your request by replying to it. If you are unhappy with the result, you can contact your state Attorney General.</li>
             </ul>
@@ -209,7 +209,7 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
 
           <section id="canada-rights">
             <h2>Canada</h2>
-            <p>Under PIPEDA, Quebec’s Law 25 and similar provincial laws, you may <strong>access</strong> and <strong>correct</strong> your information and <strong>withdraw consent</strong> on reasonable notice (which may mean we can no longer consider you for roles). Quebec residents may also request <strong>data portability</strong>, ask us to stop disseminating information about them, and be informed of decisions based solely on automated processing — we do not make any.</p>
+            <p>Under PIPEDA, Quebec’s Law 25 and similar provincial laws, you may <strong>access</strong> and <strong>correct</strong> your information and <strong>withdraw consent</strong> on reasonable notice (which may mean we can no longer consider you for roles). Quebec residents may also request <strong>data portability</strong>, ask us to stop disseminating information about them, and be informed of decisions based solely on automated processing. We do not make any.</p>
             <p>Our person in charge of the protection of personal information is {{ L.privacyOfficer }}, reachable at <a [href]="'mailto:' + L.privacyEmail" class="link">{{ L.privacyEmail }}</a>. You may complain to the Office of the Privacy Commissioner of Canada (<a href="https://www.priv.gc.ca" target="_blank" rel="noopener" class="link">priv.gc.ca</a>) or, in Quebec, the Commission d’accès à l’information (<a href="https://www.cai.gouv.qc.ca" target="_blank" rel="noopener" class="link">cai.gouv.qc.ca</a>).</p>
           </section>
 
@@ -220,15 +220,15 @@ import { CookieConsentService } from '../../services/cookie-consent.service';
 
           <section id="recruitment-fraud">
             <h2>Recruitment scams</h2>
-            <p>We <strong>never</strong> ask candidates to pay a fee, buy equipment or share bank or card details to apply or to be placed. Our emails come only from <strong>&#64;hddpconsultants.com</strong> addresses. If someone contacts you claiming to be from {{ L.brand }} and asks for money, do not respond — forward the message to <a [href]="'mailto:' + L.privacyEmail" class="link">{{ L.privacyEmail }}</a>.</p>
+            <p>We <strong>never</strong> ask candidates to pay a fee, buy equipment or share bank or card details to apply or to be placed. Our emails come only from <strong>&#64;hddpconsultants.com</strong> addresses. If someone contacts you claiming to be from {{ L.brand }} and asks for money, do not respond. Forward the message to <a [href]="'mailto:' + L.privacyEmail" class="link">{{ L.privacyEmail }}</a>.</p>
           </section>
 
           <section id="equal-opportunity">
             <h2>Equal opportunity and accessibility</h2>
             <p>We consider every qualified candidate without regard to race, colour, religion, sex, sexual orientation, gender identity, national origin, age, disability, genetic information, veteran or military status, pregnancy, marital status, citizenship status (where protected) or any other characteristic protected by law in the United States, the United Kingdom (Equality Act 2010) or Canada (Canadian Human Rights Act and provincial human rights codes).</p>
             <p>In the United States this includes Title VII of the Civil Rights Act, the Americans with Disabilities Act (ADA), the Age Discrimination in Employment Act, the Genetic Information Nondiscrimination Act (GINA), the Pregnant Workers Fairness Act and the anti-discrimination provisions of the Immigration and Nationality Act, as well as state and local laws. In line with state and local salary-history bans, we never ask about your current or past pay, and our job listings show a pay range.</p>
-            <p>If you need an accommodation or reasonable adjustment to apply — for example a different format or help completing the form — email <a [href]="'mailto:' + L.recruitmentEmail" class="link">{{ L.recruitmentEmail }}</a> or call <a [href]="L.phoneHref" class="link">{{ L.phone }}</a>. We aim for this website to meet the Web Content Accessibility Guidelines (WCAG) 2.1 level AA; if any part of it is hard to use, please tell us.</p>
-            <p>Licensing and right-to-work requirements — for example an active RN or LPN/LVN licence in the state where you will work (or a multistate NLC licence), NCLEX, and BLS/ACLS or specialty certifications in the US; NMC registration in the UK; or provincial college registration in Canada — are set by the partner agency or employer for each role.</p>
+            <p>If you need an accommodation or reasonable adjustment to apply (for example a different format or help completing the form), email <a [href]="'mailto:' + L.recruitmentEmail" class="link">{{ L.recruitmentEmail }}</a> or call <a [href]="L.phoneHref" class="link">{{ L.phone }}</a>. We aim for this website to meet the Web Content Accessibility Guidelines (WCAG) 2.1 level AA; if any part of it is hard to use, please tell us.</p>
+            <p>Licensing and right-to-work requirements (for example an active RN or LPN/LVN licence in the state where you will work (or a multistate NLC licence), NCLEX, and BLS/ACLS or specialty certifications in the US; NMC registration in the UK; or provincial college registration in Canada) are set by the partner agency or employer for each role.</p>
           </section>
 
           <section id="changes">

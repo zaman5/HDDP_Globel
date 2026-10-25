@@ -134,9 +134,9 @@ const COUNTRY_INFO: Record<string, { region: string; iso: string }> = {
                 <label for="ap-exp">Years of experience *</label>
                 <select id="ap-exp" [(ngModel)]="form.years_experience" name="years_experience">
                   <option value="Less than 1 Year">Less than 1 year</option>
-                  <option value="1-2 Years">1–2 years</option>
-                  <option value="3-5 Years">3–5 years</option>
-                  <option value="6-10 Years">6–10 years</option>
+                  <option value="1-2 Years">1-2 years</option>
+                  <option value="3-5 Years">3-5 years</option>
+                  <option value="6-10 Years">6-10 years</option>
                   <option value="10+ Years">More than 10 years</option>
                 </select>
               </div>
@@ -147,7 +147,7 @@ const COUNTRY_INFO: Record<string, { region: string; iso: string }> = {
               <div>
                 <label for="ap-license">Licence, registration and certifications</label>
                 <input id="ap-license" type="text" [(ngModel)]="form.license_type" name="license_type" placeholder="e.g. RN (Texas), NCLEX-RN, NMC PIN, CNO registration, BLS" />
-                <p class="help">List the licence type and issuing state or body. Don’t enter licence numbers here — we verify licences with the issuing board.</p>
+                <p class="help">List the licence type and issuing state or body. Don’t enter licence numbers here. We verify licences with the issuing board.</p>
               </div>
               <div *ngIf="countryOf(j) === 'United States'">
                 <label for="ap-compact">Do you hold a multistate licence under the Nurse Licensure Compact (NLC)?</label>
@@ -382,7 +382,7 @@ export class JobDetailComponent implements OnInit {
     const place = `${j.location}, ${country}`;
     const pay = j.pay_range ? ` Pay: ${j.pay_range}.` : '';
     this.seo.setPage({
-      title: `${this.applyMode() ? 'Apply: ' : ''}${j.title} – ${j.location} | HDDP`,
+      title: `${this.applyMode() ? 'Apply: ' : ''}${j.title}, ${j.location} | HDDP`,
       description: `${j.job_type} ${j.title} job in ${place}.${pay} ${(j.description || '').slice(0, 110)}`.trim().slice(0, 160),
       robots: this.applyMode() ? 'noindex, follow' : undefined
     });

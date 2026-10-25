@@ -14,7 +14,7 @@ exports.getStats = async (req, res) => {
         totalCandidates: (candidateCount[0]?.count || 0) + 14500,
         partnerFacilities: 500,
         retentionRate: '98.4%',
-        avgTurnaround: '48–96h',
+        avgTurnaround: '48-96h',
         statesCovered: 50,
         activeRequisitions: (requestCount[0]?.count || 0),
         partnerApplications: (partnerCount[0]?.count || 0),

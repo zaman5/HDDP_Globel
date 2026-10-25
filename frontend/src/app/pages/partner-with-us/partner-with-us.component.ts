@@ -107,9 +107,9 @@ import { PartnerApplication } from '../../models/models';
             <div>
               <label for="pt-volume">Monthly hiring volume</label>
               <select id="pt-volume" [(ngModel)]="formData.staffing_volume" name="staffing_volume">
-                <option value="1 - 10 Candidates/mo">1–10 candidates a month</option>
-                <option value="10 - 50 Candidates/mo">10–50 candidates a month</option>
-                <option value="50 - 150 Candidates/mo">50–150 candidates a month</option>
+                <option value="1 - 10 Candidates/mo">1-10 candidates a month</option>
+                <option value="10 - 50 Candidates/mo">10-50 candidates a month</option>
+                <option value="50 - 150 Candidates/mo">50-150 candidates a month</option>
                 <option value="150+ Candidates/mo">150+ candidates a month</option>
               </select>
             </div>

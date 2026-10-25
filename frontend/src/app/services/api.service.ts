@@ -92,7 +92,7 @@ export class ApiService {
           totalCandidates: 14500,
           partnerFacilities: 500,
           retentionRate: '98.4%',
-          avgTurnaround: '48–96h',
+          avgTurnaround: '48-96h',
           statesCovered: 50,
           activeRequisitions: 34,
           partnerApplications: 18,

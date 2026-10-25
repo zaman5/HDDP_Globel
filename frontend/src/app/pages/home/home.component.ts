@@ -51,7 +51,7 @@ import { RouterLink } from '@angular/router';
                alt="Recruitment team reviewing candidate pipelines together on a laptop" />
         </div>
         <div>
-          <h2 class="t-h2">The challenge—and how we help</h2>
+          <h2 class="t-h2">The challenge and how we help</h2>
           <h3 class="t-h3 mt-6">Recruitment teams face growing demands</h3>
           <p class="t-body mt-3">Healthcare staffing agencies often manage high volumes of requisitions, hard-to-reach candidates, time-sensitive hiring needs, and resource-intensive coordination.</p>
           <h3 class="t-h3 mt-8">HDDP adds capacity where it matters</h3>
