@@ -176,16 +176,16 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Full Name</span>{{ c.first_name }} {{ c.last_name }}</div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Email</span><a [href]="'mailto:' + c.email" class="text-[#004b87] font-semibold">{{ c.email }}</a></div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Phone</span><a [href]="'tel:' + c.phone" class="text-[#004b87] font-semibold">{{ c.phone }}</a></div>
-                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Location</span>{{ locationOf(c) }}<span *ngIf="c.country"> — {{ c.country }}</span></div>
-                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Work Authorization</span>{{ c.work_authorization || '—' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Location</span>{{ locationOf(c) }}<span *ngIf="c.country">, {{ c.country }}</span></div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Work Authorization</span>{{ c.work_authorization || 'Not provided' }}</div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Privacy Consent Given</span>{{ c.privacy_consent_at ? (c.privacy_consent_at | date:'medium') : 'Not recorded' }}</div>
-                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Text Messages</span>{{ c.sms_consent_at ? 'Opted in ' + (c.sms_consent_at | date:'medium') : 'No consent — do not text' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Text Messages</span>{{ c.sms_consent_at ? 'Opted in ' + (c.sms_consent_at | date:'medium') : 'No consent. Do not text' }}</div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">NLC Multistate Licence</span>{{ c.compact_license ? 'Yes (verify on Nursys)' : 'No / not stated' }}</div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Applied For</span>{{ c.job_title || 'General application' }}<span *ngIf="c.job_id" class="text-slate-400"> (Job #{{ c.job_id }})</span></div>
-                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Specialty</span>{{ c.specialty || '—' }}</div>
-                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">License / Certifications</span>{{ c.license_type || '—' }}</div>
-                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Experience</span>{{ c.years_experience || '—' }}</div>
-                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Expected Pay</span>{{ c.desired_pay || '—' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Specialty</span>{{ c.specialty || 'Not provided' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">License / Certifications</span>{{ c.license_type || 'Not provided' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Experience</span>{{ c.years_experience || 'Not provided' }}</div>
+                      <div><span class="block text-[10px] uppercase font-bold text-slate-400">Expected Pay</span>{{ c.desired_pay || 'Not provided' }}</div>
                       <div><span class="block text-[10px] uppercase font-bold text-slate-400">Applied On</span>{{ c.created_at | date:'medium' }}</div>
                       <div class="col-span-2"><span class="block text-[10px] uppercase font-bold text-slate-400">CV / Resume File</span>
                         <button *ngIf="c.resume_path && c.id" type="button" (click)="downloadCv(c)" class="inline-flex items-center gap-1 text-[#004b87] font-bold bg-transparent border-0 p-0 cursor-pointer">
@@ -193,7 +193,7 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
                         </button>
                         <span *ngIf="!c.resume_path">No file uploaded</span>
                       </div>
-                      <div class="col-span-2 md:col-span-4"><span class="block text-[10px] uppercase font-bold text-slate-400">Cover Note</span><p class="whitespace-pre-line">{{ c.notes || '—' }}</p></div>
+                      <div class="col-span-2 md:col-span-4"><span class="block text-[10px] uppercase font-bold text-slate-400">Cover Note</span><p class="whitespace-pre-line">{{ c.notes || 'Not provided' }}</p></div>
                     </div>
                   </td>
                 </tr>
@@ -336,7 +336,7 @@ import { JobPosition, CandidateApplication, TalentRequest, PartnerApplication, C
         <!-- TAB 5: PUBLISH NEW JOB FORM -->
         <div *ngIf="activeTab === 'new-job'" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto">
           <h3 class="font-heading text-xl font-bold text-[#003461] mb-1">Publish New Clinical Position to Database</h3>
-          <p class="text-xs text-slate-500 mb-6">New openings appear immediately on the Candidates page. Avoid age-, gender- or nationality-based requirements ("young", "native English speaker") — they breach US, UK and Canadian equality laws.</p>
+          <p class="text-xs text-slate-500 mb-6">New openings appear immediately on the Candidates page. Avoid age-, gender- or nationality-based requirements ("young", "native English speaker"). They breach US, UK and Canadian equality laws.</p>
 
           <form (ngSubmit)="publishJob()" class="space-y-4 text-xs">
             
@@ -513,7 +513,7 @@ export class AdminComponent implements OnInit {
   expandedCandidateId: number | undefined;
 
   locationOf(c: CandidateApplication) {
-    return [c.current_city, c.current_state].filter(Boolean).join(', ') || '—';
+    return [c.current_city, c.current_state].filter(Boolean).join(', ') || 'Not provided';
   }
 
   toggleCandidate(id: number | undefined) {

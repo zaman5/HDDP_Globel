@@ -34,7 +34,7 @@ function renderJobHead(shell, job, siteUrl) {
   const place = `${job.location}, ${country}`;
   const url = `${siteUrl}/jobs/${job.id}`;
   const pay = job.pay_range ? ` Pay: ${job.pay_range}.` : '';
-  const title = `${job.title} – ${job.location} | HDDP`;
+  const title = `${job.title}, ${job.location} | HDDP`;
   const description = `${job.job_type} ${job.title} job in ${place}.${pay} ${(job.description || '').slice(0, 110)}`.trim().slice(0, 160);
   const city = (job.location || '').split('(')[0].split(',')[0].trim();
 
