@@ -6,8 +6,8 @@ export const LEGAL = {
   brand: 'HDDP Consultants',
   legalEntity: '[LEGAL ENTITY NAME]',
   registeredAddress: '[REGISTERED ADDRESS]',
-  privacyEmail: 'staffing@hddpconsultants.com',
-  recruitmentEmail: 'staffing@hddpconsultants.com',
+  privacyEmail: 'info@hddpconsultants.com',
+  recruitmentEmail: 'info@hddpconsultants.com',
   phone: '(800) 555-4337',
   phoneHref: 'tel:8005554337',
   privacyOfficer: '[PRIVACY OFFICER NAME]',
@@ -15,5 +15,5 @@ export const LEGAL = {
   hostingCountry: '[HOSTING COUNTRY]',
   candidateRetention: '24 months',
   clientRetention: '6 years',
-  lastUpdated: 'October 13, 2026'
+  lastUpdated: 'October 26, 2026'
 };
